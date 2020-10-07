@@ -1,7 +1,9 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
+using Abp.AutoMapper;
 using Abp.Domain.Repositories;
+using Abp.Webhooks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestApp.Authorization;
 using TestApp.Todo_list;
+using TestApp.Todolist.Dto;
 
 namespace TestApp.Todolist
 {
@@ -19,43 +22,44 @@ namespace TestApp.Todolist
     [AbpAuthorize(PermissionNames.Pages_Todolist)]
     public class TodolistAppService : ApplicationService, ITodolistAppService
     {
-        private readonly IRepository<TodoList> repository;
-
-        public TodolistAppService(IRepository<TodoList> repository)
+        private readonly TodolistManager _todolistManager;
+        private readonly IMapper _objectMapper;
+        public TodolistAppService(TodolistManager todolistManager , IMapper objectMapper)
         {
-            this.repository = repository;
+            _todolistManager = todolistManager;
+            _objectMapper = objectMapper;
         }
 
-        public void UpdateTask(TodoListDto input)
+        public async Task CreateTask(CreateTodoListInput input)
         {
-            var newTask = repository.Get(input.Id);
-            repository.Update(newTask);
-        }
-        public void DeleteTask(TodoListDto input)
-        {
-            var task = repository.Get(input.Id);
-            repository.Delete(task);
+            TodoList output = _objectMapper.Map<CreateTodoListInput, TodoList>(input);
+            await _todolistManager.CreateTask(output);
+           
         }
 
-        public void CreateTask(TodoListDto input)
+        public void DeleteTask(DeleteTodoListInput input)
         {
-            var task = new TodoList { Id = input.Id, title = input.title };
-            repository.Insert(task);
+            _todolistManager.Delete(input.Id);
         }
 
-        public TodoList GetTaskById(TodoListDto input)
+        public IEnumerable<GetTaskOutput> GetAllTasks()
         {
-            var task = repository.Get(input.Id);
-            return task;
+            var getAll = _todolistManager.GetAllList().ToList();
+            List<GetTaskOutput> output = _objectMapper.Map<List<TodoList>,List<GetTaskOutput>>(getAll);
+            return output;
         }
 
-        public IEnumerable<TodoList> GetAllTasks()
+        public GetTaskOutput GetTaskById(GetTodoListInput input)
         {
-            List<TodoList> tasks = repository.GetAllList();
-            return tasks;
+            var task = _todolistManager.GetTaskById(input.Id);
+            GetTaskOutput output = _objectMapper.Map<TodoList, GetTaskOutput>(task);
+            return output;
         }
 
-
-
+        public void UpdateTask(UpdateTodoListInput input)
+        {
+            TodoList output = _objectMapper.Map<UpdateTodoListInput, TodoList>(input);
+            _todolistManager.Update(output);
+        }
     }
 }
