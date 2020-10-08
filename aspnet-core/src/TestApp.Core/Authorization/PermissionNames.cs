@@ -9,5 +9,7 @@
         public const string Pages_Roles = "Pages.Roles";
 
         public const string Pages_Todolist = "Pages.Todolist";
+
+        public const string Pages_Orders = "Pages.Orders";
     }
 }
