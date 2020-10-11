@@ -10,7 +10,7 @@ namespace TestApp.Models
 
         public string Name { get; set; }
         public string OrderNo { get; set; }
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
         public bool IsSubmit { get; set; }
         public string EmpolyeeName { get; set; }
         public decimal TotalPrice { get; set; }

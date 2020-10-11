@@ -15,7 +15,7 @@ namespace TestApp.Master_Details.Order.DTO
         public string OrderNo { get; set; }
 
         [Required]
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
 
         public bool IsSubmit { get; set; }
 

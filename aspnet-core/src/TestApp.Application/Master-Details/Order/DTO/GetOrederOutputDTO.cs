@@ -10,7 +10,7 @@ namespace TestApp.Master_Details.Order.DTO
         public int Id { get; set; }
         public string Name { get; set; }
         public string OrderNo { get; set; }
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
         public string EmpolyeeName { get; set; }
         public decimal TotalPrice { get; set; }
         public List<Item> Items { get; set; }

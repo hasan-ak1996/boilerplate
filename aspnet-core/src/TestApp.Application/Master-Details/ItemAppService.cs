@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,8 @@ namespace TestApp.Master_Details
         {
             _itemManager.DeleteItem(input.Id);
         }
-
-        public IEnumerable<GetItemOutputDTO> GetAllItems()
+        
+        public List<GetItemOutputDTO> GetAllItems()
         {
             var getAll = _itemManager.GetAllItems().ToList();
             List<GetItemOutputDTO> output = _objectMapper.Map<List<Item>, List<GetItemOutputDTO>>(getAll);

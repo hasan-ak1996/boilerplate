@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace TestApp.Master_Details
 {
     public interface IItemAppService : IApplicationService
     {
-        IEnumerable<GetItemOutputDTO> GetAllItems();
+        List<GetItemOutputDTO> GetAllItems();
         Task CreateItem(CreateItemInputDTO input);
         void UpdateItem(UpdateItemInputDTO input);
         void DeleteItem(DeleteItemInputDTO input);

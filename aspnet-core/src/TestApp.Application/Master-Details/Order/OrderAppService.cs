@@ -25,7 +25,19 @@ namespace TestApp.Master_Details.Order
         }
         public async Task CreateOrder(CreateOrderInputDTO input)
         {
-            TestApp.Models.Order output = _objectMapper.Map<CreateOrderInputDTO, TestApp.Models.Order>(input);
+            TestApp.Models.Order output = new TestApp.Models.Order
+            {
+                Name = input.Name,
+                OrderNo = input.OrderNo,
+                CreationTime = input.CreationTime,
+                IsSubmit = input.IsSubmit,
+                OrderDate = input.OrderDate,
+                EmpolyeeName = input.EmpolyeeName,
+                TotalPrice = input.TotalPrice
+            };
+
+
+
             await _orderManager.CreateOrder(output);
         }
 

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using System;
 using System.ComponentModel.DataAnnotations;
+using TestApp.Models;
 
 namespace TestApp.Master_Details
 {
-    public class UpdateItemInputDTO
+    [AutoMapTo(typeof(Item))]
+    public class UpdateItemInputDTO : EntityDto
     {
         [Required]
         public string Name { get; set; }

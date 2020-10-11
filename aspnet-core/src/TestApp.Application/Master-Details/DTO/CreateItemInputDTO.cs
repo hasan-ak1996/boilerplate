@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Abp.AutoMapper;
+using System;
 using System.ComponentModel.DataAnnotations;
+using TestApp.Models;
 
 namespace TestApp.Master_Details
 {
+    [AutoMapTo(typeof(Item))]
     public class CreateItemInputDTO
     {
         [Required]

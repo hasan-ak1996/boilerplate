@@ -1599,8 +1599,8 @@ namespace TestApp.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("OrderDate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderNo")
                         .HasColumnType("nvarchar(max)");

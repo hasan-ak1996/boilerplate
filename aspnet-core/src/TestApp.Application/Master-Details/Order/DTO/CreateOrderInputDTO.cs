@@ -16,13 +16,13 @@ namespace TestApp.Master_Details.Order.DTO
         [Required]
         public string OrderNo { get; set; }
 
-        [Required]
+        
         public DateTime CreationTime { get; set; }
 
         public bool IsSubmit { get; set; }
 
         [Required]
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
 
         [Required]
         public string EmpolyeeName { get; set; }
@@ -30,7 +30,5 @@ namespace TestApp.Master_Details.Order.DTO
         [Required]
         public decimal TotalPrice { get; set; }
 
-        [Required]
-        public List<Item> Items { get; set; }
     }
 }

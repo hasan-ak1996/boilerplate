@@ -1,6 +1,11 @@
-﻿namespace TestApp.Master_Details
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using TestApp.Models;
+
+namespace TestApp.Master_Details
 {
-    public class GetItemOutputDTO
+    [AutoMapFrom(typeof(Item))]
+    public class GetItemOutputDTO : EntityDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
