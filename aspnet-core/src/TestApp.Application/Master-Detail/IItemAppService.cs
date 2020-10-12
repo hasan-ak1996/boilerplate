@@ -10,7 +10,7 @@ namespace TestApp.Master_Details
     public interface IItemAppService : IApplicationService
     {
         List<GetItemOutputDTO> GetAllItems();
-        Task CreateItem(CreateItemInputDTO input);
+        void CreateItem(CreateItemInputDTO input);
         void UpdateItem(UpdateItemInputDTO input);
         void DeleteItem(DeleteItemInputDTO input);
         GetItemOutputDTO GetItemById(ItemInputDTO input);

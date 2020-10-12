@@ -26,7 +26,7 @@ namespace TestApp.Master_Details.Models
             }
             else
             {
-                return await _orderRepository.InsertAsync(order);
+                return await _orderRepository.InsertAsync(entity);
             }
             
         }

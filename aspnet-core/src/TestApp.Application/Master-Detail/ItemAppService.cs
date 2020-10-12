@@ -21,10 +21,12 @@ namespace TestApp.Master_Details
             _itemManager = itemManager;
             _objectMapper = objectMapper;
         }
-        public async Task CreateItem(CreateItemInputDTO input)
+        public  void CreateItem(CreateItemInputDTO input)
         {
             Item output = _objectMapper.Map<CreateItemInputDTO, Item>(input);
-            await _itemManager.CreateItem(output);
+
+             _itemManager.CreateItem(output);
+           
         }
 
         public void DeleteItem(DeleteItemInputDTO input)

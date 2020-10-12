@@ -1,17 +1,19 @@
-﻿using Abp.Application.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Abp.Application.Services;
 using Abp.Authorization;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestApp.Authorization;
 using TestApp.Master_Details.Models;
-using TestApp.Master_Details.Order.DTO;
+using TestApp.Master_Detail.DTO;
+using TestApp.Master_Details.Order;
 using TestApp.Models;
 
-namespace TestApp.Master_Details.Order
-{ 
+namespace TestApp.Authorization
+{
     [AbpAuthorize(PermissionNames.Pages_Orders)]
     public class OrderAppService : ApplicationService, IOrderAppService
     {
@@ -23,22 +25,12 @@ namespace TestApp.Master_Details.Order
             _orderManager = orderManager;
             _objectMapper = objectMapper;
         }
-        public async Task CreateOrder(CreateOrderInputDTO input)
+        public void CreateOrder(CreateOrderInputDTO input)
         {
-            TestApp.Models.Order output = new TestApp.Models.Order
-            {
-                Name = input.Name,
-                OrderNo = input.OrderNo,
-                CreationTime = input.CreationTime,
-                IsSubmit = input.IsSubmit,
-                OrderDate = input.OrderDate,
-                EmpolyeeName = input.EmpolyeeName,
-                TotalPrice = input.TotalPrice
-            };
+            Order output = _objectMapper.Map<CreateOrderInputDTO, Order>(input);
 
-
-
-            await _orderManager.CreateOrder(output);
+            _orderManager.CreateOrder(output);
+            
         }
 
         public void DeleteOrder(DeleteOrderInputDTO input)
@@ -56,7 +48,7 @@ namespace TestApp.Master_Details.Order
         public GetOrederOutputDTO GetOrderById(OrderInputDTO input)
         {
             var order = _orderManager.GetOrderById(input.Id);
-            GetOrederOutputDTO output = _objectMapper.Map<TestApp.Models.Order, GetOrederOutputDTO> (order);
+            GetOrederOutputDTO output = _objectMapper.Map<TestApp.Models.Order, GetOrederOutputDTO>(order);
             return output;
         }
 
@@ -65,5 +57,7 @@ namespace TestApp.Master_Details.Order
             TestApp.Models.Order output = _objectMapper.Map<UpdateOrderInputDTO, TestApp.Models.Order>(input);
             _orderManager.UpdateOrder(output);
         }
+
+
     }
 }

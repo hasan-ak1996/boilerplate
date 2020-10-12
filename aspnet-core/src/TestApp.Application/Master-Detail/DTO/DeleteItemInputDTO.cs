@@ -7,11 +7,11 @@ using TestApp.Models;
 namespace TestApp.Master_Details
 {
     [AutoMapTo(typeof(Item))]
-    public class DeleteItemInputDTO
+    public class DeleteItemInputDTO 
     {
         public int Id { get; set; }
 
-        [Required]
-        public DateTime DeletionTime { get; set; }
+
+        public DateTime? DeletionTime { get; set; }
     }
 }

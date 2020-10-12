@@ -16,11 +16,15 @@ import {
   PermissionDto,
   RoleServiceProxy,
   PermissionDtoListResultDto,
-  GetItemOutputDTO
+  GetItemOutputDTO,
+  UpdateOrderInputDTO,
+  UpdateItemInputDTO,
+  
 } from '@shared/service-proxies/service-proxies';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 import { CreateOrderItemComponent } from '@app/create-order-item/create-order-item.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 @Component({
   selector: 'create-order',
   templateUrl: './create-order.component.html',
@@ -29,21 +33,21 @@ import { CreateOrderItemComponent } from '@app/create-order-item/create-order-it
 export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
   saving = false;
+  
   order = new CreateOrderInputDTO ();
   roles: RoleDto[] = [];
-  items : GetItemOutputDTO[] = []; 
+  items : GetItemOutputDTO[] =[];
   permissions: PermissionDto[] = [];
   checkedPermissionsMap: { [key: string]: boolean } = {};
   defaultPermissionCheckedStatus = true;
   @Output() onSave = new EventEmitter<any>();
-
+  
   constructor(
     injector: Injector,
     public _orderService: OrderServiceProxy,
     private _roleService: RoleServiceProxy,
     private _modalService: BsModalService,
     public _itemService: ItemServiceProxy,
-
   ) { 
     super(injector);
   }
@@ -55,11 +59,11 @@ implements OnInit {
       this.permissions = result.items;
       this.setInitialPermissionsStatus();
     });
-
     this._itemService.getAllItems().subscribe((result) => {
       this.items = result;
-    });
-    console.log(this.items);
+    });  
+
+    
   }
   
   
@@ -93,6 +97,22 @@ implements OnInit {
 
   createItem(): void {
     this.showCreateOrEditItemDialog();
+  }
+  protected delete(item: GetItemOutputDTO): void {
+    abp.message.confirm(
+      this.l('ItemDeleteWarningMessage', item.name),
+      undefined,
+      (result: boolean) => {
+        if (result) {
+          this._itemService.deleteItem(item.id , null).subscribe(() => {
+            abp.notify.success(this.l('SuccessfullyDeleted'));
+            this._itemService.getAllItems().subscribe((result) => {
+              this.items = result;
+            }); 
+          });
+        }
+      }
+    );
   }
 
   

@@ -269,17 +269,16 @@ export class ItemServiceProxy {
 
     /**
      * @param id (optional) 
+     * @param deletionTime (optional) 
      * @return Success
      */
-    deleteItem(id: number | undefined, deletionTime: moment.Moment): Observable<void> {
+    deleteItem(id: number | undefined, deletionTime: moment.Moment | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/services/app/Item/DeleteItem?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
-        if (deletionTime === undefined || deletionTime === null)
-            throw new Error("The parameter 'deletionTime' must be defined and cannot be null.");
-        else
+        if (deletionTime !== undefined && deletionTime !== null)
             url_ += "DeletionTime=" + encodeURIComponent(deletionTime ? "" + deletionTime.toJSON() : "") + "&";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3067,7 +3066,7 @@ export class Item implements IItem {
     price: number;
     quantity: number;
     totalPrice: number;
-    orderId: number;
+    orderId: number | undefined;
 
     constructor(data?: IItem) {
         if (data) {
@@ -3142,7 +3141,7 @@ export interface IItem {
     price: number;
     quantity: number;
     totalPrice: number;
-    orderId: number;
+    orderId: number | undefined;
 }
 
 export class GetOrederOutputDTO implements IGetOrederOutputDTO {

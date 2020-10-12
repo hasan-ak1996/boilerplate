@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TestApp.Models;
 
-
-namespace TestApp.Master_Details.Order.DTO
+namespace TestApp.Master_Detail.DTO
 {
-    public class CreateOrderInputDTO
+    [AutoMapTo(typeof(Order))]
+    public class UpdateOrderInputDTO
     {
         [Required]
         public string Name { get; set; }
@@ -16,13 +16,13 @@ namespace TestApp.Master_Details.Order.DTO
         [Required]
         public string OrderNo { get; set; }
 
-        
-        public DateTime CreationTime { get; set; }
+        [Required]
+        public string OrderDate { get; set; }
 
         public bool IsSubmit { get; set; }
 
         [Required]
-        public string OrderDate { get; set; }
+        public DateTime LastModificationTime { get; set; }
 
         [Required]
         public string EmpolyeeName { get; set; }
@@ -30,5 +30,7 @@ namespace TestApp.Master_Details.Order.DTO
         [Required]
         public decimal TotalPrice { get; set; }
 
+        [Required]
+        public List<Item> Items { get; set; }
     }
 }

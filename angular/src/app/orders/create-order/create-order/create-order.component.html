@@ -135,10 +135,12 @@
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
+
+                <th></th>
                 <th>
                     <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
                         <i class="fa fa-plus-square"></i>
-                        {{ "Create" | localize }}
+                        {{ "Add item" | localize }}
                     </a>
                 </th>
             </thead>
@@ -148,6 +150,26 @@
                     <td>{{item.price}}</td>
                     <td>{{item.quantity}}</td>
                     <td>{{item.totalPrice}}</td>
+                    <td>
+                        <button
+                        type="button"
+                        class="btn btn-sm bg-secondary"
+                        (click)="editItem(item)"
+                        >
+                        <i class="fas fa-pencil-alt"></i>
+                        {{ "Edit" | localize }}
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                        type="button"
+                        class="btn btn-sm bg-danger"
+                        (click)="delete(item)"
+                        > 
+                        <i class="fas fa-trash"></i>
+                        {{ "Delete" | localize }}
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

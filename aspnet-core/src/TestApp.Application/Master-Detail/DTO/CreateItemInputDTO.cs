@@ -1,4 +1,5 @@
-﻿using Abp.AutoMapper;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using System;
 using System.ComponentModel.DataAnnotations;
 using TestApp.Models;
@@ -22,5 +23,6 @@ namespace TestApp.Master_Details
 
         [Required]
         public decimal TotalPrice { get; set; }
+       
     }
 }

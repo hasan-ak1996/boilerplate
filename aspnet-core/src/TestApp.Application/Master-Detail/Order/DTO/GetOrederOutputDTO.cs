@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TestApp.Models;
 
-namespace TestApp.Master_Details.Order.DTO
+namespace TestApp.Master_Detail.DTO
 {
-    public class GetOrederOutputDTO
+    [AutoMapFrom(typeof(Order))]
+    public class GetOrederOutputDTO : EntityDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

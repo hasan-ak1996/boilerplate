@@ -4,6 +4,7 @@
     <text name="HomePage" value="Home page" />
 	<text name="Todolist" value="Todolist" />
 	<text name="Orders" value="Orders" />
+	<text name="Item" value="Item" />
     <text name="About" value="About" />
     <text name="WelcomeMessage" value="Welcome to TestApp!" />
     <text name="FormIsNotValidMessage" value="Form is not valid. Please check and fix errors." />

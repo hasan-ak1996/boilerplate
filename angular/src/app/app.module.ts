@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientJsonpModule } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
-import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -95,7 +95,11 @@ import { CreateOrderItemComponent } from './create-order-item/create-order-item.
     NgxPaginationModule,
   ],
   providers: [
-    { provide : ItemServiceProxy , useClass : ItemServiceProxy}
+    { provide : ItemServiceProxy , useClass : ItemServiceProxy},
+    { provide : CreateOrderItemComponent , useClass : CreateOrderItemComponent},
+    { provide : BsModalRef , useClass : BsModalRef},
+    
+    
   ],
   entryComponents: [
     // tenants
