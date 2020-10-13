@@ -719,7 +719,7 @@ export class OrderServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updateOrder(body: UpdateOrderInputDTO | undefined): Observable<void> {
+    updateOrder(body: GetOrederOutputDTO | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/services/app/Order/UpdateOrder";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3153,88 +3153,6 @@ export interface IGetOrederOutputDTO {
     empolyeeName: string | undefined;
     totalPrice: number;
     items: Item[] | undefined;
-}
-
-export class UpdateOrderInputDTO implements IUpdateOrderInputDTO {
-    name: string;
-    orderNo: string;
-    orderDate: string;
-    isSubmit: boolean;
-    lastModificationTime: moment.Moment;
-    empolyeeName: string;
-    totalPrice: number;
-    items: Item[];
-
-    constructor(data?: IUpdateOrderInputDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.items = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.orderNo = _data["orderNo"];
-            this.orderDate = _data["orderDate"];
-            this.isSubmit = _data["isSubmit"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.empolyeeName = _data["empolyeeName"];
-            this.totalPrice = _data["totalPrice"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(Item.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): UpdateOrderInputDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateOrderInputDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["orderNo"] = this.orderNo;
-        data["orderDate"] = this.orderDate;
-        data["isSubmit"] = this.isSubmit;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["empolyeeName"] = this.empolyeeName;
-        data["totalPrice"] = this.totalPrice;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): UpdateOrderInputDTO {
-        const json = this.toJSON();
-        let result = new UpdateOrderInputDTO();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUpdateOrderInputDTO {
-    name: string;
-    orderNo: string;
-    orderDate: string;
-    isSubmit: boolean;
-    lastModificationTime: moment.Moment;
-    empolyeeName: string;
-    totalPrice: number;
-    items: Item[];
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
