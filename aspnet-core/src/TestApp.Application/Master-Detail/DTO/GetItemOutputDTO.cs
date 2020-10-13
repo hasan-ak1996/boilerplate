@@ -4,7 +4,7 @@ using TestApp.Models;
 
 namespace TestApp.Master_Details
 {
-    [AutoMapFrom(typeof(Item))]
+    [AutoMap(typeof(Item))]
     public class GetItemOutputDTO : EntityDto
     {
         public int Id { get; set; }

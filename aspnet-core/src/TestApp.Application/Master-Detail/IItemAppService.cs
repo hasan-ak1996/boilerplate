@@ -11,7 +11,7 @@ namespace TestApp.Master_Details
     {
         List<GetItemOutputDTO> GetAllItems();
         void CreateItem(CreateItemInputDTO input);
-        void UpdateItem(UpdateItemInputDTO input);
+        void UpdateItem(GetItemOutputDTO input);
         void DeleteItem(DeleteItemInputDTO input);
         GetItemOutputDTO GetItemById(ItemInputDTO input);
     }

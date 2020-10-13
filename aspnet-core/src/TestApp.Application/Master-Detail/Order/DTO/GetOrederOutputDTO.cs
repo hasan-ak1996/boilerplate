@@ -7,7 +7,7 @@ using TestApp.Models;
 
 namespace TestApp.Master_Detail.DTO
 {
-    [AutoMapFrom(typeof(Order))]
+    [AutoMap(typeof(Order))]
     public class GetOrederOutputDTO : EntityDto
     {
         public int Id { get; set; }

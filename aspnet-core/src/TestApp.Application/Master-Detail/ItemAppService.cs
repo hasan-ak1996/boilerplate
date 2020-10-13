@@ -48,9 +48,9 @@ namespace TestApp.Master_Details
             return output;
         }
 
-        public void UpdateItem(UpdateItemInputDTO input)
+        public void UpdateItem(GetItemOutputDTO input)
         {
-            Item output = _objectMapper.Map<UpdateItemInputDTO, Item>(input);
+            Item output = _objectMapper.Map<GetItemOutputDTO, Item>(input);
             _itemManager.UpdateItem(output);
         }
     }

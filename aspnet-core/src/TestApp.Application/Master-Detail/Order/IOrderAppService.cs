@@ -11,7 +11,7 @@ namespace TestApp.Master_Details.Order
     {
         IEnumerable<GetOrederOutputDTO> GetAllOrders();
         void CreateOrder(CreateOrderInputDTO input);
-        void UpdateOrder(UpdateOrderInputDTO input);
+        void UpdateOrder(GetOrederOutputDTO input);
         void DeleteOrder(DeleteOrderInputDTO input);
         GetOrederOutputDTO GetOrderById(OrderInputDTO input);
     }

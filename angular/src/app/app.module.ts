@@ -43,7 +43,24 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { OrderServiceProxy } from '@shared/service-proxies/service-proxies';
 import { ItemServiceProxy } from '@shared/service-proxies/service-proxies';
 import { CreateOrderItemComponent } from './create-order-item/create-order-item.component';
+import { EditItemComponent } from './edit-item/edit-item.component';
+import { ViewOrdersComponent } from './view-orders/view-orders.component';
+import { RouterModule, Routes } from '@angular/router';
+import { AppRouteGuard } from '@shared/auth/auth-route-guard';
+import { EditOrderComponent } from './edit-order/edit-order.component';
 
+const routes : Routes = [
+  { path: 'orders',
+  component: CreateOrderComponent,
+  data: { permission: 'Pages.Orders' }, 
+  canActivate: [AppRouteGuard],
+  children:
+  [
+      { path: 'view-orders', component: ViewOrdersComponent }
+  ]
+},
+
+]
 
 
 @NgModule({
@@ -77,7 +94,9 @@ import { CreateOrderItemComponent } from './create-order-item/create-order-item.
     SidebarMenuComponent,
     CreateOrderComponent,
     CreateOrderItemComponent,
-
+    EditItemComponent,
+    ViewOrdersComponent,
+    EditOrderComponent,
   ],
   imports: [
     CommonModule,
@@ -112,7 +131,8 @@ import { CreateOrderItemComponent } from './create-order-item/create-order-item.
     CreateUserDialogComponent,
     EditUserDialogComponent,
     ResetPasswordDialogComponent,
-    CreateOrderItemComponent
+    CreateOrderItemComponent,
+
   ],
 })
 export class AppModule {}

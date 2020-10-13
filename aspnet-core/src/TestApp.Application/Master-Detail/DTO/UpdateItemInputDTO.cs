@@ -21,7 +21,7 @@ namespace TestApp.Master_Details
         [Required]
         public decimal TotalPrice { get; set; }
 
-        [Required]
-        public DateTime LastModificationTime { get; set; }
+       
+        public DateTime? LastModificationTime { get; set; }
     }
 }

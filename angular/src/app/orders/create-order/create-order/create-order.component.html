@@ -128,6 +128,13 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
+            <a class="" [routerLink]="['view-orders']">
+                {{ "View Orders" | localize }}
+              </a>
+        </div>
+    </form>
 
         <table class="table table-borderless">
             <thead class="thead-light">
@@ -173,11 +180,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="form-group">
-            <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
-        </div>
-    </form>
-
+       
 </div>
 
     

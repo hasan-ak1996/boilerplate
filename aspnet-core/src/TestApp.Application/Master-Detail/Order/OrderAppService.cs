@@ -52,9 +52,9 @@ namespace TestApp.Authorization
             return output;
         }
 
-        public void UpdateOrder(UpdateOrderInputDTO input)
+        public void UpdateOrder(GetOrederOutputDTO input)
         {
-            TestApp.Models.Order output = _objectMapper.Map<UpdateOrderInputDTO, TestApp.Models.Order>(input);
+            TestApp.Models.Order output = _objectMapper.Map<GetOrederOutputDTO, TestApp.Models.Order>(input);
             _orderManager.UpdateOrder(output);
         }
 

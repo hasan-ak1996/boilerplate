@@ -4,6 +4,7 @@ import {
    OnInit,
    EventEmitter,
    Output,
+   ChangeDetectionStrategy,
    } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -17,18 +18,19 @@ import {
   RoleServiceProxy,
   PermissionDtoListResultDto,
   GetItemOutputDTO,
-  UpdateOrderInputDTO,
-  UpdateItemInputDTO,
   
 } from '@shared/service-proxies/service-proxies';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 import { CreateOrderItemComponent } from '@app/create-order-item/create-order-item.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { EditItemComponent } from '@app/edit-item/edit-item.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'create-order',
   templateUrl: './create-order.component.html',
-  styleUrls: ['./create-order.component.css']
+  styleUrls: ['./create-order.component.css'],
+
 })
 export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
@@ -61,12 +63,8 @@ implements OnInit {
     });
     this._itemService.getAllItems().subscribe((result) => {
       this.items = result;
-    });  
-
-    
+    });   
   }
-  
-  
   setInitialPermissionsStatus(): void {
     _map(this.permissions, (item) => {
       this.checkedPermissionsMap[item.name] = this.isPermissionChecked(
@@ -98,6 +96,9 @@ implements OnInit {
   createItem(): void {
     this.showCreateOrEditItemDialog();
   }
+  editItem(item: GetItemOutputDTO): void {
+    this.showCreateOrEditItemDialog(item.id);
+  }
   protected delete(item: GetItemOutputDTO): void {
     abp.message.confirm(
       this.l('ItemDeleteWarningMessage', item.name),
@@ -106,6 +107,7 @@ implements OnInit {
         if (result) {
           this._itemService.deleteItem(item.id , null).subscribe(() => {
             abp.notify.success(this.l('SuccessfullyDeleted'));
+            
             this._itemService.getAllItems().subscribe((result) => {
               this.items = result;
             }); 
@@ -125,15 +127,27 @@ implements OnInit {
           class: 'modal-lg',
         }
       );
+    } else {
+      createOrEditItemDialog = this._modalService.show(
+        EditItemComponent,
+        {
+          class: 'modal-lg',
+          initialState: {
+            id: id,
+          },
+        }
+      );
     }
+    createOrEditItemDialog.content.onSave.subscribe(() => {
+      this._itemService.getAllItems().subscribe((result) => {
+        this.items = result;})
+    });
+    
 
   }
 
-
-  
   save(): void {
     this.saving = true;
-    console.log(this.order);
     this._orderService
       .createOrder(this.order)
       .pipe(
@@ -142,7 +156,6 @@ implements OnInit {
         })
       )
       .subscribe(() => {
-
         this.notify.info(this.l('SavedSuccessfully'));
         this.onSave.emit();
       });

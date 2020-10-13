@@ -10,6 +10,7 @@ import { RolesComponent } from 'app/roles/roles.component';
 
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { CreateOrderComponent } from './orders/create-order/create-order/create-order.component';
+import { ViewOrdersComponent } from './view-orders/view-orders.component';
 
 @NgModule({
     imports: [
@@ -21,14 +22,24 @@ import { CreateOrderComponent } from './orders/create-order/create-order/create-
                     { path: 'home', component: HomeComponent, canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
-                    { path: 'orders', component: CreateOrderComponent, data: { permission: 'Pages.Orders' }, canActivate: [AppRouteGuard] },
+
+                    { path: 'orders',
+                        component: CreateOrderComponent,
+                        data: { permission: 'Pages.Orders' }, 
+                        canActivate: [AppRouteGuard],
+                    
+                    },
+
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },
-                    { path: 'update-password', component: ChangePasswordComponent }
+                    { path: 'view-orders', component: ViewOrdersComponent },
+                    { path: 'update-password', component: ChangePasswordComponent },
+                   
                 ]
             }
         ])
     ],
+    
     exports: [RouterModule]
 })
 export class AppRoutingModule { }

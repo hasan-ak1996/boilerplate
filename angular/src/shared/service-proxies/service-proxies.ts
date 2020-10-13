@@ -437,7 +437,7 @@ export class ItemServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updateItem(body: UpdateItemInputDTO | undefined): Observable<void> {
+    updateItem(body: GetItemOutputDTO | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/services/app/Item/UpdateItem";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -551,17 +551,16 @@ export class OrderServiceProxy {
 
     /**
      * @param id (optional) 
+     * @param deletionTime (optional) 
      * @return Success
      */
-    deleteOrder(id: number | undefined, deletionTime: moment.Moment): Observable<void> {
+    deleteOrder(id: number | undefined, deletionTime: moment.Moment | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/services/app/Order/DeleteOrder?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
-        if (deletionTime === undefined || deletionTime === null)
-            throw new Error("The parameter 'deletionTime' must be defined and cannot be null.");
-        else
+        if (deletionTime !== undefined && deletionTime !== null)
             url_ += "DeletionTime=" + encodeURIComponent(deletionTime ? "" + deletionTime.toJSON() : "") + "&";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2921,69 +2920,6 @@ export interface IGetItemOutputDTO {
     price: number;
     quantity: number;
     totalPrice: number;
-}
-
-export class UpdateItemInputDTO implements IUpdateItemInputDTO {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    lastModificationTime: moment.Moment;
-
-    constructor(data?: IUpdateItemInputDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.price = _data["price"];
-            this.quantity = _data["quantity"];
-            this.totalPrice = _data["totalPrice"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): UpdateItemInputDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateItemInputDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["price"] = this.price;
-        data["quantity"] = this.quantity;
-        data["totalPrice"] = this.totalPrice;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        return data; 
-    }
-
-    clone(): UpdateItemInputDTO {
-        const json = this.toJSON();
-        let result = new UpdateItemInputDTO();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUpdateItemInputDTO {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    lastModificationTime: moment.Moment;
 }
 
 export class CreateOrderInputDTO implements ICreateOrderInputDTO {
