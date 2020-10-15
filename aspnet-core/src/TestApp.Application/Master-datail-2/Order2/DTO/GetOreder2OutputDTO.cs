@@ -1,20 +1,19 @@
-﻿using Abp.Domain.Entities.Auditing;
-using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using System.Collections.Generic;
-using System.Text;
+using TestApp.Models;
 
-namespace TestApp.Models
+namespace TestApp.Master_datail_2.Order2
 {
-    public class Order : FullAuditedEntity<int>
+    [AutoMap(typeof(Order))]
+    public class GetOreder2OutputDTO : EntityDto
     {
-
+        public int Id { get; set; }
         public string Name { get; set; }
         public string OrderNo { get; set; }
         public string OrderDate { get; set; }
-        public bool IsSubmit { get; set; }
         public string EmpolyeeName { get; set; }
         public decimal TotalPrice { get; set; }
         public virtual List<Item> Items { get; set; }
-
     }
 }

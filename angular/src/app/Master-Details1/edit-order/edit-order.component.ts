@@ -30,8 +30,6 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
   }
   save(): void {
     this.saving = true;
-
-
     this._OrderService
       .updateOrder(this.order)
       .pipe(

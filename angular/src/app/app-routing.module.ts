@@ -9,8 +9,11 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
-import { CreateOrderComponent } from './orders/create-order/create-order/create-order.component';
-import { ViewOrdersComponent } from './view-orders/view-orders.component';
+import { CreateOrderComponent } from './Master-Details1/create-order/create-order.component';
+import { ViewOrdersComponent } from './Master-Details1/view-orders/view-orders.component';
+import { CreateOrder2Component } from './Master-Details2/create-order2/create-order2.component';
+import { ViewOrders2Component } from './Master-Details2/view-orders2/view-orders2.component';
+import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.component';
 
 @NgModule({
     imports: [
@@ -27,12 +30,13 @@ import { ViewOrdersComponent } from './view-orders/view-orders.component';
                         component: CreateOrderComponent,
                         data: { permission: 'Pages.Orders' }, 
                         canActivate: [AppRouteGuard],
-                    
                     },
-
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },
+                    { path: 'orders2', component: CreateOrder2Component ,},
                     { path: 'view-orders', component: ViewOrdersComponent },
+                    { path: 'view-orders2', component: ViewOrders2Component },
+                    { path: 'view-orders2/:id', component: EditOrder2Component },
                     { path: 'update-password', component: ChangePasswordComponent },
                    
                 ]

@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using TestApp.Models;
 
-
-namespace TestApp.Master_Detail.DTO
+namespace TestApp.Master_datail_2.Order2
 {
     [AutoMapTo(typeof(Order))]
-    public class CreateOrderInputDTO
+    public class CreateOrder2InputDTO
     {
         [Required]
         public string Name { get; set; }
@@ -17,7 +15,7 @@ namespace TestApp.Master_Detail.DTO
         [Required]
         public string OrderNo { get; set; }
 
-        
+
         public DateTime CreationTime { get; set; }
 
         public bool IsSubmit { get; set; }
@@ -31,6 +29,6 @@ namespace TestApp.Master_Detail.DTO
         [Required]
         public decimal TotalPrice { get; set; }
 
-        public List<Item> Items { get; set; }
+        public List<CreateItem2InputDTO> Items { get; set; }
     }
 }

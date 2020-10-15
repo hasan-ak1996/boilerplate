@@ -1,11 +1,11 @@
 <form
   class="form-horizontal"
   autocomplete="off"
-  #editItemModal="ngForm"
+  #createItemModal="ngForm"
   (ngSubmit)="save() "
 >
     <abp-modal-header
-    [title]="'EditItem' | localize"
+    [title]="'CreateNewItem' | localize"
     (onCloseClick)="bsModalRef.hide()"
     ></abp-modal-header>
      <div class="modal-body">
@@ -101,7 +101,7 @@
     </div>
     <abp-modal-footer
     [cancelDisabled]="saving"
-    [saveDisabled]="!editItemModal.form.valid || saving"
+    [saveDisabled]="!createItemModal.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
     ></abp-modal-footer>
 </form>

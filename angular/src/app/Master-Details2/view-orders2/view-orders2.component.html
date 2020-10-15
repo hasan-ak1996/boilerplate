@@ -1,0 +1,41 @@
+<table class="table table-borderless">
+    <thead class="thead-light">
+        <th>Name</th>
+        <th>Order.No</th>
+        <th>Order Date</th>
+        <th>Employee Name</th>
+        <th>Total Price</th>
+        <th></th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let order of orders">
+            <td>{{order.name}}</td>
+            <td>{{order.orderNo}}</td>
+            <td>{{order.orderDate}}</td>
+            <td>{{order.empolyeeName}}</td>
+            <td>{{order.totalPrice}}</td>
+            <td>
+                <button
+                type="button"
+                class="btn btn-sm bg-secondary"
+                (click)="editOrder(order)"
+                >
+                <i class="fas fa-pencil-alt"></i>
+                {{ "Edit" | localize }}
+                </button>
+            </td>
+            <td>
+                <button
+                type="button"
+                class="btn btn-sm bg-danger"
+                (click)="delete(order)"
+                > 
+                <i class="fas fa-trash"></i>
+                {{ "Delete" | localize }}
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

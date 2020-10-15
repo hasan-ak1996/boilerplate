@@ -22,9 +22,9 @@ import {
 } from '@shared/service-proxies/service-proxies';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
-import { CreateOrderItemComponent } from '@app/create-order-item/create-order-item.component';
+import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { EditItemComponent } from '@app/edit-item/edit-item.component';
+import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
 import { Router } from '@angular/router';
 @Component({
   selector: 'create-order',

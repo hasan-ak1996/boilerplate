@@ -1,0 +1,107 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #editItem2Form="ngForm"
+  (ngSubmit)="save() "
+>
+    <abp-modal-header
+    [title]="'EditItem' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+    ></abp-modal-header>
+     <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="itemName">
+               {{ "Item Name" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="itemName"
+                required
+                maxlength="32"
+                [(ngModel)]="item.name"
+                #nameModel="ngModel"
+                #nameEl
+                />
+                <abp-validation-summary
+                [control]="nameModel"
+                [controlEl]="nameEl"
+                ></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="price">
+                {{ "Price" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                type="number"
+                class="form-control"
+                name="price"
+                id="price"
+                required
+                maxlength="32"
+                [(ngModel)]="item.price"
+                #priceModel="ngModel"
+                #priceEl
+                />
+                <abp-validation-summary
+                [control]="priceModel"
+                [controlEl]="priceEl"
+                ></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="quantity">
+                {{ "Quantity" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                type="number"
+                class="form-control"
+                name="quantity"
+                id="quantity"
+                required
+                minlength="2"
+                maxlength="32"
+                [(ngModel)]="item.quantity"
+                #quantityModel="ngModel"
+                #quantityEl
+                />
+                <abp-validation-summary
+                [control]="quantityModel"
+                [controlEl]="quantityEl"
+                ></abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="totalPriceItem">
+                {{ "Total Price" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                type="number"
+                class="form-control"
+                name="totalPrice"
+                id="totalPriceItem"
+                required
+                maxlength="32"
+                [(ngModel)]="item.totalPrice"
+                #totalPriceModel="ngModel"
+                #totalPriceEl
+                />
+                <abp-validation-summary
+                [control]="totalPriceModel"
+                [controlEl]="totalPriceEl"
+                ></abp-validation-summary>
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!editItem2Form.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+    ></abp-modal-footer>
+</form>

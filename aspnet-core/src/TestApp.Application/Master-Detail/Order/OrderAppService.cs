@@ -28,6 +28,7 @@ namespace TestApp.Authorization
         public void CreateOrder(CreateOrderInputDTO input)
         {
             Order output = _objectMapper.Map<CreateOrderInputDTO, Order>(input);
+            
 
             _orderManager.CreateOrder(output);
             

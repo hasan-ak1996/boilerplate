@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { EditOrderComponent } from '@app/edit-order/edit-order.component';
+import { EditOrderComponent } from '@app/Master-Details1/edit-order/edit-order.component';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   OrderServiceProxy,

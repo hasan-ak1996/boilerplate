@@ -41,8 +41,6 @@ export class EditItemComponent extends AppComponentBase implements OnInit {
 
   save(): void {
     this.saving = true;
-
-
     this._ItemService
       .updateItem(this.item)
       .pipe(
