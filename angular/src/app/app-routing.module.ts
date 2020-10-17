@@ -21,6 +21,7 @@ import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.c
             {
                 path: '',
                 component: AppComponent,
+              
                 children: [
                     { path: 'home', component: HomeComponent, canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
@@ -28,8 +29,7 @@ import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.c
 
                     { path: 'orders',
                         component: CreateOrderComponent,
-                        data: { permission: 'Pages.Orders' }, 
-                        canActivate: [AppRouteGuard],
+
                     },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },

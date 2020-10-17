@@ -1283,7 +1283,7 @@ export class Order2ServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    updateOrder(body: UpdateOrder2InputDTO | undefined): Observable<void> {
+    updateOrder(body: GetOreder2OutputDTO | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/services/app/Order2/UpdateOrder";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3429,7 +3429,7 @@ export interface ICreateItemInputDTO {
 
 export class GetItemOutputDTO implements IGetItemOutputDTO {
     id: number;
-    name: string | undefined;
+    name: string;
     price: number;
     quantity: number;
     totalPrice: number;
@@ -3480,7 +3480,7 @@ export class GetItemOutputDTO implements IGetItemOutputDTO {
 
 export interface IGetItemOutputDTO {
     id: number;
-    name: string | undefined;
+    name: string;
     price: number;
     quantity: number;
     totalPrice: number;
@@ -3679,97 +3679,6 @@ export interface IUpdateItem2InputDTO {
     orderId: number | undefined;
 }
 
-export class Item implements IItem {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    name: string | undefined;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    orderId: number | undefined;
-
-    constructor(data?: IItem) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.name = _data["name"];
-            this.price = _data["price"];
-            this.quantity = _data["quantity"];
-            this.totalPrice = _data["totalPrice"];
-            this.orderId = _data["orderId"];
-        }
-    }
-
-    static fromJS(data: any): Item {
-        data = typeof data === 'object' ? data : {};
-        let result = new Item();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["name"] = this.name;
-        data["price"] = this.price;
-        data["quantity"] = this.quantity;
-        data["totalPrice"] = this.totalPrice;
-        data["orderId"] = this.orderId;
-        return data; 
-    }
-
-    clone(): Item {
-        const json = this.toJSON();
-        let result = new Item();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IItem {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    name: string | undefined;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    orderId: number | undefined;
-}
-
 export class CreateOrderInputDTO implements ICreateOrderInputDTO {
     name: string;
     orderNo: string;
@@ -3778,7 +3687,6 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-    items: Item[] | undefined;
 
     constructor(data?: ICreateOrderInputDTO) {
         if (data) {
@@ -3798,11 +3706,6 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
             this.orderDate = _data["orderDate"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(Item.fromJS(item));
-            }
         }
     }
 
@@ -3822,11 +3725,6 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
         data["orderDate"] = this.orderDate;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
         return data; 
     }
 
@@ -3846,17 +3744,15 @@ export interface ICreateOrderInputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-    items: Item[] | undefined;
 }
 
 export class GetOrederOutputDTO implements IGetOrederOutputDTO {
     id: number;
-    name: string | undefined;
-    orderNo: string | undefined;
-    orderDate: string | undefined;
-    empolyeeName: string | undefined;
+    name: string;
+    orderNo: string;
+    orderDate: string;
+    empolyeeName: string;
     totalPrice: number;
-    items: Item[] | undefined;
 
     constructor(data?: IGetOrederOutputDTO) {
         if (data) {
@@ -3875,11 +3771,6 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
             this.orderDate = _data["orderDate"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(Item.fromJS(item));
-            }
         }
     }
 
@@ -3898,11 +3789,6 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
         data["orderDate"] = this.orderDate;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
         return data; 
     }
 
@@ -3916,12 +3802,11 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
 
 export interface IGetOrederOutputDTO {
     id: number;
-    name: string | undefined;
-    orderNo: string | undefined;
-    orderDate: string | undefined;
-    empolyeeName: string | undefined;
+    name: string;
+    orderNo: string;
+    orderDate: string;
+    empolyeeName: string;
     totalPrice: number;
-    items: Item[] | undefined;
 }
 
 export class CreateOrder2InputDTO implements ICreateOrder2InputDTO {
@@ -3932,7 +3817,7 @@ export class CreateOrder2InputDTO implements ICreateOrder2InputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-    items: CreateItem2InputDTO[] | undefined;
+    items: CreateItem2InputDTO[];
 
     constructor(data?: ICreateOrder2InputDTO) {
         if (data) {
@@ -3940,6 +3825,9 @@ export class CreateOrder2InputDTO implements ICreateOrder2InputDTO {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.items = [];
         }
     }
 
@@ -4000,17 +3888,17 @@ export interface ICreateOrder2InputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-    items: CreateItem2InputDTO[] | undefined;
+    items: CreateItem2InputDTO[];
 }
 
 export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
     id: number;
-    name: string | undefined;
-    orderNo: string | undefined;
-    orderDate: string | undefined;
-    empolyeeName: string | undefined;
+    name: string;
+    orderNo: string;
+    orderDate: string;
+    empolyeeName: string;
     totalPrice: number;
-    items: Item[] | undefined;
+    items: GetItem2OutputDTO[] | undefined;
 
     constructor(data?: IGetOreder2OutputDTO) {
         if (data) {
@@ -4032,7 +3920,7 @@ export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items.push(Item.fromJS(item));
+                    this.items.push(GetItem2OutputDTO.fromJS(item));
             }
         }
     }
@@ -4070,98 +3958,12 @@ export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
 
 export interface IGetOreder2OutputDTO {
     id: number;
-    name: string | undefined;
-    orderNo: string | undefined;
-    orderDate: string | undefined;
-    empolyeeName: string | undefined;
-    totalPrice: number;
-    items: Item[] | undefined;
-}
-
-export class UpdateOrder2InputDTO implements IUpdateOrder2InputDTO {
-    id: number;
     name: string;
     orderNo: string;
     orderDate: string;
-    isSubmit: boolean;
-    lastModificationTime: moment.Moment;
     empolyeeName: string;
     totalPrice: number;
-    items: Item[];
-
-    constructor(data?: IUpdateOrder2InputDTO) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.items = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.orderNo = _data["orderNo"];
-            this.orderDate = _data["orderDate"];
-            this.isSubmit = _data["isSubmit"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.empolyeeName = _data["empolyeeName"];
-            this.totalPrice = _data["totalPrice"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(Item.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): UpdateOrder2InputDTO {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateOrder2InputDTO();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["orderNo"] = this.orderNo;
-        data["orderDate"] = this.orderDate;
-        data["isSubmit"] = this.isSubmit;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["empolyeeName"] = this.empolyeeName;
-        data["totalPrice"] = this.totalPrice;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): UpdateOrder2InputDTO {
-        const json = this.toJSON();
-        let result = new UpdateOrder2InputDTO();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUpdateOrder2InputDTO {
-    id: number;
-    name: string;
-    orderNo: string;
-    orderDate: string;
-    isSubmit: boolean;
-    lastModificationTime: moment.Moment;
-    empolyeeName: string;
-    totalPrice: number;
-    items: Item[];
+    items: GetItem2OutputDTO[] | undefined;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

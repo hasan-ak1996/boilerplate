@@ -48,9 +48,9 @@ namespace TestApp.Master_datail_2.Order2
             return output;
         }
 
-        public void UpdateOrder(UpdateOrder2InputDTO input)
+        public void UpdateOrder(GetOreder2OutputDTO input)
         {
-            TestApp.Models.Order output = _objectMapper.Map<UpdateOrder2InputDTO, TestApp.Models.Order>(input);
+            TestApp.Models.Order output = _objectMapper.Map<GetOreder2OutputDTO, TestApp.Models.Order>(input);
             _orderManager.UpdateOrder(output);
         }
     }

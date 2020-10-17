@@ -28,7 +28,7 @@ namespace TestApp.Master_datail_2.Order2
 
         [Required]
         public decimal TotalPrice { get; set; }
-
+        [Required]
         public List<CreateItem2InputDTO> Items { get; set; }
     }
 }

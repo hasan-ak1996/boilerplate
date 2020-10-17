@@ -3,7 +3,7 @@
     class="form-horizontal"
     autocomplete="off"
     #createOrderModal="ngForm"
-    (ngSubmit)="save()"
+    (ngSubmit)="createOrderModal.valid &&  save()"
     >
         <div class="row">
             <div class="col-md-6">
@@ -12,21 +12,24 @@
                     {{ "Order Name" | localize }}
                     </label>
                     <div>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        id="name"
-                        required
-                        maxlength="32"
-                        [(ngModel)]="order.name"
-                        #nameModel="ngModel"
-                        #nameEl
-                    />
-                    <abp-validation-summary
-                        [control]="nameModel"
-                        [controlEl]="nameEl"
-                    ></abp-validation-summary>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="name"
+                            id="name"
+                            required
+                            maxlength="32"
+                            [(ngModel)]="order.name"
+                            #nameModel="ngModel"
+                            #nameEl
+                        />
+                        <div 
+                        class="text-danger"
+                        *ngIf="createOrderModal.submitted && !nameModel.valid">
+                            <div *ngIf="nameModel.errors.required">
+                                Name is required
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -36,21 +39,24 @@
                     {{ "Order.No" | localize }}
                     </label>
                     <div>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="orderNo"
-                        id="orderNo"
-                        required
-                        maxlength="32"
-                        [(ngModel)]="order.orderNo"
-                        #orderNoModel="ngModel"
-                        #orderNoEl
-                    />
-                    <abp-validation-summary
-                        [control]="orderNoModel"
-                        [controlEl]="orderNoEl"
-                    ></abp-validation-summary>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="orderNo"
+                            id="orderNo"
+                            required
+                            maxlength="32"
+                            [(ngModel)]="order.orderNo"
+                            #orderNoModel="ngModel"
+                            #orderNoEl
+                        />
+                        <div 
+                        class="text-danger"
+                        *ngIf="createOrderModal.submitted && !orderNoModel.valid">
+                            <div *ngIf="orderNoModel.errors.required">
+                                Order.No is required
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,44 +67,50 @@
                     {{ "Empolyee Name" | localize }}
                     </label>
                     <div>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="empolyeeName"
-                        id="empolyeeName"
-                        required
-                        maxlength="32"
-                        [(ngModel)]="order.empolyeeName"
-                        #empolyeeNameModel="ngModel"
-                        #empolyeeNameEl
-                    />
-                    <abp-validation-summary
-                        [control]="empolyeeNameModel"
-                        [controlEl]="empolyeeNameEl"
-                    ></abp-validation-summary>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="empolyeeName"
+                            id="empolyeeName"
+                            required
+                            maxlength="32"
+                            [(ngModel)]="order.empolyeeName"
+                            #empolyeeNameModel="ngModel"
+                            #empolyeeNameEl
+                        />
+                        <div 
+                        class="text-danger"
+                        *ngIf="createOrderModal.submitted && !empolyeeNameModel.valid">
+                            <div *ngIf="empolyeeNameModel.errors.required">
+                                Empolyee Name is required
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group required">
                     <label class="col-form-label" for="totalPrice">
-                    {{ "TotalPrice" | localize }}
+                    {{ "Total Price" | localize }}
                     </label>
                     <div>
-                    <input
-                        type="number"
-                        class="form-control"
-                        name="totalPrice"
-                        id="totalPrice"
-                        required
-                        maxlength="32"
-                        [(ngModel)]="order.totalPrice"
-                        #totalPriceModel="ngModel"
-                        #totalPriceEl
-                    />
-                    <abp-validation-summary
-                        [control]="totalPriceModel"
-                        [controlEl]="totalPriceEl"
-                    ></abp-validation-summary>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="totalPrice"
+                            id="totalPrice"
+                            required
+                            maxlength="32"
+                            [(ngModel)]="order.totalPrice"
+                            #totalPriceModel="ngModel"
+                            #totalPriceEl
+                        />
+                        <div 
+                        class="text-danger"
+                        *ngIf="createOrderModal.submitted && !totalPriceModel.valid">
+                            <div *ngIf="totalPriceModel.errors.required">
+                                Total Price is required
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -109,28 +121,30 @@
                     {{ "Order Date" | localize }}
                     </label>
                     <div>
-                    <input
-                        type="date"
-                        class="form-control"
-                        name="orderDate"
-                        id="orderDate"
-                        required
-                        maxlength="32"
-                        [(ngModel)]="order.orderDate"
-                        #orderDateModel="ngModel"
-                        #orderDateEl
-                    />
-                    <abp-validation-summary
-                        [control]="orderDateModel"
-                        [controlEl]="orderDateEl"
-                    ></abp-validation-summary>
+                        <input
+                            type="date"
+                            class="form-control"
+                            name="orderDate"
+                            id="orderDate"
+                            required
+                            maxlength="32"
+                            [(ngModel)]="order.orderDate"
+                            #orderDateModel="ngModel"
+                            #orderDateEl
+                        />
+                        <div 
+                        class="text-danger"
+                        *ngIf="createOrderModal.submitted && !orderDateModel.valid">
+                            <div *ngIf="orderDateModel.errors.required">
+                                Order Date is required
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
-
         </div>
     </form>
 

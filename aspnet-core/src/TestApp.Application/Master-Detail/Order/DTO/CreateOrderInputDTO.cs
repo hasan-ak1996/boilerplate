@@ -31,6 +31,5 @@ namespace TestApp.Master_Detail.DTO
         [Required]
         public decimal TotalPrice { get; set; }
 
-        public List<Item> Items { get; set; }
     }
 }

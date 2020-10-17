@@ -2,7 +2,7 @@
   class="form-horizontal"
   autocomplete="off"
   #editItem2Form="ngForm"
-  (ngSubmit)="save() "
+  (ngSubmit)="editItem2Form.valid && save() "
 >
     <abp-modal-header
     [title]="'EditItem' | localize"
@@ -25,10 +25,13 @@
                 #nameModel="ngModel"
                 #nameEl
                 />
-                <abp-validation-summary
-                [control]="nameModel"
-                [controlEl]="nameEl"
-                ></abp-validation-summary>
+                <div 
+                    class="text-danger"
+                    *ngIf="editItem2Form.submitted && !nameModel.valid">
+                    <div *ngIf="nameModel.errors.required">
+                        Name is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group row required">
@@ -47,10 +50,13 @@
                 #priceModel="ngModel"
                 #priceEl
                 />
-                <abp-validation-summary
-                [control]="priceModel"
-                [controlEl]="priceEl"
-                ></abp-validation-summary>
+                <div 
+                    class="text-danger"
+                    *ngIf="editItem2Form.submitted && !priceModel.valid">
+                    <div *ngIf="priceModel.errors.required">
+                        Price is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group row required">
@@ -70,10 +76,13 @@
                 #quantityModel="ngModel"
                 #quantityEl
                 />
-                <abp-validation-summary
-                [control]="quantityModel"
-                [controlEl]="quantityEl"
-                ></abp-validation-summary>
+                <div 
+                    class="text-danger"
+                    *ngIf="editItem2Form.submitted && !quantityModel.valid">
+                    <div *ngIf="quantityModel.errors.required">
+                        Quantity is required
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group row required">
@@ -92,16 +101,18 @@
                 #totalPriceModel="ngModel"
                 #totalPriceEl
                 />
-                <abp-validation-summary
-                [control]="totalPriceModel"
-                [controlEl]="totalPriceEl"
-                ></abp-validation-summary>
+                <div 
+                    class="text-danger"
+                    *ngIf="editItem2Form.submitted && !totalPriceModel.valid">
+                    <div *ngIf="totalPriceModel.errors.required">
+                        Total Price is required
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <abp-modal-footer
     [cancelDisabled]="saving"
-    [saveDisabled]="!editItem2Form.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
     ></abp-modal-footer>
 </form>

@@ -20,5 +20,6 @@
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="5.13.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>
 </Project>

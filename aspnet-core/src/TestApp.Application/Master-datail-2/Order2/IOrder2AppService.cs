@@ -9,7 +9,7 @@ namespace TestApp.Master_datail_2.Order2
     {
         IEnumerable<GetOreder2OutputDTO> GetAllOrders();
         void CreateOrder(CreateOrder2InputDTO input);
-        void UpdateOrder(UpdateOrder2InputDTO input);
+        void UpdateOrder(GetOreder2OutputDTO input);
         void DeleteOrder(DeleteOrder2InputDTO input);
         GetOreder2OutputDTO GetOrderById(Order2InputDTO input);
     }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditItem2Component } from '@app/Master-Details2/edit-item2/edit-item2.component';
 import { AppComponentBase } from '@shared/app-component-base';
 import { CreateItem2InputDTO, CreateOrder2InputDTO, Order2ServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -22,7 +23,9 @@ export class CreateOrder2Component extends AppComponentBase
   constructor(injector: Injector,
     public _orderService: Order2ServiceProxy,
     private _modalService: BsModalService,
-    public dataItemsService : DataItemsService) {
+    public dataItemsService : DataItemsService,
+    private router: Router,
+    private route: ActivatedRoute) {
       super(injector);
      }
 
