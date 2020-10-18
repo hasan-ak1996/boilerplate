@@ -14,6 +14,7 @@ import { ViewOrdersComponent } from './Master-Details1/view-orders/view-orders.c
 import { CreateOrder2Component } from './Master-Details2/create-order2/create-order2.component';
 import { ViewOrders2Component } from './Master-Details2/view-orders2/view-orders2.component';
 import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.component';
+import { EditOrderComponent } from './Master-Details1/edit-order/edit-order.component';
 
 @NgModule({
     imports: [
@@ -37,6 +38,7 @@ import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.c
                     { path: 'view-orders', component: ViewOrdersComponent },
                     { path: 'view-orders2', component: ViewOrders2Component },
                     { path: 'view-orders2/:id', component: EditOrder2Component },
+                    { path: 'view-orders/:id', component: EditOrderComponent },
                     { path: 'update-password', component: ChangePasswordComponent },
                    
                 ]

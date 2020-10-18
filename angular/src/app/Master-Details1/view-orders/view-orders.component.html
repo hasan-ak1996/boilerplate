@@ -6,7 +6,7 @@
         <th>Employee Name</th>
         <th>Total Price</th>
         <th></th>
-        <th></th>
+        <th><button (click)="goToCreateOrder()" class="btn btn-primary">Create Order</button></th>
     </thead>
     <tbody>
         <tr *ngFor = "let order of orders">
@@ -19,8 +19,9 @@
                 <button
                 type="button"
                 class="btn btn-sm bg-secondary"
-                (click)="editOrder(order)"
+                [routerLink] = "['/app/view-orders' , order.id]"
                 >
+
                 <i class="fas fa-pencil-alt"></i>
                 {{ "Edit" | localize }}
                 </button>

@@ -46,21 +46,9 @@ export class ViewOrders2Component  extends AppComponentBase
       }
     );
     }
-    editOrder(order: GetOreder2OutputDTO): void {
-      this.showEditOrderDialog(order.id);
+    goToCreateOrder(){
+      this.router.navigate(['app/orders2']);
     }
   
-    private showEditOrderDialog(id: number): void {
-      let EditOrderDialog: BsModalRef;
-        EditOrderDialog = this._modalService.show(
-          EditOrder2Component,
-          {
-            class: 'modal-lg',
-            initialState: {
-              id: id,
-            },
-          }
-        );
-    }
 
 }

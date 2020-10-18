@@ -30,8 +30,6 @@ export class CreateOrder2Component extends AppComponentBase
      }
 
   ngOnInit(): void {
-
-    
   }
   createItem(): void {
     this.showCreateOrEditItemDialog();
@@ -84,13 +82,10 @@ export class CreateOrder2Component extends AppComponentBase
         }
       }
     );
-
-
-
-
   }
-
-
+  goToViewOrders(){
+    this.router.navigate(['app/view-orders2']);
+  }
   save(): void {
     this.order.items = this.dataItemsService.lines ;
     this.saving = true;

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditOrderComponent } from '@app/Master-Details1/edit-order/edit-order.component';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
@@ -18,7 +18,9 @@ export class ViewOrdersComponent  extends AppComponentBase implements OnInit {
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector ,
     public _orderService: OrderServiceProxy,
-    private _modalService: BsModalService, ) {
+    private _modalService: BsModalService,
+    private router : Router,
+    private route : ActivatedRoute, ) {
     super(injector);
    }
 
@@ -28,31 +30,6 @@ export class ViewOrdersComponent  extends AppComponentBase implements OnInit {
     });
 
   }
-
-  editOrder(order: GetOrederOutputDTO): void {
-    this.showEditOrderDialog(order.id);
-  }
-
-  private showEditOrderDialog(id: number): void {
-    let EditOrderDialog: BsModalRef;
-      EditOrderDialog = this._modalService.show(
-        EditOrderComponent,
-        {
-          class: 'modal-lg',
-          initialState: {
-            id: id,
-          },
-        }
-      );
-    
-      EditOrderDialog.content.onSave.subscribe(() => {
-      this._orderService.getAllOrders().subscribe((result) => {
-        this.orders = result;})
-    });
-    
-
-  }
-
     protected delete(order: GetOrederOutputDTO): void {
     abp.message.confirm(
       this.l('OrderDeleteWarningMessage', order.name),
@@ -69,6 +46,9 @@ export class ViewOrdersComponent  extends AppComponentBase implements OnInit {
         }
       }
     );
+  }
+  goToCreateOrder(){
+    this.router.navigate(['app/orders']);
   }
 
 }

@@ -1,16 +1,14 @@
-<form
+<div class="container">
+    <form
   class="form-horizontal"
   autocomplete="off"
   #editOrderModal="ngForm"
   (ngSubmit)="editOrderModal.valid && save() "
 >
-    <abp-modal-header
-    [title]="'EditOrder' | localize"
-    (onCloseClick)="bsModalRef.hide()"
-    ></abp-modal-header>
+    <h3>EditOrder</h3>
      <div class="modal-body">
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="orderName">
+            <label class="col-md-2 col-form-label" for="orderName">
                {{ "order Name" | localize }}
             </label>
             <div class="col-md-9">
@@ -35,7 +33,7 @@
             </div>
         </div>
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="orderNo">
+            <label class="col-md-2 col-form-label" for="orderNo">
                 {{ "orderNo" | localize }}
             </label>
             <div class="col-md-9">
@@ -60,7 +58,7 @@
             </div>
         </div>
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="empolyeeName">
+            <label class="col-md-2 col-form-label" for="empolyeeName">
                 {{ "Empolyee Name" | localize }}
             </label>
             <div class="col-md-9">
@@ -86,7 +84,7 @@
             </div>
         </div>
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="totalPriceOrder">
+            <label class="col-md-2 col-form-label" for="totalPriceOrder">
                 {{ "Total Price" | localize }}
             </label>
             <div class="col-md-9">
@@ -112,7 +110,7 @@
         </div>
 
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="orderDate">
+            <label class="col-md-2 col-form-label" for="orderDate">
                 {{ "Order Date" | localize }}
             </label>
             <div class="col-md-9">
@@ -136,9 +134,10 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <button class="btn btn-primary ml-auto" type="submit">Save</button>
+        </div>
     </div>
-    <abp-modal-footer
-    [cancelDisabled]="saving"
-    (onCancelClick)="bsModalRef.hide()"
-    ></abp-modal-footer>
-</form>
+
+    </form>
+</div>

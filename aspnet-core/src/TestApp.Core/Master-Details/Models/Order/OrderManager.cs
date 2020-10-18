@@ -1,6 +1,7 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,7 @@ namespace TestApp.Master_Details.Models
 
         public Order GetOrderById(int id)
         {
-            return _orderRepository.Get(id);
+           return _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefault();
         }
 
         public void UpdateOrder(Order entity)

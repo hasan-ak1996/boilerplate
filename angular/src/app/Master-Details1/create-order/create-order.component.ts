@@ -25,7 +25,7 @@ import { AbpValidationError } from '@shared/components/validation/abp-validation
 import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'create-order',
   templateUrl: './create-order.component.html',
@@ -50,6 +50,8 @@ implements OnInit {
     private _roleService: RoleServiceProxy,
     private _modalService: BsModalService,
     public _itemService: ItemServiceProxy,
+    private router: Router,
+    private route: ActivatedRoute
   ) { 
     super(injector);
   }
@@ -160,5 +162,9 @@ implements OnInit {
         this.onSave.emit();
       });
   }
+  goToViewOrders(){
+    this.router.navigate(['app/view-orders']);
+  }
+
 
 }
