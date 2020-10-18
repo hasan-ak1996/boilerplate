@@ -50,7 +50,7 @@ namespace TestApp.Master_Details.Models
 
         public IEnumerable<Order> GetAllOreders()
         {
-            return _orderRepository.GetAllIncluding(r=>r.Items);
+            return _orderRepository.GetAllIncluding(r=>r.Items).ToList();
         }
 
         public Order GetOrderById(int id)
