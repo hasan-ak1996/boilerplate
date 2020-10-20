@@ -15,6 +15,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editItemForm.submitted && !nameModel.valid"
                 type="text"
                 class="form-control"
                 name="name"
@@ -26,9 +27,8 @@
                 #nameEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editItemForm.submitted && !nameModel.valid">
-                    <div *ngIf="nameModel.errors.required">
+                    <div *ngIf="nameModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         Name is required
                     </div>
                 </div>
@@ -40,6 +40,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editItemForm.submitted && !priceModel.valid"
                 type="number"
                 class="form-control"
                 name="price"
@@ -51,9 +52,8 @@
                 #priceEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editItemForm.submitted && !priceModel.valid">
-                    <div *ngIf="priceModel.errors.required">
+                    <div *ngIf="priceModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         Price is required
                     </div>
                 </div>
@@ -65,10 +65,12 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editItemForm.submitted && !quantityModel.valid"
                 type="number"
                 class="form-control"
                 name="quantity"
                 id="quantity"
+                (keyup)="UpdateTotal()"
                 required
                 minlength="2"
                 maxlength="32"
@@ -77,9 +79,8 @@
                 #quantityEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editItemForm.submitted && !quantityModel.valid">
-                    <div *ngIf="quantityModel.errors.required">
+                    <div *ngIf="quantityModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         Quantity is required
                     </div>
                 </div>
@@ -94,20 +95,13 @@
                 type="number"
                 class="form-control"
                 name="totalPrice"
-                id="totalPriceItem"
-                required
+                id="totalPriceItem"   
+                disabled
                 maxlength="32"
                 [(ngModel)]="item.totalPrice"
                 #totalPriceModel="ngModel"
                 #totalPriceEl
                 />
-                <div 
-                    class="text-danger"
-                    *ngIf="editItemForm.submitted && !totalPriceModel.valid">
-                    <div *ngIf="totalPriceModel.errors.required">
-                        Total Price is required
-                    </div>
-                </div>
             </div>
         </div>
     </div>

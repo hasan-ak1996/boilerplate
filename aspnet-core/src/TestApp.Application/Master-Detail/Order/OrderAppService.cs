@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TestApp.Authorization;
 using TestApp.Master_Details.Models;
 using TestApp.Master_Detail.DTO;
-using TestApp.Master_Details.Order;
+using TestApp.Master_Details.Order3;
 using TestApp.Models;
 
 namespace TestApp.Authorization
@@ -25,12 +25,12 @@ namespace TestApp.Authorization
             _orderManager = orderManager;
             _objectMapper = objectMapper;
         }
-        public void CreateOrder(CreateOrderInputDTO input)
+        public Task<Order> CreateOrder(CreateOrderInputDTO input)
         {
             Order output = _objectMapper.Map<CreateOrderInputDTO, Order>(input);
             
 
-            _orderManager.CreateOrder(output);
+            return _orderManager.CreateOrder(output);
             
         }
 

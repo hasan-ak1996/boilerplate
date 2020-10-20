@@ -13,6 +13,7 @@
                     </label>
                     <div>
                         <input
+                        [class.is-invalid]="createOrder2Form.submitted && !nameModel.valid"
                             type="text"
                             class="form-control"
                             name="name"
@@ -24,9 +25,8 @@
                             #nameEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrder2Form.submitted && !nameModel.valid">
-                            <div *ngIf="nameModel.errors.required">
+                            <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Name is required
                             </div>
                         </div>
@@ -40,6 +40,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrder2Form.submitted && !orderNoModel.valid"
                             type="text"
                             class="form-control"
                             name="orderNo"
@@ -51,9 +52,8 @@
                             #orderNoEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrder2Form.submitted && !orderNoModel.valid">
-                            <div *ngIf="orderNoModel.errors.required">
+                            <div *ngIf="orderNoModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Order.No is required
                             </div>
                         </div>
@@ -68,6 +68,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrder2Form.submitted && !empolyeeNameModel.valid"
                             type="text"
                             class="form-control"
                             name="empolyeeName"
@@ -79,9 +80,8 @@
                             #empolyeeNameEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrder2Form.submitted && !empolyeeNameModel.valid">
-                            <div *ngIf="empolyeeNameModel.errors.required">
+                            <div *ngIf="empolyeeNameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Empolyee Name is required
                             </div>
                         </div>
@@ -98,19 +98,13 @@
                             class="form-control"
                             name="totalPrice"
                             id="totalPrice"
-                            required
+                            disabled
                             maxlength="32"
                             [(ngModel)]="order.totalPrice"
                             #totalPriceModel="ngModel"
                             #totalPriceEl
                         />
-                        <div 
-                        class="text-danger"
-                        *ngIf="createOrder2Form.submitted && !totalPriceModel.valid">
-                            <div *ngIf="totalPriceModel.errors.required">
-                                Total Price is required
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -122,6 +116,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrder2Form.submitted && !orderNoModel.valid"
                             type="date"
                             class="form-control"
                             name="orderDate"
@@ -133,9 +128,8 @@
                             #orderDateEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrder2Form.submitted && !orderDateModel.valid">
-                            <div *ngIf="orderDateModel.errors.required">
+                            <div *ngIf="orderDateModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Order Date is required
                             </div>
                         </div>
@@ -163,6 +157,11 @@
                 </th>
             </thead>
             <tbody>
+                <tr *ngIf="!items2.length">
+                    <td class="text-center font-italic" colspan="7">
+                        No item selected for this order
+                    </td>
+                </tr>
                 <tr *ngFor = "let item of items2 ; let i=index">
                     <td>{{item.name}}</td>
                     <td>{{item.price}}</td>

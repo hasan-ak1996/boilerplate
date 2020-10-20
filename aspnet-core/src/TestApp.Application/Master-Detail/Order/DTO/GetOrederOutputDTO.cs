@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using TestApp.Master_Details;
 using TestApp.Models;
 
 namespace TestApp.Master_Detail.DTO
@@ -22,5 +23,7 @@ namespace TestApp.Master_Detail.DTO
         public string EmpolyeeName { get; set; }
         [Required]
         public decimal TotalPrice { get; set; }
+        public virtual List<GetItemOutputDTO> Items { get; set; }
+
     }
 }

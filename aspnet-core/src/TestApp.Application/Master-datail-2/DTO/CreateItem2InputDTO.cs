@@ -22,6 +22,6 @@ namespace TestApp.Master_datail_2
 
         [Required]
         public decimal TotalPrice { get; set; }
-        public int? OrderId { get; set; }
+        public int OrderId { get; set; }
     }
 }

@@ -1,41 +1,90 @@
-<table class="table table-borderless">
-    <thead class="thead-light">
-        <th>Name</th>
-        <th>Order.No</th>
-        <th>Order Date</th>
-        <th>Employee Name</th>
-        <th>Total Price</th>
-        <th></th>
-        <th><button (click)="goToCreateOrder()" class="btn btn-primary">Create Order</button></th>
-    </thead>
-    <tbody>
-        <tr *ngFor = "let order of orders">
-            <td>{{order.name}}</td>
-            <td>{{order.orderNo}}</td>
-            <td>{{order.orderDate}}</td>
-            <td>{{order.empolyeeName}}</td>
-            <td>{{order.totalPrice}}</td>
-            <td>
-                <button
-                type="button"
-                class="btn btn-sm bg-secondary"
-                [routerLink] = "['/app/view-orders' , order.id]"
-                >
+<section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Orders" | localize }}</h1>
+        </div>
+        <div class="col-6 text-right">
+          <a href="javascript:;" class="btn bg-blue" (click)="goToCreateOrder()">
+            <i class="fa fa-plus-square"></i>
+            {{ "Create Order" | localize }}
+          </a>
+        </div>
+      </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
 
-                <i class="fas fa-pencil-alt"></i>
-                {{ "Edit" | localize }}
-                </button>
-            </td>
-            <td>
-                <button
-                type="button"
-                class="btn btn-sm bg-danger"
-                (click)="delete(order)"
-                > 
-                <i class="fas fa-trash"></i>
-                {{ "Delete" | localize }}
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table  class="table table-hover text-nowrap">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Order.No</th>
+                            <th>Order Date</th>
+                            <th>Employee Name</th>
+                            <th>Total Price</th>
+                            <th style="width: 200px;">{{ "Actions" | localize }}</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngIf="!orders.length">
+                            <td class="text-center font-italic" colspan="7">
+                                No Orders Created
+                            </td>
+                        </tr>
+                        <tr  *ngFor = "let order of orders"
+                        >
+                            <td>{{order.name}}</td>
+                            <td>{{order.orderNo}}</td>
+                            <td>{{order.orderDate}}</td>
+                            <td>{{order.empolyeeName}}</td>
+                            <td>{{order.totalPrice}}</td>
+                            <td>
+                                <button
+                                type="button"
+                                class="btn btn-sm bg-secondary"
+                                [routerLink] = "['/app/view-orders' , order.id]"
+                                >
+                                <i class="fas fa-pencil-alt"></i>
+                                {{ "Edit" | localize }}
+                                </button>
+
+                                <button
+                                type="button"
+                                class="btn btn-sm bg-danger mx-2"
+                                (click)="delete(order)"
+                                > 
+                                <i class="fas fa-trash"></i>
+                                {{ "Delete" | localize }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="card-footer bg-light border-top">
+                <div class="row">
+                  <div class="col-sm-4 col-12 text-sm-left text-center">
+                  </div>
+                  <div class="col-sm-4 col-12 text-center">
+                    <p class="mb-0 my-2">
+                    </p>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+

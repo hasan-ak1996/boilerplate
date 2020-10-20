@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TestApp.Master_Details.Models;
 using TestApp.Models;
 
@@ -20,25 +21,25 @@ namespace TestApp.Master_datail_2.Order2
             _objectMapper = objectMapper;
         }
 
-        public void CreateOrder(CreateOrder2InputDTO input)
+        public async Task<Order> CreateOrder(CreateOrder2InputDTO input)
         {
             Order output = _objectMapper.Map<CreateOrder2InputDTO, Order>(input);
 
 
-            _orderManager.CreateOrder(output);
+           return await _orderManager.CreateOrder(output);
 
         }
 
-        public void DeleteOrder(DeleteOrder2InputDTO input)
+        public  void  DeleteOrder(DeleteOrder2InputDTO input)
         {
-            _orderManager.DeleteOrder(input.Id);
+             _orderManager.DeleteOrder(input.Id);
         }
 
-        public IEnumerable<GetOreder2OutputDTO> GetAllOrders()
+        public  IEnumerable<GetOreder2OutputDTO> GetAllOrders()
         {
-            var getAll = _orderManager.GetAllOreders().ToList();
+            var getAll =  _orderManager.GetAllOreders().ToList();
             List<GetOreder2OutputDTO> output = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOreder2OutputDTO>>(getAll);
-            return output;
+            return  output;
         }
 
         public GetOreder2OutputDTO GetOrderById(Order2InputDTO input)

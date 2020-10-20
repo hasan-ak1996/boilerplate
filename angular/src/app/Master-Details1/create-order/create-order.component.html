@@ -13,6 +13,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
                             type="text"
                             class="form-control"
                             name="name"
@@ -24,9 +25,8 @@
                             #nameEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrderModal.submitted && !nameModel.valid">
-                            <div *ngIf="nameModel.errors.required">
+                            <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Name is required
                             </div>
                         </div>
@@ -40,6 +40,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
                             type="text"
                             class="form-control"
                             name="orderNo"
@@ -51,9 +52,8 @@
                             #orderNoEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrderModal.submitted && !orderNoModel.valid">
-                            <div *ngIf="orderNoModel.errors.required">
+                            <div *ngIf="orderNoModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Order.No is required
                             </div>
                         </div>
@@ -68,6 +68,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
                             type="text"
                             class="form-control"
                             name="empolyeeName"
@@ -79,9 +80,8 @@
                             #empolyeeNameEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrderModal.submitted && !empolyeeNameModel.valid">
-                            <div *ngIf="empolyeeNameModel.errors.required">
+                            <div *ngIf="empolyeeNameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Empolyee Name is required
                             </div>
                         </div>
@@ -94,6 +94,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
                             type="number"
                             class="form-control"
                             name="totalPrice"
@@ -105,9 +106,8 @@
                             #totalPriceEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrderModal.submitted && !totalPriceModel.valid">
-                            <div *ngIf="totalPriceModel.errors.required">
+                            <div *ngIf="totalPriceModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Total Price is required
                             </div>
                         </div>
@@ -122,6 +122,7 @@
                     </label>
                     <div>
                         <input
+                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
                             type="date"
                             class="form-control"
                             name="orderDate"
@@ -133,9 +134,8 @@
                             #orderDateEl
                         />
                         <div 
-                        class="text-danger"
                         *ngIf="createOrderModal.submitted && !orderDateModel.valid">
-                            <div *ngIf="orderDateModel.errors.required">
+                            <div *ngIf="orderDateModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
                                 Order Date is required
                             </div>
                         </div>
@@ -144,10 +144,12 @@
             </div>
         </div>
         <div class="form-group">
-            <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit</button>
+            <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit Master</button>
             <button  (click)="goToViewOrders()" class="btn btn-dark ml-2">View Orders</button>
         </div>
     </form>
+
+    <!--
 
         <table class="table table-borderless">
             <thead class="thead-light">
@@ -165,6 +167,11 @@
                 </th>
             </thead>
             <tbody>
+                <tr *ngIf="!items">
+                    <td class="text-center font-italic" colspan="7">
+                        No item selected for this order
+                    </td>
+                </tr>
                 <tr *ngFor = "let item of items">
                     <td>{{item.name}}</td>
                     <td>{{item.price}}</td>
@@ -193,6 +200,7 @@
                 </tr>
             </tbody>
         </table>
+    -->
        
 </div>
 

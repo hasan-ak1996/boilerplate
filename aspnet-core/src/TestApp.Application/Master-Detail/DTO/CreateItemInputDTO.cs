@@ -23,6 +23,7 @@ namespace TestApp.Master_Details
 
         [Required]
         public decimal TotalPrice { get; set; }
-       
+
+        public int OrderId { get; set; }
     }
 }

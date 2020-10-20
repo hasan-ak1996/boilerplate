@@ -23,6 +23,10 @@ export class CreateItem2Component  extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
   }
+  
+  UpdateTotal(){
+    this.item.totalPrice = parseInt((this.item.quantity * this.item.price).toFixed(2));
+  }
 
   save(): void {
     

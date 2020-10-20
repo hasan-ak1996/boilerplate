@@ -26,6 +26,10 @@ export class EditItem2Component  extends AppComponentBase  implements OnInit {
     this.item  = this.dataItemsService.lines.find(i => i.name == this.name);
   }
 
+  UpdateTotal(){
+    this.item.totalPrice = parseInt((this.item.quantity * this.item.price).toFixed(2));
+  }
+
   save(): void {
     this.saving = true;
     this.notify.info(this.l('SavedSuccessfully'));

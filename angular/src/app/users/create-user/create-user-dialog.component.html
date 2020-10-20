@@ -2,7 +2,7 @@
   class="form-horizontal"
   autocomplete="off"
   #createUserModal="ngForm"
-  (ngSubmit)="save()"
+  (ngSubmit)="createUserModal.valid && save()"
 >
   <abp-modal-header
     [title]="'CreateNewUser' | localize"
@@ -17,6 +17,7 @@
           </label>
           <div class="col-md-9">
             <input
+            [class.is-invalid]="createUserModal.submitted && !nameModel.valid"
               type="text"
               class="form-control"
               name="name"
@@ -27,10 +28,11 @@
               #nameModel="ngModel"
               #nameEl
             />
-            <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
-            ></abp-validation-summary>
+            <div *ngIf="createUserModal.submitted && !nameModel.valid">
+            <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted"
+            >this field is requerd
+          </div>
+            </div>
           </div>
         </div>
         <div class="form-group row required">
@@ -194,7 +196,6 @@
   </div>
   <abp-modal-footer
     [cancelDisabled]="saving"
-    [saveDisabled]="!createUserModal.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
   ></abp-modal-footer>
 </form>

@@ -31,6 +31,13 @@ export class CreateOrder2Component extends AppComponentBase
 
   ngOnInit(): void {
   }
+
+  UpdateTotalPrice(){
+    this.order.totalPrice = this.items2.reduce((prev,curr) => {
+      return prev + curr.totalPrice;
+    },0);
+    this.order.totalPrice = parseInt((this.order.totalPrice).toFixed(2));
+  }
   createItem(): void {
     this.showCreateOrEditItemDialog();
   }
@@ -44,7 +51,8 @@ export class CreateOrder2Component extends AppComponentBase
       );
     
     createOrEditItemDialog.content.onSave.subscribe(() => {
-       this.items2 =  this.dataItemsService.lines
+       this.items2 =  this.dataItemsService.lines;
+       this.UpdateTotalPrice()
     });
   }
 
@@ -65,7 +73,8 @@ export class CreateOrder2Component extends AppComponentBase
       );
     
     createOrEditItemDialog.content.onSave.subscribe(() => {
-      this.items2 =  this.dataItemsService.lines
+      this.items2 =  this.dataItemsService.lines;
+      this.UpdateTotalPrice()
     });
     
 
@@ -78,7 +87,8 @@ export class CreateOrder2Component extends AppComponentBase
         if (result) {
           this.dataItemsService.lines.splice(index , 1);
             abp.notify.success(this.l('SuccessfullyDeleted'));
-            this.items2 =  this.dataItemsService.lines
+            this.items2 =  this.dataItemsService.lines;
+            this.UpdateTotalPrice()
         }
       }
     );
@@ -99,6 +109,8 @@ export class CreateOrder2Component extends AppComponentBase
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
         this.onSave.emit();
+        this.router.navigate(['app/view-orders2']);
+        this.dataItemsService.lines =[];
       });
   }
 

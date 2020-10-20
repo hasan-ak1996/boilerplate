@@ -23,6 +23,7 @@ export class EditItemComponent extends AppComponentBase implements OnInit {
   saving = false;
   item = new GetItemOutputDTO ();
   id: number;
+  orderId: number;
   @Output() onSave = new EventEmitter<any>();
   constructor(
     injector: Injector,
@@ -36,11 +37,15 @@ export class EditItemComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this._ItemService.getItemById(this.id).subscribe((result) => {
        this.item = result; 
-        })
+    })
+  }
+  UpdateTotal(){
+    this.item.totalPrice = parseInt((this.item.quantity * this.item.price).toFixed(2));
   }
 
   save(): void {
     this.saving = true;
+    this.item.orderId = this.orderId;
     this._ItemService
       .updateItem(this.item)
       .pipe(
@@ -49,7 +54,7 @@ export class EditItemComponent extends AppComponentBase implements OnInit {
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
+        this.notify.info(this.l('UpdatedSuccessfully'));
         this.bsModalRef.hide();
         this.onSave.emit();
       });

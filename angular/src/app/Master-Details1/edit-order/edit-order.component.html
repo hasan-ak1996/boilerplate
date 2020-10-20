@@ -13,6 +13,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editOrderModal.submitted && !nameModel.valid"
                 type="text"
                 class="form-control"
                 name="orderName"
@@ -24,9 +25,8 @@
                 #nameEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editOrderModal.submitted && !nameModel.valid">
-                    <div *ngIf="nameModel.errors.required">
+                    <div *ngIf="nameModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         order Name is required
                     </div>
                 </div>
@@ -38,6 +38,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editOrderModal.submitted && !orderNoModel.valid"
                 type="number"
                 class="form-control"
                 name="orderNo"
@@ -49,9 +50,8 @@
                 #orderNoEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editOrderModal.submitted && !orderNoModel.valid">
-                    <div *ngIf="orderNoModel.errors.required">
+                    <div *ngIf="orderNoModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         orderNo is required
                     </div>
                 </div>
@@ -63,6 +63,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editOrderModal.submitted && !empolyeeNameModel.valid"
                 type="text"
                 class="form-control"
                 name="empolyeeName"
@@ -75,9 +76,8 @@
                 #empolyeeNameEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editOrderModal.submitted && !empolyeeNameModel.valid">
-                    <div *ngIf="empolyeeNameModel.errors.required">
+                    <div *ngIf="empolyeeNameModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         Empolyee Name is required
                     </div>
                 </div>
@@ -93,19 +93,13 @@
                 class="form-control"
                 name="totalPrice"
                 id="totalPriceOrder"
-                required
+                disabled
                 maxlength="32"
                 [(ngModel)]="order.totalPrice"
                 #totalPriceModel="ngModel"
                 #totalPriceEl
                 />
-                <div 
-                    class="text-danger"
-                    *ngIf="editOrderModal.submitted && !totalPriceModel.valid">
-                    <div *ngIf="totalPriceModel.errors.required">
-                        Total Price is required
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -115,6 +109,7 @@
             </label>
             <div class="col-md-9">
                 <input
+                [class.is-invalid]="editOrderModal.submitted && !orderDateModel.valid"
                 type="date"
                 class="form-control"
                 name="orderDate"
@@ -126,14 +121,59 @@
                 #orderDateEl
                 />
                 <div 
-                    class="text-danger"
                     *ngIf="editOrderModal.submitted && !orderDateModel.valid">
-                    <div *ngIf="orderDateModel.errors.required">
+                    <div *ngIf="orderDateModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
                         Order Date is required
                     </div>
                 </div>
             </div>
         </div>
+
+        <table class="table table-borderless">
+            <thead class="thead-light">
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+
+                <th></th>
+                <th>
+                    <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
+                        <i class="fa fa-plus-square"></i>
+                        {{ "Add item" | localize }}
+                    </a>
+                </th>
+            </thead>
+            <tbody>
+                <tr *ngFor = "let item of items">
+                    <td>{{item.name}}</td>
+                    <td>{{item.price}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.totalPrice}}</td>
+                    <td>
+                        <button
+                        type="button"
+                        class="btn btn-sm bg-secondary"
+                        (click)="editItem(item)"
+                        >
+                        <i class="fas fa-pencil-alt"></i>
+                        {{ "Edit" | localize }}
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                        type="button"
+                        class="btn btn-sm bg-danger"
+                        (click)="delete(item)"
+                        > 
+                        <i class="fas fa-trash"></i>
+                        {{ "Delete" | localize }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
         <div class="form-group">
             <button class="btn btn-primary ml-auto" type="submit">Save</button>
         </div>

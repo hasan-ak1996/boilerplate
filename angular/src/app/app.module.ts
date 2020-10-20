@@ -53,7 +53,8 @@ import{DataItemsService} from './Master-Details2/data-items-service';
 import { CreateItem2Component } from './Master-Details2/create-item2/create-item2.component';
 import { ViewOrders2Component } from './Master-Details2/view-orders2/view-orders2.component';
 import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.component';
-import { EditItem2Component } from './Master-Details2/edit-item2/edit-item2.component'
+import { EditItem2Component } from './Master-Details2/edit-item2/edit-item2.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 @NgModule({
@@ -111,6 +112,8 @@ import { EditItem2Component } from './Master-Details2/edit-item2/edit-item2.comp
     ServiceProxyModule,
     SharedModule,
     NgxPaginationModule,
+    MatSliderModule
+    
     
   ],
   providers: [

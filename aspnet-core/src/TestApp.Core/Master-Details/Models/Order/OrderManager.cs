@@ -48,17 +48,17 @@ namespace TestApp.Master_Details.Models
             }
         }
 
-        public IEnumerable<Order> GetAllOreders()
+        public  IEnumerable<Order> GetAllOreders()
         {
-            return _orderRepository.GetAllIncluding(r=>r.Items).ToList();
+            return  _orderRepository.GetAllIncluding(r=>r.Items).ToList();
         }
 
-        public Order GetOrderById(int id)
+        public  Order GetOrderById(int id)
         {
-           return _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefault();
+           return  _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefault();
         }
 
-        public void UpdateOrder(Order entity)
+        public  void UpdateOrder(Order entity)
         {
             _orderRepository.Update(entity);
         }

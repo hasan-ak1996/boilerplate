@@ -35,7 +35,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
   saving = false;
-  
+  orderId : number;
   order = new CreateOrderInputDTO ();
   roles: RoleDto[] = [];
   items : GetItemOutputDTO[] =[];
@@ -63,8 +63,8 @@ implements OnInit {
       this.permissions = result.items;
       this.setInitialPermissionsStatus();
     });
-    this._itemService.getAllItems().subscribe((result) => {
-      this.items = result;
+    this._orderService.getOrderById(this.orderId).subscribe((result) => {
+      this.items = result.items;
     });   
   }
   setInitialPermissionsStatus(): void {
@@ -96,10 +96,10 @@ implements OnInit {
   }
 
   createItem(): void {
-    this.showCreateOrEditItemDialog();
+    this.showCreateItemDialog();
   }
   editItem(item: GetItemOutputDTO): void {
-    this.showCreateOrEditItemDialog(item.id);
+    this.showEditItemDialog(item.id);
   }
   protected delete(item: GetItemOutputDTO): void {
     abp.message.confirm(
@@ -109,9 +109,10 @@ implements OnInit {
         if (result) {
           this._itemService.deleteItem(item.id , null).subscribe(() => {
             abp.notify.success(this.l('SuccessfullyDeleted'));
-            
-            this._itemService.getAllItems().subscribe((result) => {
-              this.items = result;
+
+            this._orderService.getOrderById(this.orderId).subscribe((result) => {
+              this.items = result.items;
+              this.UpdateTotalPrice()
             }); 
           });
         }
@@ -119,34 +120,50 @@ implements OnInit {
     );
   }
 
-  
-  private showCreateOrEditItemDialog(id?: number): void {
-    let createOrEditItemDialog: BsModalRef;
-    if (!id) {
-      createOrEditItemDialog = this._modalService.show(
+  private showCreateItemDialog(): void {
+    let createItemDialog: BsModalRef;
+      createItemDialog = this._modalService.show(
         CreateOrderItemComponent,
         {
           class: 'modal-lg',
+          initialState: {
+            id: this.orderId,
+          },
         }
       );
-    } else {
-      createOrEditItemDialog = this._modalService.show(
+      createItemDialog.content.onSave.subscribe(() => {
+        this._orderService.getOrderById(this.orderId).subscribe((result) => {
+          this.items = result.items;
+          this.UpdateTotalPrice()
+        }); 
+      });
+  }
+  UpdateTotalPrice(){
+    this.order.totalPrice = this.items.reduce((prev,curr) => {
+      return prev + curr.totalPrice;
+    },0);
+    this.order.totalPrice = parseInt((this.order.totalPrice).toFixed(2));
+  }
+
+  private showEditItemDialog(id: number): void {
+    let EditItemDialog: BsModalRef;
+      EditItemDialog = this._modalService.show(
         EditItemComponent,
         {
           class: 'modal-lg',
           initialState: {
             id: id,
+            orderId : this.orderId
           },
         }
       );
-    }
-    createOrEditItemDialog.content.onSave.subscribe(() => {
-      this._itemService.getAllItems().subscribe((result) => {
-        this.items = result;})
-    });
-    
-
+      EditItemDialog.content.onSave.subscribe(() => {
+        this._orderService.getOrderById(this.orderId).subscribe((result) => {
+          this.items = result.items;
+        }); 
+      });
   }
+    
 
   save(): void {
     this.saving = true;
@@ -157,9 +174,12 @@ implements OnInit {
           this.saving = false;
         })
       )
-      .subscribe(() => {
+      .subscribe((result) => {
         this.notify.info(this.l('SavedSuccessfully'));
         this.onSave.emit();
+        this.orderId = result.id;
+        console.log(this.orderId );
+        this.router.navigate(['app/view-orders' , this.orderId ]);
       });
   }
   goToViewOrders(){
