@@ -22,6 +22,6 @@ namespace TestApp.Master_Details
         public decimal TotalPrice { get; set; }
 
        
-        public DateTime? LastModificationTime { get; set; }
+        public DateTime LastModificationTime { get; set; }
     }
 }

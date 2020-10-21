@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TestApp.Master_Details.Models;
 using TestApp.Models;
 
@@ -19,37 +20,37 @@ namespace TestApp.Master_datail_2
             _objectMapper = objectMapper;
         }
 
-        public void CreateItem(CreateItem2InputDTO input)
+        public async Task<Item> CreateItem(CreateItem2InputDTO input)
         {
             Item output = _objectMapper.Map<CreateItem2InputDTO, Item>(input);
 
-            _itemManager.CreateItem(output);
+           return await _itemManager.CreateItem(output);
 
         }
 
-        public void DeleteItem(DeleteItem2InputDTO input)
+        public async Task DeleteItem(DeleteItem2InputDTO input)
         {
-            _itemManager.DeleteItem(input.Id);
+            await _itemManager.DeleteItem(input.Id);
         }
 
-        public List<GetItem2OutputDTO> GetAllItems()
+        public async Task<List<GetItem2OutputDTO>> GetAllItems()
         {
-            var getAll = _itemManager.GetAllItems().ToList();
+            var getAll = await _itemManager.GetAllItems();
             List<GetItem2OutputDTO> output = _objectMapper.Map<List<Item>, List<GetItem2OutputDTO>>(getAll);
             return output;
         }
 
-        public GetItem2OutputDTO GetItemById(Item2InputDTO input)
+        public async Task<GetItem2OutputDTO> GetItemById(Item2InputDTO input)
         {
-            var item = _itemManager.GetItemById(input.Id);
+            var item = await _itemManager.GetItemById(input.Id);
             GetItem2OutputDTO output = _objectMapper.Map<Item, GetItem2OutputDTO>(item);
             return output;
         }
 
-        public void UpdateItem(UpdateItem2InputDTO input)
+        public async Task UpdateItem(UpdateItem2InputDTO input)
         {
             Item output = _objectMapper.Map<UpdateItem2InputDTO, Item>(input);
-            _itemManager.UpdateItem(output);
+            await _itemManager.UpdateItem(output);
         }
     }
 

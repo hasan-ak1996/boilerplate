@@ -65,6 +65,7 @@ implements OnInit {
     });
     this._orderService.getOrderById(this.orderId).subscribe((result) => {
       this.items = result.items;
+      this.order.totalPrice = 0;
     });   
   }
   setInitialPermissionsStatus(): void {

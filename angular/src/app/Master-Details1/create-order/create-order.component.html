@@ -1,155 +1,120 @@
-<div class="container">
-    <form
-    class="form-horizontal"
-    autocomplete="off"
-    #createOrderModal="ngForm"
-    (ngSubmit)="createOrderModal.valid &&  save()"
-    >
+<section class="content-header">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-form-label" for="name">
-                    {{ "Order Name" | localize }}
-                    </label>
-                    <div>
-                        <input
-                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
-                            type="text"
-                            class="form-control"
-                            name="name"
-                            id="name"
-                            required
-                            maxlength="32"
-                            [(ngModel)]="order.name"
-                            #nameModel="ngModel"
-                            #nameEl
-                        />
-                        <div 
-                        *ngIf="createOrderModal.submitted && !nameModel.valid">
-                            <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                                Name is required
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="form-group required">
-                    <label class="col-form-label" for="orderNo">
-                    {{ "Order.No" | localize }}
-                    </label>
-                    <div>
-                        <input
-                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
-                            type="text"
-                            class="form-control"
-                            name="orderNo"
-                            id="orderNo"
-                            required
-                            maxlength="32"
-                            [(ngModel)]="order.orderNo"
-                            #orderNoModel="ngModel"
-                            #orderNoEl
-                        />
-                        <div 
-                        *ngIf="createOrderModal.submitted && !orderNoModel.valid">
-                            <div *ngIf="orderNoModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                                Order.No is required
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                
-            <div class="col-md-6">
-                <div class="form-group required">
-                    <label class="col-form-label" for="empolyeeName">
-                    {{ "Empolyee Name" | localize }}
-                    </label>
-                    <div>
-                        <input
-                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
-                            type="text"
-                            class="form-control"
-                            name="empolyeeName"
-                            id="empolyeeName"
-                            required
-                            maxlength="32"
-                            [(ngModel)]="order.empolyeeName"
-                            #empolyeeNameModel="ngModel"
-                            #empolyeeNameEl
-                        />
-                        <div 
-                        *ngIf="createOrderModal.submitted && !empolyeeNameModel.valid">
-                            <div *ngIf="empolyeeNameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                                Empolyee Name is required
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group required">
-                    <label class="col-form-label" for="totalPrice">
-                    {{ "Total Price" | localize }}
-                    </label>
-                    <div>
-                        <input
-                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
-                            type="number"
-                            class="form-control"
-                            name="totalPrice"
-                            id="totalPrice"
-                            required
-                            maxlength="32"
-                            [(ngModel)]="order.totalPrice"
-                            #totalPriceModel="ngModel"
-                            #totalPriceEl
-                        />
-                        <div 
-                        *ngIf="createOrderModal.submitted && !totalPriceModel.valid">
-                            <div *ngIf="totalPriceModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                                Total Price is required
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                
-                <div class="form-group required">
-                    <label class="col-form-label" for="orderDate">
-                    {{ "Order Date" | localize }}
-                    </label>
-                    <div>
-                        <input
-                            [class.is-invalid]="createOrderModal.submitted && !nameModel.valid"
-                            type="date"
-                            class="form-control"
-                            name="orderDate"
-                            id="orderDate"
-                            required
-                            maxlength="32"
-                            [(ngModel)]="order.orderDate"
-                            #orderDateModel="ngModel"
-                            #orderDateEl
-                        />
-                        <div 
-                        *ngIf="createOrderModal.submitted && !orderDateModel.valid">
-                            <div *ngIf="orderDateModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                                Order Date is required
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-6">
+                <h1>{{ "Create Order" | localize }}</h1>
             </div>
         </div>
-        <div class="form-group">
-            <button  typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit Master</button>
-            <button  (click)="goToViewOrders()" class="btn btn-dark ml-2">View Orders</button>
-        </div>
-    </form>
+    </div>
+</section>
 
-    <!--
+
+<section class="content px-2">
+    <div class="container-fluid">
+        <form class="form-horizontal" autocomplete="off" #createOrderModal="ngForm"
+            (ngSubmit)="createOrderModal.valid &&  save()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group required">
+                        <label class="col-form-label" for="name">
+                            {{ "Order Name" | localize }}
+                        </label>
+                        <div>
+                            <input [class.is-invalid]="createOrderModal.submitted && !nameModel.valid" type="text"
+                                class="form-control" name="name" id="name" required maxlength="32"
+                                [(ngModel)]="order.name" #nameModel="ngModel" #nameEl />
+                            <div *ngIf="createOrderModal.submitted && !nameModel.valid">
+                                <div *ngIf="nameModel.errors.required"
+                                    class="error invalid-feedback d-block ng-star-inserted">
+                                    Name is required
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group required">
+                        <label class="col-form-label" for="orderNo">
+                            {{ "Order.No" | localize }}
+                        </label>
+                        <div>
+                            <input [class.is-invalid]="createOrderModal.submitted && !nameModel.valid" type="text"
+                                class="form-control" name="orderNo" id="orderNo" required maxlength="32"
+                                [(ngModel)]="order.orderNo" #orderNoModel="ngModel" #orderNoEl />
+                            <div *ngIf="createOrderModal.submitted && !orderNoModel.valid">
+                                <div *ngIf="orderNoModel.errors.required"
+                                    class="error invalid-feedback d-block ng-star-inserted">
+                                    Order.No is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group required">
+                        <label class="col-form-label" for="empolyeeName">
+                            {{ "Empolyee Name" | localize }}
+                        </label>
+                        <div>
+                            <input [class.is-invalid]="createOrderModal.submitted && !nameModel.valid" type="text"
+                                class="form-control" name="empolyeeName" id="empolyeeName" required maxlength="32"
+                                [(ngModel)]="order.empolyeeName" #empolyeeNameModel="ngModel" #empolyeeNameEl />
+                            <div *ngIf="createOrderModal.submitted && !empolyeeNameModel.valid">
+                                <div *ngIf="empolyeeNameModel.errors.required"
+                                    class="error invalid-feedback d-block ng-star-inserted">
+                                    Empolyee Name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group required">
+                        <label class="col-form-label" for="totalPrice">
+                            {{ "Total Price" | localize }}
+                        </label>
+                        <div>
+                            <input type="number" class="form-control" name="totalPrice" id="totalPrice" disabled
+                                maxlength="32" [(ngModel)]="order.totalPrice" #totalPriceModel="ngModel"
+                                #totalPriceEl />
+                            <div *ngIf="createOrderModal.submitted && !totalPriceModel.valid">
+                                <div *ngIf="totalPriceModel.errors.required"
+                                    class="error invalid-feedback d-block ng-star-inserted">
+                                    Total Price is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="form-group required">
+                        <label class="col-form-label" for="orderDate">
+                            {{ "Order Date" | localize }}
+                        </label>
+                        <div>
+                            <input [class.is-invalid]="createOrderModal.submitted && !nameModel.valid" type="date"
+                                class="form-control" name="orderDate" id="orderDate" required maxlength="32"
+                                [(ngModel)]="order.orderDate" #orderDateModel="ngModel" #orderDateEl />
+                            <div *ngIf="createOrderModal.submitted && !orderDateModel.valid">
+                                <div *ngIf="orderDateModel.errors.required"
+                                    class="error invalid-feedback d-block ng-star-inserted">
+                                    Order Date is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button typr="submit" class="btn btn-dark"><i class="fa fa-database"></i> Submit Master</button>
+                <button (click)="goToViewOrders()" class="btn btn-dark ml-2">View Orders</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--
 
         <table class="table table-borderless">
             <thead class="thead-light">
@@ -201,7 +166,3 @@
             </tbody>
         </table>
     -->
-       
-</div>
-
-    

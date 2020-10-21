@@ -37,7 +37,14 @@
                                 No Orders Created
                             </td>
                         </tr>
-                        <tr  *ngFor = "let order of orders"
+                        <tr  *ngFor = "let order of orders 
+                                      | paginate
+                                      : {
+                                          id: 'server',
+                                          itemsPerPage: pageSize,
+                                          currentPage: pageNumber,
+                                          totalItems: totalItems
+                                        }"
                         >
                             <td>{{order.name}}</td>
                             <td>{{order.orderNo}}</td>
@@ -74,7 +81,17 @@
                   </div>
                   <div class="col-sm-4 col-12 text-center">
                     <p class="mb-0 my-2">
+                      {{ "TotalRecordsCount" | localize: totalItems }}
                     </p>
+                  </div>
+                  <div class="col-sm-4 col-12">
+                    <div class="float-sm-right m-auto">
+                      <abp-pagination-controls
+                        id="server"
+                        (pageChange)="getDataPage($event)"
+                      >
+                      </abp-pagination-controls>
+                    </div>
                   </div>
                 </div>
             </div>

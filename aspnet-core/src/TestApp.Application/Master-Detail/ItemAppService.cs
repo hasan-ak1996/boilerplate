@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using AutoMapper;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,37 +22,37 @@ namespace TestApp.Master_Details
             _itemManager = itemManager;
             _objectMapper = objectMapper;
         }
-        public  void CreateItem(CreateItemInputDTO input)
+        public async Task<Item> CreateItem(CreateItemInputDTO input)
         {
             Item output = _objectMapper.Map<CreateItemInputDTO, Item>(input);
 
-             _itemManager.CreateItem(output);
+             return await _itemManager.CreateItem(output);
            
         }
 
-        public void DeleteItem(DeleteItemInputDTO input)
+        public async Task DeleteItem(DeleteItemInputDTO input)
         {
-            _itemManager.DeleteItem(input.Id);
+           await _itemManager.DeleteItem(input.Id);
         }
         
-        public List<GetItemOutputDTO> GetAllItems()
+        public async Task<List<GetItemOutputDTO>> GetAllItems()
         {
-            var getAll = _itemManager.GetAllItems().ToList();
+            var getAll = await _itemManager.GetAllItems();
             List<GetItemOutputDTO> output = _objectMapper.Map<List<Item>, List<GetItemOutputDTO>>(getAll);
             return output;
         }
 
-        public GetItemOutputDTO GetItemById(ItemInputDTO input)
+        public async Task<GetItemOutputDTO> GetItemById(ItemInputDTO input)
         {
-            var item = _itemManager.GetItemById(input.Id);
+            var item = await _itemManager.GetItemById(input.Id);
             GetItemOutputDTO output = _objectMapper.Map<Item, GetItemOutputDTO>(item);
             return output;
         }
 
-        public void UpdateItem(GetItemOutputDTO input)
+        public async Task UpdateItem(GetItemOutputDTO input)
         {
             Item output = _objectMapper.Map<GetItemOutputDTO, Item>(input);
-            _itemManager.UpdateItem(output);
+            await _itemManager.UpdateItem(output);
         }
     }
 }

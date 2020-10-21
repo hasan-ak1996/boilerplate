@@ -24,6 +24,6 @@ namespace TestApp.Master_datail_2
 
 
         public DateTime? LastModificationTime { get; set; }
-        public int? OrderId { get; set; }
+        public int OrderId { get; set; }
     }
 }

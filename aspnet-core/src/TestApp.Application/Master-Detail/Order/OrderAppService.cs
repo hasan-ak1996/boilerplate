@@ -11,6 +11,11 @@ using TestApp.Master_Details.Models;
 using TestApp.Master_Detail.DTO;
 using TestApp.Master_Details.Order3;
 using TestApp.Models;
+using Abp.Application.Services.Dto;
+using TestApp.Master_Detail.DTOp;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestApp.Authorization
 {
@@ -19,44 +24,58 @@ namespace TestApp.Authorization
     {
         private readonly OrderManager _orderManager;
         private readonly IMapper _objectMapper;
+        private readonly IRepository<Order> orderRepository;
 
-        public OrderAppService(OrderManager orderManager, IMapper objectMapper)
+        public OrderAppService(OrderManager orderManager, IMapper objectMapper , IRepository<Order> orderRepository)
         {
             _orderManager = orderManager;
             _objectMapper = objectMapper;
+            this.orderRepository = orderRepository;
         }
-        public Task<Order> CreateOrder(CreateOrderInputDTO input)
+        public async Task<Order> CreateOrder(CreateOrderInputDTO input)
         {
-            Order output = _objectMapper.Map<CreateOrderInputDTO, Order>(input);
+            Order output =  _objectMapper.Map<CreateOrderInputDTO, Order>(input);
             
 
-            return _orderManager.CreateOrder(output);
+            return await _orderManager.CreateOrder(output);
             
         }
 
-        public void DeleteOrder(DeleteOrderInputDTO input)
+        public async Task DeleteOrder(DeleteOrderInputDTO input)
         {
-            _orderManager.DeleteOrder(input.Id);
+            await _orderManager.DeleteOrder(input.Id);
         }
 
-        public IEnumerable<GetOrederOutputDTO> GetAllOrders()
+        public async Task<PagedResultDto<GetOrederOutputDTO>> GetAllOrders(PagedOrderResultRequestDto input)
         {
-            var getAll = _orderManager.GetAllOreders().ToList();
-            List<GetOrederOutputDTO> output = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOrederOutputDTO>>(getAll);
-            return output;
+
+            var ordersCount = orderRepository.Count();
+
+            var orders =
+                await orderRepository.GetAllIncluding(o => o.Items).PageBy(input).ToListAsync();
+            return new PagedResultDto<GetOrederOutputDTO>
+            {
+                TotalCount = ordersCount,
+                Items = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOrederOutputDTO>>(orders)
+            };
         }
 
-        public GetOrederOutputDTO GetOrderById(OrderInputDTO input)
+            //var getAll = await _orderManager.GetAllOreders();
+            //List<GetOrederOutputDTO> output = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOrederOutputDTO>>(getAll);
+            //return output;
+        
+
+        public async Task<GetOrederOutputDTO> GetOrderById(OrderInputDTO input)
         {
-            var order = _orderManager.GetOrderById(input.Id);
+            var order = await _orderManager.GetOrderById(input.Id);
             GetOrederOutputDTO output = _objectMapper.Map<TestApp.Models.Order, GetOrederOutputDTO>(order);
             return output;
         }
 
-        public void UpdateOrder(GetOrederOutputDTO input)
+        public async Task UpdateOrder(GetOrederOutputDTO input)
         {
             TestApp.Models.Order output = _objectMapper.Map<GetOrederOutputDTO, TestApp.Models.Order>(input);
-            _orderManager.UpdateOrder(output);
+           await _orderManager.UpdateOrder(output);
         }
 
 

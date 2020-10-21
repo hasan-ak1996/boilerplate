@@ -9,10 +9,10 @@ namespace TestApp.Master_Details.Models
 {
     public interface IItemManager : IDomainService
     {
-        IEnumerable<Item> GetAllItems();
-        Item GetItemById(int id);
+        Task<List<Item>> GetAllItems();
+        Task<Item> GetItemById(int id);
         Task<Item> CreateItem(Item entity);
-        void DeleteItem(int id);
-        void UpdateItem(Item entity);
+        Task DeleteItem(int id);
+        Task UpdateItem(Item entity);
     }
 }

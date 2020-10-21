@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TestApp.Models;
 
@@ -34,9 +35,9 @@ namespace TestApp.Master_Details.Models
             
         }
 
-        public void DeleteOrder(int id)
+        public async Task DeleteOrder(int id)
         {
-            var order = _orderRepository.FirstOrDefault( o=> o.Id == id);
+            var order = await _orderRepository.FirstOrDefaultAsync( o=> o.Id == id);
 
             if (order == null)
             {
@@ -44,23 +45,23 @@ namespace TestApp.Master_Details.Models
             }
             else
             {
-                _orderRepository.Delete(order);
+               await _orderRepository.DeleteAsync(order);
             }
         }
 
-        public  IEnumerable<Order> GetAllOreders()
+        public  async Task<List<Order>> GetAllOreders()
         {
-            return  _orderRepository.GetAllIncluding(r=>r.Items).ToList();
+            return await _orderRepository.GetAllIncluding(r => r.Items).ToListAsync();
         }
 
-        public  Order GetOrderById(int id)
+        public async Task<Order> GetOrderById(int id)
         {
-           return  _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefault();
+           return await _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefaultAsync();
         }
 
-        public  void UpdateOrder(Order entity)
+        public  async Task UpdateOrder(Order entity)
         {
-            _orderRepository.Update(entity);
+            await _orderRepository.UpdateAsync(entity);
         }
     }
 }

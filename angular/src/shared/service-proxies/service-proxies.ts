@@ -219,7 +219,7 @@ export class ItemServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createItem(body: CreateItemInputDTO | undefined): Observable<void> {
+    createItem(body: CreateItemInputDTO | undefined): Observable<Item> {
         let url_ = this.baseUrl + "/api/services/app/Item/CreateItem";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -231,6 +231,7 @@ export class ItemServiceProxy {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
             })
         };
 
@@ -241,14 +242,14 @@ export class ItemServiceProxy {
                 try {
                     return this.processCreateItem(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<Item>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<Item>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateItem(response: HttpResponseBase): Observable<void> {
+    protected processCreateItem(response: HttpResponseBase): Observable<Item> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -257,14 +258,17 @@ export class ItemServiceProxy {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Item.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<Item>(<any>null);
     }
 
     /**
@@ -501,7 +505,7 @@ export class Item2ServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createItem(body: CreateItem2InputDTO | undefined): Observable<void> {
+    createItem(body: CreateItem2InputDTO | undefined): Observable<Item> {
         let url_ = this.baseUrl + "/api/services/app/Item2/CreateItem";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -513,6 +517,7 @@ export class Item2ServiceProxy {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
             })
         };
 
@@ -523,14 +528,14 @@ export class Item2ServiceProxy {
                 try {
                     return this.processCreateItem(<any>response_);
                 } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
+                    return <Observable<Item>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<void>><any>_observableThrow(response_);
+                return <Observable<Item>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateItem(response: HttpResponseBase): Observable<void> {
+    protected processCreateItem(response: HttpResponseBase): Observable<Item> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -539,14 +544,17 @@ export class Item2ServiceProxy {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Item.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(<any>null);
+        return _observableOf<Item>(<any>null);
     }
 
     /**
@@ -891,10 +899,20 @@ export class OrderServiceProxy {
     }
 
     /**
+     * @param maxResultCount (optional) 
+     * @param skipCount (optional) 
      * @return Success
      */
-    getAllOrders(): Observable<GetOrederOutputDTO[]> {
-        let url_ = this.baseUrl + "/api/services/app/Order/GetAllOrders";
+    getAllOrders(maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOrederOutputDTOPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Order/GetAllOrders?";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -912,14 +930,14 @@ export class OrderServiceProxy {
                 try {
                     return this.processGetAllOrders(<any>response_);
                 } catch (e) {
-                    return <Observable<GetOrederOutputDTO[]>><any>_observableThrow(e);
+                    return <Observable<GetOrederOutputDTOPagedResultDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<GetOrederOutputDTO[]>><any>_observableThrow(response_);
+                return <Observable<GetOrederOutputDTOPagedResultDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllOrders(response: HttpResponseBase): Observable<GetOrederOutputDTO[]> {
+    protected processGetAllOrders(response: HttpResponseBase): Observable<GetOrederOutputDTOPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -930,11 +948,7 @@ export class OrderServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(GetOrederOutputDTO.fromJS(item));
-            }
+            result200 = GetOrederOutputDTOPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -942,7 +956,7 @@ export class OrderServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetOrederOutputDTO[]>(<any>null);
+        return _observableOf<GetOrederOutputDTOPagedResultDto>(<any>null);
     }
 
     /**
@@ -1177,10 +1191,20 @@ export class Order2ServiceProxy {
     }
 
     /**
+     * @param maxResultCount (optional) 
+     * @param skipCount (optional) 
      * @return Success
      */
-    getAllOrders(): Observable<GetOreder2OutputDTO[]> {
-        let url_ = this.baseUrl + "/api/services/app/Order2/GetAllOrders";
+    getAllOrders(maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOreder2OutputDTOPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Order2/GetAllOrders?";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1198,14 +1222,14 @@ export class Order2ServiceProxy {
                 try {
                     return this.processGetAllOrders(<any>response_);
                 } catch (e) {
-                    return <Observable<GetOreder2OutputDTO[]>><any>_observableThrow(e);
+                    return <Observable<GetOreder2OutputDTOPagedResultDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<GetOreder2OutputDTO[]>><any>_observableThrow(response_);
+                return <Observable<GetOreder2OutputDTOPagedResultDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllOrders(response: HttpResponseBase): Observable<GetOreder2OutputDTO[]> {
+    protected processGetAllOrders(response: HttpResponseBase): Observable<GetOreder2OutputDTOPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1216,11 +1240,7 @@ export class Order2ServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(GetOreder2OutputDTO.fromJS(item));
-            }
+            result200 = GetOreder2OutputDTOPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1228,7 +1248,7 @@ export class Order2ServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetOreder2OutputDTO[]>(<any>null);
+        return _observableOf<GetOreder2OutputDTOPagedResultDto>(<any>null);
     }
 
     /**
@@ -3439,6 +3459,97 @@ export interface ICreateItemInputDTO {
     orderId: number;
 }
 
+export class Item implements IItem {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    name: string | undefined;
+    price: number;
+    quantity: number;
+    totalPrice: number;
+    orderId: number;
+
+    constructor(data?: IItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.name = _data["name"];
+            this.price = _data["price"];
+            this.quantity = _data["quantity"];
+            this.totalPrice = _data["totalPrice"];
+            this.orderId = _data["orderId"];
+        }
+    }
+
+    static fromJS(data: any): Item {
+        data = typeof data === 'object' ? data : {};
+        let result = new Item();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["name"] = this.name;
+        data["price"] = this.price;
+        data["quantity"] = this.quantity;
+        data["totalPrice"] = this.totalPrice;
+        data["orderId"] = this.orderId;
+        return data; 
+    }
+
+    clone(): Item {
+        const json = this.toJSON();
+        let result = new Item();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IItem {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    name: string | undefined;
+    price: number;
+    quantity: number;
+    totalPrice: number;
+    orderId: number;
+}
+
 export class GetItemOutputDTO implements IGetItemOutputDTO {
     id: number;
     name: string;
@@ -3635,7 +3746,7 @@ export class UpdateItem2InputDTO implements IUpdateItem2InputDTO {
     quantity: number;
     totalPrice: number;
     lastModificationTime: moment.Moment | undefined;
-    orderId: number | undefined;
+    orderId: number;
 
     constructor(data?: IUpdateItem2InputDTO) {
         if (data) {
@@ -3692,7 +3803,7 @@ export interface IUpdateItem2InputDTO {
     quantity: number;
     totalPrice: number;
     lastModificationTime: moment.Moment | undefined;
-    orderId: number | undefined;
+    orderId: number;
 }
 
 export class CreateOrderInputDTO implements ICreateOrderInputDTO {
@@ -3760,97 +3871,6 @@ export interface ICreateOrderInputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-}
-
-export class Item implements IItem {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    name: string | undefined;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    orderId: number;
-
-    constructor(data?: IItem) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.name = _data["name"];
-            this.price = _data["price"];
-            this.quantity = _data["quantity"];
-            this.totalPrice = _data["totalPrice"];
-            this.orderId = _data["orderId"];
-        }
-    }
-
-    static fromJS(data: any): Item {
-        data = typeof data === 'object' ? data : {};
-        let result = new Item();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["name"] = this.name;
-        data["price"] = this.price;
-        data["quantity"] = this.quantity;
-        data["totalPrice"] = this.totalPrice;
-        data["orderId"] = this.orderId;
-        return data; 
-    }
-
-    clone(): Item {
-        const json = this.toJSON();
-        let result = new Item();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IItem {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    name: string | undefined;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-    orderId: number;
 }
 
 export class Order implements IOrder {
@@ -4035,6 +4055,61 @@ export interface IGetOrederOutputDTO {
     items: GetItemOutputDTO[] | undefined;
 }
 
+export class GetOrederOutputDTOPagedResultDto implements IGetOrederOutputDTOPagedResultDto {
+    items: GetOrederOutputDTO[] | undefined;
+    totalCount: number;
+
+    constructor(data?: IGetOrederOutputDTOPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(GetOrederOutputDTO.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): GetOrederOutputDTOPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetOrederOutputDTOPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data; 
+    }
+
+    clone(): GetOrederOutputDTOPagedResultDto {
+        const json = this.toJSON();
+        let result = new GetOrederOutputDTOPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetOrederOutputDTOPagedResultDto {
+    items: GetOrederOutputDTO[] | undefined;
+    totalCount: number;
+}
+
 export class CreateOrder2InputDTO implements ICreateOrder2InputDTO {
     name: string;
     orderNo: string;
@@ -4190,6 +4265,61 @@ export interface IGetOreder2OutputDTO {
     empolyeeName: string;
     totalPrice: number;
     items: GetItem2OutputDTO[] | undefined;
+}
+
+export class GetOreder2OutputDTOPagedResultDto implements IGetOreder2OutputDTOPagedResultDto {
+    items: GetOreder2OutputDTO[] | undefined;
+    totalCount: number;
+
+    constructor(data?: IGetOreder2OutputDTOPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(GetOreder2OutputDTO.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): GetOreder2OutputDTOPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetOreder2OutputDTOPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data; 
+    }
+
+    clone(): GetOreder2OutputDTOPagedResultDto {
+        const json = this.toJSON();
+        let result = new GetOreder2OutputDTOPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IGetOreder2OutputDTOPagedResultDto {
+    items: GetOreder2OutputDTO[] | undefined;
+    totalCount: number;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {

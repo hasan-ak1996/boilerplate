@@ -30,9 +30,9 @@ namespace TestApp.Master_Details.Models
             }
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            var item = _itemRepository.FirstOrDefault(i => i.Id == id);
+            var item = await _itemRepository.FirstOrDefaultAsync(i => i.Id == id);
 
             if (item == null)
             {
@@ -40,23 +40,23 @@ namespace TestApp.Master_Details.Models
             }
             else
             {
-                _itemRepository.Delete(item);
+               await _itemRepository.DeleteAsync(item);
             }
         }
 
-        public IEnumerable<Item> GetAllItems()
+        public async Task<List<Item>> GetAllItems()
         {
-            return _itemRepository.GetAllList();
+            return await _itemRepository.GetAllListAsync();
         }
 
-        public Item GetItemById(int id)
+        public async Task<Item>  GetItemById(int id)
         {
-            return _itemRepository.Get(id);
+            return await _itemRepository.GetAsync(id);
         }
 
-        public void UpdateItem(Item entity)
+        public async Task UpdateItem(Item entity)
         {
-            _itemRepository.Update(entity);
+          await  _itemRepository.UpdateAsync(entity);
         }
     }
 }

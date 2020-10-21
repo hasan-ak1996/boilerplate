@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Services;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +10,10 @@ namespace TestApp.Master_Details.Models
 {
     public interface IOrderManager : IDomainService
     {
-        IEnumerable<Order> GetAllOreders();
-        Order GetOrderById(int id);
+        Task<List<Order>> GetAllOreders();
+        Task<Order> GetOrderById(int id);
         Task<Order> CreateOrder(Order entity);
-        void DeleteOrder(int id);
-        void UpdateOrder(Order entity);
+        Task DeleteOrder(int id);
+        Task UpdateOrder(Order entity);
     }
 }
