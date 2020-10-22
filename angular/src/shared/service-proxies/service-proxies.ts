@@ -899,12 +899,18 @@ export class OrderServiceProxy {
     }
 
     /**
+     * @param keyword (optional) 
+     * @param isSubmit (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
      * @return Success
      */
-    getAllOrders(maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOrederOutputDTOPagedResultDto> {
+    getAllOrders(keyword: string | null | undefined, isSubmit: boolean | null | undefined, maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOrederOutputDTOPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/Order/GetAllOrders?";
+        if (keyword !== undefined && keyword !== null)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (isSubmit !== undefined && isSubmit !== null)
+            url_ += "IsSubmit=" + encodeURIComponent("" + isSubmit) + "&";
         if (maxResultCount === null)
             throw new Error("The parameter 'maxResultCount' cannot be null.");
         else if (maxResultCount !== undefined)
@@ -1191,12 +1197,18 @@ export class Order2ServiceProxy {
     }
 
     /**
+     * @param keyword (optional) 
+     * @param isSubmit (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
      * @return Success
      */
-    getAllOrders(maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOreder2OutputDTOPagedResultDto> {
+    getAllOrders(keyword: string | null | undefined, isSubmit: boolean | null | undefined, maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOreder2OutputDTOPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/Order2/GetAllOrders?";
+        if (keyword !== undefined && keyword !== null)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (isSubmit !== undefined && isSubmit !== null)
+            url_ += "IsSubmit=" + encodeURIComponent("" + isSubmit) + "&";
         if (maxResultCount === null)
             throw new Error("The parameter 'maxResultCount' cannot be null.");
         else if (maxResultCount !== undefined)
@@ -3987,6 +3999,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
+    isSubmit: boolean;
     items: GetItemOutputDTO[] | undefined;
 
     constructor(data?: IGetOrederOutputDTO) {
@@ -4006,6 +4019,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
             this.orderDate = _data["orderDate"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
+            this.isSubmit = _data["isSubmit"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -4029,6 +4043,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
         data["orderDate"] = this.orderDate;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
+        data["isSubmit"] = this.isSubmit;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -4052,6 +4067,7 @@ export interface IGetOrederOutputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
+    isSubmit: boolean;
     items: GetItemOutputDTO[] | undefined;
 }
 
@@ -4199,6 +4215,7 @@ export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
+    isSubmit: boolean;
     items: GetItem2OutputDTO[] | undefined;
 
     constructor(data?: IGetOreder2OutputDTO) {
@@ -4218,6 +4235,7 @@ export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
             this.orderDate = _data["orderDate"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
+            this.isSubmit = _data["isSubmit"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -4241,6 +4259,7 @@ export class GetOreder2OutputDTO implements IGetOreder2OutputDTO {
         data["orderDate"] = this.orderDate;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
+        data["isSubmit"] = this.isSubmit;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -4264,6 +4283,7 @@ export interface IGetOreder2OutputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
+    isSubmit: boolean;
     items: GetItem2OutputDTO[] | undefined;
 }
 

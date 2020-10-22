@@ -7,6 +7,12 @@ import { EditOrder2Component } from '../edit-order2/edit-order2.component';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { finalize } from 'rxjs/operators';
 
+class PagedOrders2RequestDto extends PagedRequestDto {
+  keyword: string;
+  isSubmit: boolean | null;
+}
+
+
 @Component({
   selector: 'app-view-orders2',
   templateUrl: './view-orders2.component.html',
@@ -14,6 +20,9 @@ import { finalize } from 'rxjs/operators';
 })
 export class ViewOrders2Component  extends PagedListingComponentBase<GetOreder2OutputDTO>{
   orders : GetOreder2OutputDTO[] =[];
+  keyword = '';
+  isSubmit: boolean | null;
+  advancedFiltersVisible = false;
   constructor(injector: Injector ,
     public _order2Service: Order2ServiceProxy,
     private router : Router,
@@ -24,13 +33,17 @@ export class ViewOrders2Component  extends PagedListingComponentBase<GetOreder2O
      }
 
      protected list(
-       request: PagedRequestDto,
+       request: PagedOrders2RequestDto,
         pageNumber: number,
          finishedCallback: Function
          ): void 
         {
+          request.keyword = this.keyword;
+          request.isSubmit = this.isSubmit;
           this._order2Service
           .getAllOrders(
+            request.keyword,
+            request.isSubmit,
             request.maxResultCount,
             request.skipCount
           )
@@ -43,6 +56,11 @@ export class ViewOrders2Component  extends PagedListingComponentBase<GetOreder2O
             this.orders  = result.items;
             this.showPaging(result, pageNumber);
           });
+        }
+        clearFilters(): void {
+          this.keyword = '';
+          this.isSubmit = undefined;
+          this.getDataPage(1);
         }
 
       protected delete(order: GetOreder2OutputDTO): void {

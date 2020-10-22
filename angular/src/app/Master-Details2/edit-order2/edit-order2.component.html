@@ -62,22 +62,22 @@
                     {{ "Employee Name" | localize }}
                 </label>
                 <div class="col-md-9">
-                    <input
-                    [class.is-invalid]="editOrder2Form.submitted && !empolyeeNameModel.valid"
-                    type="text"
-                    class="form-control"
+                    <select 
+                    [(ngModel)]="order.empolyeeName"
                     name="empolyeeName"
                     id="empolyeeName"
-                    required
-                    minlength="2"
-                    maxlength="32"
-                    [(ngModel)]="order.empolyeeName"
+                    [class.is-invalid]="editOrder2Form.submitted && !empolyeeNameModel.value"
+                    class="form-control" 
                     #empolyeeNameModel="ngModel"
-                    #empolyeeNameEl
-                    />
-                    <div 
-                        *ngIf="editOrder2Form.submitted && !empolyeeNameModel.valid">
-                        <div *ngIf="empolyeeNameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
+                    >
+                        <option value="" selected>--selecte employee--</option>
+                        <option *ngFor="let user of users" [value]="user.userName">
+                            {{user.userName}}
+                        </option>
+                    </select>
+                    <div *ngIf="editOrder2Form.submitted && !empolyeeNameModel.value">
+                        <div 
+                            class="error invalid-feedback d-block ng-star-inserted">
                             Empolyee Name is required
                         </div>
                     </div>
@@ -89,23 +89,16 @@
                 </label>
                 <div class="col-md-9">
                     <input
-                    [class.is-invalid]="editOrder2Form.submitted && !totalPriceModel.valid"
                     type="number"
                     class="form-control"
                     name="totalPrice"
                     id="totalPriceOrder"
-                    required
+                    disabled
                     maxlength="32"
                     [(ngModel)]="order.totalPrice"
                     #totalPriceModel="ngModel"
                     #totalPriceEl
                     />
-                    <div 
-                        *ngIf="editOrder2Form.submitted && !totalPriceModel.valid">
-                        <div *ngIf="totalPriceModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                            Total Price is required
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -134,23 +127,59 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row mb-0">
+                <label class="col-md-2 col-form-label">
+                  {{ "IsSubmit" | localize }}
+                </label>
+                <div class="col-md-9">
+                    <div class="custom-control custom-checkbox">
+                        <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        name="isSubmit"
+                        id="isSubmit"
+                        [(ngModel)]="order.isSubmit"
+                        />
+                        <label class="custom-control-label mt-2" for="isSubmit"></label>
+                    </div>
+                </div>
+            </div>
 
-            <table class="table table-borderless">
-                <thead class="thead-light">
+            <table class="table table-hover text-nowrap">
+                <thead class="bg-light">
                     <th>Name</th>
                     <th>Price</th>
                     <th>Quantity</th>
                     <th>Total Price</th>
-    
-                    <th></th>
-
+                    
+                    <th style="width: 200px;">
+                        <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
+                            <i class="fa fa-plus-square"></i>
+                            {{ "Add item" | localize }}
+                        </a>
+                    </th>
                 </thead>
                 <tbody>
+                    <tr *ngIf="!items.length">
+                        <td class="text-center font-italic" colspan="7">
+                            No item selected for this order
+                        </td>
+                    </tr>
                     <tr *ngFor = "let item of items">
                         <td>{{item.name}}</td>
                         <td>{{item.price}}</td>
                         <td>{{item.quantity}}</td>
                         <td>{{item.totalPrice}}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm bg-secondary" (click)="editItem(item)">
+                                <i class="fas fa-pencil-alt"></i>
+                                {{ "Edit" | localize }}
+                            </button>
+                            <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(item)">
+                                <i class="fas fa-trash"></i>
+                                {{ "Delete" | localize }}
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

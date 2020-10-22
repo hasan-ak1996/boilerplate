@@ -20,6 +20,7 @@ namespace TestApp.Master_datail_2.Order2
         public string EmpolyeeName { get; set; }
         [Required]
         public decimal TotalPrice { get; set; }
+        public bool IsSubmit { get; set; }
         public virtual List<GetItem2OutputDTO> Items { get; set; }
     }
 }

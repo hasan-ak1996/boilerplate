@@ -17,7 +17,117 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <button
+                    type="button"
+                    class="btn bg-blue"
+                    (click)="getDataPage(1)"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="keyword"
+                  [placeholder]="'SearchWithThreeDot' | localize"
+                  [(ngModel)]="keyword"
+                  (keyup.enter)="getDataPage(1)"
+                />
+                <div class="input-group-append">
+                    <button
+                      type="button"
+                      class="btn btn-default"
+                      (click)="advancedFiltersVisible = !advancedFiltersVisible"
+                    >
+                      <i
+                        class="fas"
+                        [class.fa-angle-up]="advancedFiltersVisible"
+                        [class.fa-angle-down]="!advancedFiltersVisible"
+                      ></i>
+                    </button>
+                </div> 
+              </div>
+              <div *ngIf="advancedFiltersVisible" class="card mb-0 mt-1">
+                <div class="card-body">
+                  <form class="form-horizontal">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row mb-0">
+                          <label class="col-md-3 col-form-label">
+                            {{ "IsSubmit" | localize }}
+                          </label>
+                          <div class="col-md-9 pt-2">
+                            <div class="custom-control custom-radio d-inline">
+                              <input
+                                type="radio"
+                                class="custom-control-input"
+                                id="isSubmitAll2"
+                                name="isSubmit"
+                                [(ngModel)]="isSubmit"
+                                [value]="undefined"
+                                checked
+                              />
+                              <label class="custom-control-label" for="isSubmitAll2">
+                                {{ "All" | localize }}
+                              </label>
+                            </div>
+                            <div class="custom-control custom-radio d-inline mx-3">
+                              <input
+                                type="radio"
+                                class="custom-control-input"
+                                id="isSubmitSubmit2"
+                                name="isSubmit"
+                                [(ngModel)]="isSubmit"
+                                [value]="true"
+                              />
+                              <label
+                                class="custom-control-label"
+                                for="isSubmitSubmit2"
+                              >
+                                {{ "Yes" | localize }}
+                              </label>
+                            </div>
+                            <div class="custom-control custom-radio d-inline">
+                              <input
+                                type="radio"
+                                class="custom-control-input"
+                                id="isSubmitPassive2"
+                                name="isSubmit"
+                                [(ngModel)]="isSubmit"
+                                [value]="false"
+                              />
+                              <label
+                                class="custom-control-label"
+                                for="isSubmitPassive2"
+                              >
+                                {{ "No" | localize }}
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer">
+                  <button
+                    type="button"
+                    class="btn bg-blue"
+                    (click)="getDataPage(1)"
+                  >
+                    {{ "Search" | localize }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-default float-right"
+                    (click)="clearFilters()"
+                  >
+                    {{ "Clear" | localize }}
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
@@ -28,7 +138,8 @@
                             <th>Order Date</th>
                             <th>Employee Name</th>
                             <th>Total Price</th>
-                            <th style="width: 200px;">{{ "Actions" | localize }}</th>
+                            <th>is submit</th>
+                            <th style="width: 100px;">{{ "Actions" | localize }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +162,17 @@
                             <td>{{order.orderDate}}</td>
                             <td>{{order.empolyeeName}}</td>
                             <td>{{order.totalPrice}}</td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      disabled
+                                      [checked]="order.isSubmit"
+                                    />
+                                    <label class="custom-control-label"></label>
+                                </div>
+                            </td>
                             <td>
                                 <button
                                 type="button"
@@ -77,6 +199,9 @@
             <div class="card-footer bg-light border-top">
                 <div class="row">
                   <div class="col-sm-4 col-12 text-sm-left text-center">
+                      <button class="btn btn-secondary" (click)="refresh()">
+                        <i class="fas fa-redo-alt"></i>
+                      </button>
                   </div>
                   <div class="col-sm-4 col-12 text-center">
                     <p class="mb-0 my-2">

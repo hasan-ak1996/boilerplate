@@ -45,8 +45,45 @@ namespace TestApp.Master_datail_2.Order2
         public  async Task<PagedResultDto<GetOreder2OutputDTO>> GetAllOrders(PagedOrder2ResultRequestDto input)
         {
             var ordersCount = orderRepository.Count();
+            List<Order> orders;
 
-            var orders = await orderRepository.GetAllIncluding(o => o.Items).PageBy(input).ToListAsync();
+            if (input.keyword == null)
+            {
+                if (input.IsSubmit == null)
+                {
+                    orders = 
+                        await orderRepository.GetAllIncluding(o => o.Items).PageBy(input).ToListAsync();
+                }
+                else
+                {
+                    orders =
+                        await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.IsSubmit == input.IsSubmit).PageBy(input).ToListAsync();
+                }
+            }
+            else
+            {
+                if (input.IsSubmit == null)
+                {
+                    orders =
+                       await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.Name.Contains(input.keyword)
+                       || o.OrderNo.Contains(input.keyword)
+                       || o.OrderDate.Contains(input.keyword)
+                       || o.EmpolyeeName.Contains(input.keyword)
+                       || o.TotalPrice.ToString().Contains(input.keyword)
+                       ).PageBy(input).ToListAsync();
+                }
+                else
+                {
+                    orders =
+                       await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.IsSubmit == input.IsSubmit && (o.Name.Contains(input.keyword)
+                       || o.OrderNo.Contains(input.keyword)
+                       || o.OrderDate.Contains(input.keyword)
+                       || o.EmpolyeeName.Contains(input.keyword)
+                       || o.TotalPrice.ToString().Contains(input.keyword))
+                       ).PageBy(input).ToListAsync();
+                }
+
+            }
 
             return new PagedResultDto<GetOreder2OutputDTO>
             {

@@ -10,8 +10,8 @@ using TestApp.EntityFrameworkCore;
 namespace TestApp.Migrations
 {
     [DbContext(typeof(TestAppDbContext))]
-    [Migration("20201020091039_Update-Item2")]
-    partial class UpdateItem2
+    [Migration("20201022155721_update5-Item")]
+    partial class update5Item
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

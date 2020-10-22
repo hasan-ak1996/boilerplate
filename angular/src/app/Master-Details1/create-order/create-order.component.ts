@@ -4,7 +4,6 @@ import {
    OnInit,
    EventEmitter,
    Output,
-   ChangeDetectionStrategy,
    } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -12,18 +11,14 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
   OrderServiceProxy,
   ItemServiceProxy,
-  RoleDto,
   CreateOrderInputDTO,
-  PermissionDto,
-  RoleServiceProxy,
-  PermissionDtoListResultDto,
   GetItemOutputDTO,
+  UserDto,
+  UserServiceProxy,
   
 } from '@shared/service-proxies/service-proxies';
-import { forEach as _forEach, map as _map } from 'lodash-es';
-import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
+import { forEach as _forEach, map as _map, result } from 'lodash-es';
 import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
@@ -37,17 +32,14 @@ implements OnInit {
   saving = false;
   orderId : number;
   order = new CreateOrderInputDTO ();
-  roles: RoleDto[] = [];
+  users: UserDto[] = [];
   items : GetItemOutputDTO[] =[];
-  permissions: PermissionDto[] = [];
-  checkedPermissionsMap: { [key: string]: boolean } = {};
-  defaultPermissionCheckedStatus = true;
   @Output() onSave = new EventEmitter<any>();
   
   constructor(
     injector: Injector,
     public _orderService: OrderServiceProxy,
-    private _roleService: RoleServiceProxy,
+    private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     public _itemService: ItemServiceProxy,
     private router: Router,
@@ -57,44 +49,18 @@ implements OnInit {
   }
 
   ngOnInit(): void {
-    this._roleService
-    .getAllPermissions()
-    .subscribe((result: PermissionDtoListResultDto) => {
-      this.permissions = result.items;
-      this.setInitialPermissionsStatus();
-    });
     this._orderService.getOrderById(this.orderId).subscribe((result) => {
       this.items = result.items;
       this.order.totalPrice = 0;
-    });   
-  }
-  setInitialPermissionsStatus(): void {
-    _map(this.permissions, (item) => {
-      this.checkedPermissionsMap[item.name] = this.isPermissionChecked(
-        item.name
-      );
     });
-  }
 
-  isPermissionChecked(permissionName: string): boolean {
-    // just return default permission checked status
-    // it's better to use a setting
-    return this.defaultPermissionCheckedStatus;
-  }
-
-  onPermissionChange(permission: PermissionDto, $event) {
-    this.checkedPermissionsMap[permission.name] = $event.target.checked;
-  }
-
-  getCheckedPermissions(): string[] {
-    const permissions: string[] = [];
-    _forEach(this.checkedPermissionsMap, function (value, key) {
-      if (value) {
-        permissions.push(key);
-      }
+    this._userService.getAll('',undefined,0,1000).subscribe((result) => {
+      this.users = result.items;
     });
-    return permissions;
+    
   }
+
+
 
   createItem(): void {
     this.showCreateItemDialog();

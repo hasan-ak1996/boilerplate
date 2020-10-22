@@ -47,11 +47,21 @@
                     {{ "Empolyee Name" | localize }}
                 </label>
                 <div class="col-md-9">
-                    <input [class.is-invalid]="editOrderModal.submitted && !empolyeeNameModel.valid" type="text"
-                        class="form-control" name="empolyeeName" id="empolyeeName" required minlength="2" maxlength="32"
-                        [(ngModel)]="order.empolyeeName" #empolyeeNameModel="ngModel" #empolyeeNameEl />
-                    <div *ngIf="editOrderModal.submitted && !empolyeeNameModel.valid">
-                        <div *ngIf="empolyeeNameModel.errors.required"
+                    <select 
+                    [(ngModel)]="order.empolyeeName"
+                    name="empolyeeName"
+                    id="empolyeeName"
+                    [class.is-invalid]="editOrderModal.submitted && !empolyeeNameModel.value"
+                    class="form-control" 
+                    #empolyeeNameModel="ngModel"
+                    >
+                        <option value="" selected>--selecte employee--</option>
+                        <option *ngFor="let user of users" [value]="user.userName">
+                            {{user.userName}}
+                        </option>
+                    </select>
+                    <div *ngIf="editOrderModal.submitted && !empolyeeNameModel.value">
+                        <div 
                             class="error invalid-feedback d-block ng-star-inserted">
                             Empolyee Name is required
                         </div>
@@ -85,6 +95,23 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group row mb-0">
+                <label class="col-md-2 col-form-label">
+                  {{ "IsSubmit" | localize }}
+                </label>
+                <div class="col-md-9">
+                    <div class="custom-control custom-checkbox">
+                        <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        name="isSubmit"
+                        id="isSubmit"
+                        [(ngModel)]="order.isSubmit"
+                        />
+                        <label class="custom-control-label mt-2" for="isSubmit"></label>
+                    </div>
+                </div>
+            </div>
 
             <table class="table table-hover text-nowrap">
                 <thead class="bg-light">
@@ -93,7 +120,7 @@
                     <th>Quantity</th>
                     <th>Total Price</th>
 
-                    <th style="width: 300px;">
+                    <th style="width: 200px;">
                         <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
                             <i class="fa fa-plus-square"></i>
                             {{ "Add item" | localize }}

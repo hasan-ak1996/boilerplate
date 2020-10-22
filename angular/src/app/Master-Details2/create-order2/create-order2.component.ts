@@ -2,7 +2,7 @@ import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditItem2Component } from '@app/Master-Details2/edit-item2/edit-item2.component';
 import { AppComponentBase } from '@shared/app-component-base';
-import { CreateItem2InputDTO, CreateOrder2InputDTO, Order2ServiceProxy } from '@shared/service-proxies/service-proxies';
+import { CreateItem2InputDTO, CreateOrder2InputDTO, Order2ServiceProxy, UserDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs/operators';
 import { CreateItem2Component } from '../create-item2/create-item2.component';
@@ -18,10 +18,11 @@ export class CreateOrder2Component extends AppComponentBase
   saving = false;
   order = new CreateOrder2InputDTO ();
   items2 : CreateItem2InputDTO[] = [];
-  
+  users: UserDto[] = [];
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector,
     public _orderService: Order2ServiceProxy,
+    private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     public dataItemsService : DataItemsService,
     private router: Router,
@@ -30,6 +31,9 @@ export class CreateOrder2Component extends AppComponentBase
      }
 
   ngOnInit(): void {
+    this._userService.getAll('',undefined,0,1000).subscribe((result) => {
+    this.users = result.items;
+    });
   }
 
   UpdateTotalPrice(){

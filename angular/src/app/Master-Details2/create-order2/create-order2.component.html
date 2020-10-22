@@ -7,7 +7,6 @@
         </div>
     </div>
 </section>
-
 <section class="content px-2">
     <div class="container-fluid">
         <form class="form-horizontal" autocomplete="off" #createOrder2Form="ngForm"
@@ -54,12 +53,21 @@
                             {{ "Empolyee Name" | localize }}
                         </label>
                         <div>
-                            <input [class.is-invalid]="createOrder2Form.submitted && !empolyeeNameModel.valid"
-                                type="text" class="form-control" name="empolyeeName" id="empolyeeName" required
-                                maxlength="32" [(ngModel)]="order.empolyeeName" #empolyeeNameModel="ngModel"
-                                #empolyeeNameEl />
-                            <div *ngIf="createOrder2Form.submitted && !empolyeeNameModel.valid">
-                                <div *ngIf="empolyeeNameModel.errors.required"
+                            <select 
+                            [(ngModel)]="order.empolyeeName"
+                            name="empolyeeName"
+                            id="empolyeeName"
+                            [class.is-invalid]="createOrder2Form.submitted && !empolyeeNameModel.value"
+                            class="form-control" 
+                            #empolyeeNameModel="ngModel"
+                            >
+                                <option value="" selected>--selecte employee--</option>
+                                <option *ngFor="let user of users" [value]="user.userName">
+                                    {{user.userName}}
+                                </option>
+                            </select>
+                            <div *ngIf="createOrder2Form.submitted && !empolyeeNameModel.value">
+                                <div 
                                     class="error invalid-feedback d-block ng-star-inserted">
                                     Empolyee Name is required
                                 </div>
@@ -94,6 +102,23 @@
                                     class="error invalid-feedback d-block ng-star-inserted">
                                     Order Date is required
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <label class="col-md-3 col-form-label">
+                          {{ "IsSubmit" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <div class="custom-control custom-checkbox">
+                                <input
+                                type="checkbox"
+                                class="custom-control-input"
+                                name="isSubmit"
+                                id="isSubmit"
+                                [(ngModel)]="order.isSubmit"
+                                />
+                                <label class="custom-control-label mt-2" for="isSubmit"></label>
                             </div>
                         </div>
                     </div>

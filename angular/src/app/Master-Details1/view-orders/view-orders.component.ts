@@ -7,11 +7,14 @@ import {
   OrderServiceProxy,
   GetOrederOutputDTO,
   GetOrederOutputDTOPagedResultDto,
-  
 } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs/operators';
 
+class PagedOrderssRequestDto extends PagedRequestDto {
+  keyword: string;
+  isSubmit: boolean | null;
+}
 
 @Component({
   selector: 'app-view-orders',
@@ -21,6 +24,9 @@ import { finalize } from 'rxjs/operators';
 export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutputDTO> {
 
   orders : GetOrederOutputDTO[] =[];
+  keyword = '';
+  isSubmit: boolean | null;
+  advancedFiltersVisible = false;
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector ,
     public _orderService: OrderServiceProxy,
@@ -31,16 +37,19 @@ export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutp
    }
 
    protected list(
-    request: PagedRequestDto, 
+    request: PagedOrderssRequestDto, 
     pageNumber: number,
     finishedCallback: Function
     ): void 
     {
+    request.keyword = this.keyword;
+    request.isSubmit = this.isSubmit;
       this._orderService
       .getAllOrders(
+        request.keyword,
+        request.isSubmit,
         request.maxResultCount,
-        request.skipCount
-
+        request.skipCount,
       )
       .pipe(
         finalize(() => {
@@ -51,6 +60,11 @@ export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutp
         this.orders  = result.items;
         this.showPaging(result, pageNumber);
       });
+  }
+  clearFilters(): void {
+    this.keyword = '';
+    this.isSubmit = undefined;
+    this.getDataPage(1);
   }
 
 
