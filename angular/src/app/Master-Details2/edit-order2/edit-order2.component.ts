@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router'
-import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
-import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
+
 import { AppComponentBase } from '@shared/app-component-base';
 import { CreateItem2InputDTO, GetItem2OutputDTO, GetItemOutputDTO, GetOreder2OutputDTO, Item2ServiceProxy, Order2ServiceProxy, UserDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs/operators';
 import { DataItemsService } from '../data-items-service';
+import { EditItem2Component } from '../edit-item2/edit-item2.component';
+import { EditOrder2Items2Component } from '../edit-order2-items2/edit-order2-items2.component';
+import { CreateItems2Component } from './create-items2/create-items2.component';
 @Component({
   selector: 'app-edit-order2',
   templateUrl: './edit-order2.component.html',
@@ -36,16 +38,17 @@ export class EditOrder2Component  extends AppComponentBase  implements OnInit {
 
   ngOnInit(): void {
     this._activatedRoute.params.subscribe((params: Params) => {
-      this.id = params['id']; });
+    this.id = params['id']; });
     
     this._Order2Service.getOrderById(this.id).subscribe((result) => {
       this.order = result;
-      this.items =result.items;
+      this.items = this.dataItemsService.linesForUpdate =result.items;
+      console.log(this.dataItemsService.linesForUpdate )
        });
-
        this._userService.getAll('',undefined,0,1000).subscribe((result) => {
         this.users = result.items;
         });
+
   }
 
   UpdateTotalPrice(){
@@ -57,13 +60,13 @@ export class EditOrder2Component  extends AppComponentBase  implements OnInit {
   createItem(): void {
     this.showCreateItemDialog();
   }
-  editItem(item: GetItem2OutputDTO): void {
-    this.showEditItemDialog(item.id);
+  editItem(id: number): void {
+    this.showEditItemDialog(id);
   }
   private showCreateItemDialog(): void {
     let createItemDialog: BsModalRef;
       createItemDialog = this._modalService.show(
-        CreateOrderItemComponent,
+        CreateItems2Component,
         {
           class: 'modal-lg',
           initialState: {
@@ -72,44 +75,39 @@ export class EditOrder2Component  extends AppComponentBase  implements OnInit {
         }
       );
       createItemDialog.content.onSave.subscribe(() => {
-        this._Order2Service.getOrderById(this.id).subscribe((result) => {
-          this.items = result.items;
-          this.UpdateTotalPrice();
-        }); 
+        this.items = this.dataItemsService.linesForUpdate;
+        this.notify.info(this.l('SavedSuccessfully'));
+        this.UpdateTotalPrice(); 
       });
   }
 
   private showEditItemDialog(id: number): void {
     let EditItemDialog: BsModalRef;
       EditItemDialog = this._modalService.show(
-        EditItemComponent,
+        EditOrder2Items2Component,
         {
           class: 'modal-lg',
           initialState: {
             id: id,
-            orderId : this.id
           },
         }
       );
       EditItemDialog.content.onSave.subscribe(() => {
-        this._Order2Service.getOrderById(this.id).subscribe((result) => {
-          this.items = result.items;
-          this.UpdateTotalPrice();
-        }); 
+        this.items = this.dataItemsService.linesForUpdate;
+        this.UpdateTotalPrice();
       });
   }
-  protected delete(item: GetItem2OutputDTO): void {
+  protected delete(index): void {
     abp.message.confirm(
-      this.l('ItemDeleteWarningMessage', item.name),
+      this.l('ItemDeleteWarningMessage'),
       undefined,
       (result: boolean) => {
         if (result) {
-          this._item2Service.deleteItem(item.id , null).subscribe(() => {
-            this._Order2Service.getOrderById(this.id).subscribe((result) => {
-              this.items = result.items;
-              this.UpdateTotalPrice();
-            }); 
-          });
+          this.dataItemsService.deleteItemForEdit(index);
+          abp.notify.success(this.l('SuccessfullyDeleted'));
+          this.items = this.dataItemsService.linesForUpdate;
+          this.UpdateTotalPrice();
+
         }
       }
     );
@@ -118,6 +116,9 @@ export class EditOrder2Component  extends AppComponentBase  implements OnInit {
   
   save(): void {
     this.saving = true;
+    this.dataItemsService.deletedItem.forEach(function(item){ item.id = -item.id });
+    this.items = this.dataItemsService.linesForUpdate.concat(this.dataItemsService.deletedItem);
+    this.order.items = this.items;
     this._Order2Service
       .updateOrder(this.order)
       .pipe(
@@ -128,10 +129,16 @@ export class EditOrder2Component  extends AppComponentBase  implements OnInit {
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
         this.onSave.emit();
+        this.dataItemsService.linesForUpdate = [];
+        this.dataItemsService.deletedItem = []
         this._router.navigate(['app/view-orders2']);
       });
 
   }
-
-
+  
 }
+
+
+
+
+

@@ -29,8 +29,7 @@ export class CreateItem2Component  extends AppComponentBase implements OnInit {
   }
 
   save(): void {
-    
-    this.dataItemsService.lines.push(this.item);
+    this.dataItemsService.addItem(this.item);
     this.saving = true;
     this.bsModalRef.hide();
     this.onSave.emit();

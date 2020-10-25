@@ -52,41 +52,15 @@ namespace TestApp.Authorization
 
             var ordersCount = orderRepository.Count();
             List<Order> orders;
-            if (input.keyword == null) {
-                if(input.IsSubmit == null)
-                {
-                    orders =
-                        await orderRepository.GetAllIncluding(o => o.Items).PageBy(input).ToListAsync();
-                }
-                else
-                {
-                    orders =
-                        await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.IsSubmit == input.IsSubmit).PageBy(input).ToListAsync();
-                }
-            }
-            else
-            {
-                if (input.IsSubmit == null)
-                {
-                   orders =
-                   await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.Name.Contains(input.keyword)
+            orders =
+             await orderRepository.GetAllIncluding(o => o.Items)
+             .WhereIf(input.IsSubmit != null,o => o.IsSubmit == input.IsSubmit)
+              .WhereIf(input.keyword != null, o => o.Name.Contains(input.keyword)
                    || o.OrderNo.Contains(input.keyword)
                    || o.OrderDate.Contains(input.keyword)
-                   || o.EmpolyeeName.Contains(input.keyword)
-                   || o.TotalPrice.ToString().Contains(input.keyword)
-                   ).PageBy(input).ToListAsync();
-                }
-                else
-                {
-                     orders =
-                    await orderRepository.GetAllIncluding(o => o.Items).Where(o =>o.IsSubmit==input.IsSubmit &&( o.Name.Contains(input.keyword)
-                    || o.OrderNo.Contains(input.keyword)
-                    || o.OrderDate.Contains(input.keyword)
-                    || o.EmpolyeeName.Contains(input.keyword)
-                    || o.TotalPrice.ToString().Contains(input.keyword))
-                    ).PageBy(input).ToListAsync();
-                }
-            }
+                   || o.EmpolyeeName.Contains(input.keyword))
+             .PageBy(input).ToListAsync();
+            
             return new PagedResultDto<GetOrederOutputDTO>
             {
                 TotalCount = ordersCount,

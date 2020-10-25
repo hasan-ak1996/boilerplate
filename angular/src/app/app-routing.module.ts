@@ -30,7 +30,6 @@ import { EditOrderComponent } from './Master-Details1/edit-order/edit-order.comp
 
                     { path: 'orders',
                         component: CreateOrderComponent,
-
                     },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },

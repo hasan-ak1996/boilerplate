@@ -20,12 +20,16 @@ namespace TestApp.Master_datail_2.Order2
         private readonly OrderManager _orderManager;
         private readonly IMapper _objectMapper;
         private readonly IRepository<Order> orderRepository;
+        private readonly ItemManager _itemManager;
+        private readonly IRepository<Item> _itemRepository;
 
-        public Order2AppService(OrderManager orderManager, IMapper objectMapper , IRepository<Order> orderRepository)
+        public Order2AppService(OrderManager orderManager, IMapper objectMapper , IRepository<Order> orderRepository, ItemManager itemManager, IRepository<Item> itemRepository)
         {
             _orderManager = orderManager;
             _objectMapper = objectMapper;
             this.orderRepository = orderRepository;
+            _itemManager = itemManager;
+            _itemRepository = itemRepository;
         }
 
         public async Task<Order> CreateOrder(CreateOrder2InputDTO input)
@@ -46,54 +50,20 @@ namespace TestApp.Master_datail_2.Order2
         {
             var ordersCount = orderRepository.Count();
             List<Order> orders;
-
-            if (input.keyword == null)
-            {
-                if (input.IsSubmit == null)
-                {
-                    orders = 
-                        await orderRepository.GetAllIncluding(o => o.Items).PageBy(input).ToListAsync();
-                }
-                else
-                {
-                    orders =
-                        await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.IsSubmit == input.IsSubmit).PageBy(input).ToListAsync();
-                }
-            }
-            else
-            {
-                if (input.IsSubmit == null)
-                {
-                    orders =
-                       await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.Name.Contains(input.keyword)
-                       || o.OrderNo.Contains(input.keyword)
-                       || o.OrderDate.Contains(input.keyword)
-                       || o.EmpolyeeName.Contains(input.keyword)
-                       || o.TotalPrice.ToString().Contains(input.keyword)
-                       ).PageBy(input).ToListAsync();
-                }
-                else
-                {
-                    orders =
-                       await orderRepository.GetAllIncluding(o => o.Items).Where(o => o.IsSubmit == input.IsSubmit && (o.Name.Contains(input.keyword)
-                       || o.OrderNo.Contains(input.keyword)
-                       || o.OrderDate.Contains(input.keyword)
-                       || o.EmpolyeeName.Contains(input.keyword)
-                       || o.TotalPrice.ToString().Contains(input.keyword))
-                       ).PageBy(input).ToListAsync();
-                }
-
-            }
+            orders =
+                await orderRepository.GetAllIncluding(o => o.Items)
+                .WhereIf(input.IsSubmit != null, o => o.IsSubmit == input.IsSubmit)
+                .WhereIf(input.keyword != null , o => o.Name.Contains(input.keyword)
+                    || o.OrderNo.Contains(input.keyword)
+                    || o.OrderDate.Contains(input.keyword)
+                    || o.EmpolyeeName.Contains(input.keyword))
+                .PageBy(input).ToListAsync();
 
             return new PagedResultDto<GetOreder2OutputDTO>
             {
                 TotalCount = ordersCount,
                 Items = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOreder2OutputDTO>>(orders)
             };
-
-            //var getAll = await _orderManager.GetAllOreders();
-            //List<GetOreder2OutputDTO> output = _objectMapper.Map<List<Order>, List<GetOreder2OutputDTO>>(getAll);
-            //return  output;
         }
 
         public async Task<GetOreder2OutputDTO>  GetOrderById(Order2InputDTO input)
@@ -107,7 +77,22 @@ namespace TestApp.Master_datail_2.Order2
         {
             Order output = _objectMapper.Map<GetOreder2OutputDTO,Order>(input);
 
-           await _orderManager.UpdateOrder(output);
+            await _orderManager.UpdateOrder(output);
+
+            foreach (var item in input.Items)
+            {
+                Item itemDetail = _objectMapper.Map<GetItem2OutputDTO, Item>(item);
+                if (item.Id > 0)
+                {
+                    var UpdatedItem = await _itemManager.GetItemById(itemDetail.Id);
+                    await _itemManager.UpdateItem(UpdatedItem);
+                }
+                else if(item.Id < 0)
+                {
+                    await _itemManager.DeleteItem(item.Id * -1);
+                }
+            }
+
         }
     }
 }

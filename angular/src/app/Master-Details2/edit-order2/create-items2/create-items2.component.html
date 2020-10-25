@@ -1,0 +1,114 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #createItem2Form="ngForm"
+  (ngSubmit)="createItem2Form.valid && save() "
+>
+    <abp-modal-header
+    [title]="'CreateNewItem' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+    ></abp-modal-header>
+     <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="itemName">
+               {{ "Item Name" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                [class.is-invalid]="createItem2Form.submitted && !nameModel.valid"
+                type="text"
+                class="form-control"
+                name="name"
+                id="itemName"
+                required
+                maxlength="32"
+                [(ngModel)]="item.name"
+                #nameModel="ngModel"
+                #nameEl
+                />
+                <div 
+                    *ngIf="createItem2Form.submitted && !nameModel.valid">
+                    <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
+                        Name is required
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="price">
+                {{ "Price" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                [class.is-invalid]="createItem2Form.submitted && !nameModel.valid"
+                type="number"
+                class="form-control"
+                name="price"
+                id="price"
+                required
+                maxlength="32"
+                [(ngModel)]="item.price"
+                #priceModel="ngModel"
+                #priceEl
+                />
+                <div 
+                class="text-danger"
+                *ngIf="createItem2Form.submitted && !priceModel.valid">
+                    <div *ngIf="priceModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
+                        Price is required
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="quantity">
+                {{ "Quantity" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                [class.is-invalid]="createItem2Form.submitted && !nameModel.valid"
+                type="number"
+                class="form-control"
+                name="quantity"
+                id="quantity"
+                (keyup)="UpdateTotal()"
+                required
+                minlength="2"
+                maxlength="32"
+                [(ngModel)]="item.quantity"
+                #quantityModel="ngModel"
+                #quantityEl
+                />
+                <div 
+                class="text-danger"
+                *ngIf="createItem2Form.submitted && !quantityModel.valid">
+                    <div *ngIf="quantityModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
+                        Quantity is required
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="totalPriceItem">
+                {{ "Total Price" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input
+                type="number"
+                class="form-control"
+                name="totalPrice"
+                id="totalPriceItem"
+                disabled
+                maxlength="32"
+                [(ngModel)]="item.totalPrice"
+                #totalPriceModel="ngModel"
+                #totalPriceEl
+                />
+            </div>
+        </div>
+    </div>
+    <abp-modal-footer
+    [cancelDisabled]="saving"
+    (onCancelClick)="bsModalRef.hide()"
+    ></abp-modal-footer>
+</form>

@@ -43,9 +43,9 @@ export class CreateOrder2Component extends AppComponentBase
     this.order.totalPrice = parseInt((this.order.totalPrice).toFixed(2));
   }
   createItem(): void {
-    this.showCreateOrEditItemDialog();
+    this.showCreateItemDialog();
   }
-  private showCreateOrEditItemDialog(): void {
+  private showCreateItemDialog(): void {
     let createOrEditItemDialog: BsModalRef;
       createOrEditItemDialog = this._modalService.show(
         CreateItem2Component,
@@ -60,18 +60,18 @@ export class CreateOrder2Component extends AppComponentBase
     });
   }
 
-    editItem(item: CreateItem2InputDTO): void {
-    this.showEditItemDialog(item.name);
+    editItem(id :number): void {
+    this.showEditItemDialog(id);
   }
 
-  private showEditItemDialog(name: string): void {
+  private showEditItemDialog(id: number): void {
     let createOrEditItemDialog: BsModalRef;
       createOrEditItemDialog = this._modalService.show(
         EditItem2Component,
         {
           class: 'modal-lg',
           initialState: {
-            name: name,
+            id: id,
           },
         }
       );
@@ -89,7 +89,7 @@ export class CreateOrder2Component extends AppComponentBase
       undefined,
       (result: boolean) => {
         if (result) {
-          this.dataItemsService.lines.splice(index , 1);
+          this.dataItemsService.deleteItem(index);
             abp.notify.success(this.l('SuccessfullyDeleted'));
             this.items2 =  this.dataItemsService.lines;
             this.UpdateTotalPrice()

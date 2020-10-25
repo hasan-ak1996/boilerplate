@@ -165,17 +165,17 @@
                             No item selected for this order
                         </td>
                     </tr>
-                    <tr *ngFor = "let item of items">
+                    <tr *ngFor = "let item of items; let i=index">
                         <td>{{item.name}}</td>
                         <td>{{item.price}}</td>
                         <td>{{item.quantity}}</td>
                         <td>{{item.totalPrice}}</td>
                         <td>
-                            <button type="button" class="btn btn-sm bg-secondary" (click)="editItem(item)">
+                            <button type="button" class="btn btn-sm bg-secondary" (click)="editItem(i)">
                                 <i class="fas fa-pencil-alt"></i>
                                 {{ "Edit" | localize }}
                             </button>
-                            <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(item)">
+                            <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(i)">
                                 <i class="fas fa-trash"></i>
                                 {{ "Delete" | localize }}
                             </button>

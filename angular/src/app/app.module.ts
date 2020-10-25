@@ -55,6 +55,8 @@ import { ViewOrders2Component } from './Master-Details2/view-orders2/view-orders
 import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.component';
 import { EditItem2Component } from './Master-Details2/edit-item2/edit-item2.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { EditOrder2Items2Component } from './Master-Details2/edit-order2-items2/edit-order2-items2.component';
+import { CreateItems2Component } from './Master-Details2/edit-order2/create-items2/create-items2.component';
 
 
 @NgModule({
@@ -96,6 +98,8 @@ import { MatSliderModule } from '@angular/material/slider';
     ViewOrders2Component,
     EditOrder2Component,
     EditItem2Component,
+    EditOrder2Items2Component,
+    CreateItems2Component,
     
   ],
   imports: [

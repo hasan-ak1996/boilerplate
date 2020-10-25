@@ -9,7 +9,6 @@ namespace TestApp.Master_datail_2.Order2
     [AutoMap(typeof(Order))]
     public class GetOreder2OutputDTO : EntityDto
     {
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

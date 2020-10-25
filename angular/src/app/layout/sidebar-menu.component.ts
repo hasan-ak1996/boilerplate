@@ -63,13 +63,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         'Pages.Roles'
       ),
       new MenuItem(
-        this.l('Orders'),
+        this.l('Orders(live)'),
         '/app/view-orders',
         'fas fa-theater-masks',
         'Pages.Orders'
       ),
       new MenuItem(
-        this.l('Orders2'),
+        this.l('Orders2(local)'),
         '/app/view-orders2',
         'fas fa-theater-masks',
       ),

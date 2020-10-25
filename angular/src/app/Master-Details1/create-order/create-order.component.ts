@@ -31,6 +31,7 @@ export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
   saving = false;
   orderId : number;
+  EditItemComponent
   order = new CreateOrderInputDTO ();
   users: UserDto[] = [];
   items : GetItemOutputDTO[] =[];

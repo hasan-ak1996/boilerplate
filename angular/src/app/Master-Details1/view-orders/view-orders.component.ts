@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EditOrderComponent } from '@app/Master-Details1/edit-order/edit-order.component';
-import { AppComponentBase } from '@shared/app-component-base';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import {
   OrderServiceProxy,
