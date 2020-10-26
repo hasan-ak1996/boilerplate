@@ -10,7 +10,6 @@ namespace TestApp.Master_Details.Models
 {
     public interface IOrderManager : IDomainService
     {
-        Task<List<Order>> GetAllOreders();
         Task<Order> GetOrderById(int id);
         Task<Order> CreateOrder(Order entity);
         Task DeleteOrder(int id);

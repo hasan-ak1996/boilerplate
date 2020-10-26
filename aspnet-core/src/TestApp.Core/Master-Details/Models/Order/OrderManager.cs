@@ -49,10 +49,6 @@ namespace TestApp.Master_Details.Models
             }
         }
 
-        public  async Task<List<Order>> GetAllOreders()
-        {
-            return await _orderRepository.GetAllIncluding(r => r.Items).ToListAsync();
-        }
 
         public async Task<Order> GetOrderById(int id)
         {
