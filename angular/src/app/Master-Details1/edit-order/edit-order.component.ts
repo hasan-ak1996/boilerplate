@@ -16,7 +16,7 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
   saving = false;
   order = new GetOrederOutputDTO ();
   items : GetItemOutputDTO[] =[];
-
+  displayedColumns: string[] = ['name', 'price', 'quantity', 'Total Price','actions'];
   users: UserDto[] = [];
   id: number;
   @Output() onSave = new EventEmitter<any>();

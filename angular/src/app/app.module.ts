@@ -55,6 +55,15 @@ import { ViewOrders2Component } from './Master-Details2/view-orders2/view-orders
 import { EditOrder2Component } from './Master-Details2/edit-order2/edit-order2.component';
 import { EditItem2Component } from './Master-Details2/edit-item2/edit-item2.component';
 import { MatSliderModule } from '@angular/material/slider';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
 import { EditOrder2Items2Component } from './Master-Details2/edit-order2-items2/edit-order2-items2.component';
 import { CreateItems2Component } from './Master-Details2/edit-order2/create-items2/create-items2.component';
 
@@ -116,11 +125,22 @@ import { CreateItems2Component } from './Master-Details2/edit-order2/create-item
     ServiceProxyModule,
     SharedModule,
     NgxPaginationModule,
-    MatSliderModule
+    MatSliderModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatTableModule
     
     
   ],
   providers: [
+    MatDatepickerModule, 
+    MatNativeDateModule,
     { provide : ItemServiceProxy , useClass : ItemServiceProxy},
     { provide : Item2ServiceProxy , useClass : Item2ServiceProxy},
     { provide : Order2ServiceProxy , useClass : Order2ServiceProxy},

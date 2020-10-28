@@ -11,152 +11,194 @@
     <div class="container-fluid">
         <form class="form-horizontal" autocomplete="off" #editOrderModal="ngForm"
             (ngSubmit)="editOrderModal.valid && save() ">
-            <div class="form-group row required">
-                <label class="col-md-2 col-form-label" for="orderName">
-                    {{ "order Name" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <input [class.is-invalid]="editOrderModal.submitted && !nameModel.valid" type="text"
-                        class="form-control" name="orderName" id="orderName" required maxlength="32"
-                        [(ngModel)]="order.name" #nameModel="ngModel" #nameEl />
-                    <div *ngIf="editOrderModal.submitted && !nameModel.valid">
-                        <div *ngIf="nameModel.errors.required" class="error invalid-feedback d-block ng-star-inserted">
-                            order Name is required
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field 
+                    appearance="fill"
+                    [class.mat-form-field-invalid]="editOrderModal.submitted && nameModel.hasError('required')"
+                    class="w-100">
+                        <mat-label for="orderName">
+                            {{ "Order Name" | localize }}
+                        </mat-label>
+                        <input 
+                        matInput 
+                        type="text"
+                        name="orderName" 
+                        id="orderName" 
+                        required 
+                        maxlength="32"
+                        [(ngModel)]="order.name" 
+                        #nameModel="ngModel" 
+                        >
+                        <mat-error *ngIf="editOrderModal.submitted && nameModel.hasError('required')">
+                            Name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field 
+                    appearance="fill" 
+                    [class.mat-form-field-invalid]="editOrderModal.submitted && orderNoModel.hasError('required')"
+                    class="w-100">
+                        <mat-label for="orderNo">
+                            {{ "Order.No" | localize }}
+                        </mat-label>
+                        <input 
+                        matInput 
+                        type="text"
+                        name="orderNo" 
+                        id="orderNo" 
+                        required 
+                        maxlength="32"
+                        [(ngModel)]="order.orderNo" 
+                        #orderNoModel="ngModel" 
+                        #orderNoEl >
+                        <mat-error *ngIf="editOrderModal.submitted && orderNoModel.hasError('required')">
+                            Order.No is required
+                        </mat-error>
+                    </mat-form-field>
                 </div>
             </div>
-            <div class="form-group row required">
-                <label class="col-md-2 col-form-label" for="orderNo">
-                    {{ "orderNo" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <input [class.is-invalid]="editOrderModal.submitted && !orderNoModel.valid" type="number"
-                        class="form-control" name="orderNo" id="orderNo" required maxlength="32"
-                        [(ngModel)]="order.orderNo" #orderNoModel="ngModel" #orderNoEl />
-                    <div *ngIf="editOrderModal.submitted && !orderNoModel.valid">
-                        <div *ngIf="orderNoModel.errors.required"
-                            class="error invalid-feedback d-block ng-star-inserted">
-                            orderNo is required
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row required">
-                <label class="col-md-2 col-form-label" for="empolyeeName">
-                    {{ "Empolyee Name" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <select 
-                    [(ngModel)]="order.empolyeeName"
-                    name="empolyeeName"
-                    id="empolyeeName"
-                    [class.is-invalid]="editOrderModal.submitted && !empolyeeNameModel.value"
-                    class="form-control" 
-                    #empolyeeNameModel="ngModel"
-                    >
-                        <option value="" selected>--selecte employee--</option>
-                        <option *ngFor="let user of users" [value]="user.userName">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field 
+                    appearance="fill"
+                    [class.mat-form-field-invalid]="editOrderModal.submitted && empolyeeNameModel.hasError('required')"
+                    class="w-100">
+                        <mat-label for="empolyeeName">
+                            {{ "Employee Name" | localize }}
+                        </mat-label>
+
+                        <mat-select 
+                        [(ngModel)]="order.empolyeeName"
+                        name="empolyeeName"
+                        id="empolyeeName"
+                        #empolyeeNameModel="ngModel"
+                        required
+                        >
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let user of users" [value]="user.userName">
                             {{user.userName}}
-                        </option>
-                    </select>
-                    <div *ngIf="editOrderModal.submitted && !empolyeeNameModel.value">
-                        <div 
-                            class="error invalid-feedback d-block ng-star-inserted">
-                            Empolyee Name is required
-                        </div>
-                    </div>
+                        </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="editOrderModal.submitted && empolyeeNameModel.hasError('required')">Please choose an Employee Name</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field 
+                    appearance="fill"
+                    class="w-100">
+                        <mat-label for="totalPriceOrder">
+                            {{ "Total Price" | localize }}
+                        </mat-label>
+                        <input 
+                        matInput 
+                        type="number" 
+                        name="totalPrice" 
+                        id="totalPriceOrder" 
+                        disabled
+                        maxlength="32" 
+                        [(ngModel)]="order.totalPrice" 
+                        #totalPriceModel="ngModel"
+                        #totalPriceEl 
+                        >
+                    </mat-form-field>
                 </div>
             </div>
-            <div class="form-group row required">
-                <label class="col-md-2 col-form-label" for="totalPriceOrder">
-                    {{ "Total Price" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <input type="number" class="form-control" name="totalPrice" id="totalPriceOrder" disabled
-                        maxlength="32" [(ngModel)]="order.totalPrice" #totalPriceModel="ngModel" #totalPriceEl />
 
-                </div>
-            </div>
-
-            <div class="form-group row required">
-                <label class="col-md-2 col-form-label" for="orderDate">
-                    {{ "Order Date" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <input [class.is-invalid]="editOrderModal.submitted && !orderDateModel.valid" type="date"
-                        class="form-control" name="orderDate" id="orderDate" required maxlength="32"
-                        [(ngModel)]="order.orderDate" #orderDateModel="ngModel" #orderDateEl />
-                    <div *ngIf="editOrderModal.submitted && !orderDateModel.valid">
-                        <div *ngIf="orderDateModel.errors.required"
-                            class="error invalid-feedback d-block ng-star-inserted">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field  
+                    appearance="fill"
+                    [class.mat-form-field-invalid]="editOrderModal.submitted && orderDateModel.hasError('required')"
+                    class="w-100"
+                    >
+                        <mat-label for="orderDate">
+                            {{ "Order Date" | localize }}
+                        </mat-label>
+                        <input 
+                        matInput 
+                        [matDatepicker]="picker1"
+                        name="orderDate" 
+                        id="orderDate" 
+                        required 
+                        maxlength="32"
+                        [(ngModel)]="order.orderDate" 
+                        #orderDateModel="ngModel" 
+                        #orderDateEl
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error *ngIf="editOrderModal.submitted && orderDateModel.hasError('required')">
                             Order Date is required
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row mb-0">
-                <label class="col-md-2 col-form-label">
-                  {{ "IsSubmit" | localize }}
-                </label>
-                <div class="col-md-9">
-                    <div class="custom-control custom-checkbox">
-                        <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        name="isSubmit"
-                        id="isSubmit"
-                        [(ngModel)]="order.isSubmit"
-                        />
-                        <label class="custom-control-label mt-2" for="isSubmit"></label>
-                    </div>
+                        </mat-error>
+                    </mat-form-field>
                 </div>
             </div>
 
-            <table class="table table-hover text-nowrap">
-                <thead class="bg-light">
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
+            <div class="row mb-0">
+                <div class="col-md-6">
+                    <mat-checkbox
+                    name="isSubmit"
+                    id="isSubmit"
+                    [(ngModel)]="order.isSubmit"
+                    color="primary"
+                    >
+                        {{ "IsSubmit" | localize }}
+                    </mat-checkbox>
+                </div>
+            </div>
+            <a mat-raised-button color="primary" href="javascript:;" class=" float-right mb-2"  (click)="createItem()">
+                <i class="fa fa-plus-square"></i>
+                {{ "Add item" | localize }}
+            </a>
 
-                    <th style="width: 200px;">
-                        <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
-                            <i class="fa fa-plus-square"></i>
-                            {{ "Add item" | localize }}
-                        </a>
+            <table mat-table [dataSource]="items" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef> Name. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef style="width:200px"> Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                  <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="Total Price">
+                  <th mat-header-cell *matHeaderCellDef> Total Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.totalPrice}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef style="width:200px">
+                        actions
                     </th>
-                </thead>
-                <tbody>
-                    <tr *ngIf="!items.length">
-                        <td class="text-center font-italic" colspan="7">
-                            No item selected for this order
-                        </td>
-                    </tr>
-                    <tr *ngFor="let item of items">
-                        <td>{{item.name}}</td>
-                        <td>{{item.price}}</td>
-                        <td>{{item.quantity}}</td>
-                        <td>{{item.totalPrice}}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm bg-secondary" (click)="editItem(item)">
-                                <i class="fas fa-pencil-alt"></i>
-                                {{ "Edit" | localize }}
-                            </button>
-                            <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(item)">
-                                <i class="fas fa-trash"></i>
-                                {{ "Delete" | localize }}
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
+                    <td mat-cell *matCellDef="let element"> 
+                        <button  type="button" class="btn btn-sm bg-secondary" (click)="editItem(element)">
+                            <i class="fas fa-pencil-alt"></i>
+                            {{ "Edit" | localize }}
+                        </button>
+                        <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(element)">
+                            <i class="fas fa-trash"></i>
+                            {{ "Delete" | localize }}
+                        </button>
+                    </td>
+                  </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"  ></tr>
+
             </table>
 
-            <div class="form-group">
-                <button class="btn btn-primary ml-auto" type="submit">Save</button>
-            </div>
-
-
+            <button mat-raised-button color="primary" class="ml-auto my-3" type="submit">Save</button>
         </form>
     </div>
 </section>

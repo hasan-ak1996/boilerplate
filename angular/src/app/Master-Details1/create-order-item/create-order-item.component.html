@@ -9,104 +9,111 @@
     (onCloseClick)="bsModalRef.hide()"
     ></abp-modal-header>
      <div class="modal-body">
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="itemName">
-               {{ "Item Name" | localize }}
-            </label>
-            <div class="col-md-9">
-                <input
-                [class.is-invalid]="createItemModal.submitted && !nameModel.valid"
-                type="text"
-                class="form-control"
-                name="name"
-                id="itemName"
-                required
-                maxlength="32"
-                [(ngModel)]="item.name"
-                #nameModel="ngModel"
-                #nameEl
-                />
-                <div 
-                    *ngIf="createItemModal.submitted && !nameModel.valid">
-                    <div *ngIf="nameModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field 
+                appearance="fill"
+                [class.mat-form-field-invalid]="createItemModal.submitted && nameModel.hasError('required')"
+                class="w-100">
+                    <mat-label for="itemName">
+                        {{ "Item Name" | localize }}
+                    </mat-label>
+                    <input 
+                    matInput 
+                    type="text"
+                    name="name"
+                    id="itemName"
+                    required
+                    maxlength="32"
+                    [(ngModel)]="item.name"
+                    #nameModel="ngModel"
+                    #nameEl
+                    >
+                    <mat-error *ngIf="createItemModal.submitted && nameModel.hasError('required')">
                         Name is required
-                    </div>
-                </div>
+                    </mat-error>
+                </mat-form-field>
             </div>
-        </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="price">
-                {{ "Price" | localize }}
-            </label>
-            <div class="col-md-9">
-                <input
-                [class.is-invalid]="createItemModal.submitted && !priceModel.valid"
-                type="number"
-                class="form-control"
-                name="price"
-                id="price"
-                required
-                maxlength="32"
-                [(ngModel)]="item.price"
-                #priceModel="ngModel"
-                #priceEl
-                />
-                <div 
-                *ngIf="createItemModal.submitted && !priceModel.valid">
-                    <div *ngIf="priceModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
+
+            <div class="col-md-6">
+                <mat-form-field 
+                appearance="fill"
+                [class.mat-form-field-invalid]="createItemModal.submitted && priceModel.hasError('required')"
+                class="w-100">
+                    <mat-label for="price">
+                        {{ "Price" | localize }}
+                    </mat-label>
+                    <input 
+                    matInput 
+                    type="number"
+                    name="price"
+                    id="price"
+                    required
+                    maxlength="32"
+                    [(ngModel)]="item.price"
+                    #priceModel="ngModel"
+                    #priceEl
+                    >
+                    <mat-error *ngIf="createItemModal.submitted && priceModel.hasError('required')">
                         Price is required
-                    </div>
-                </div>
+                    </mat-error>
+                </mat-form-field>
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="quantity">
-                {{ "Quantity" | localize }}
-            </label>
-            <div class="col-md-9">
-                <input
-                [class.is-invalid]="createItemModal.submitted && !quantityModel.valid"
-                type="number"
-                class="form-control"
-                name="quantity"
-                id="quantity"
-                (keyup)="UpdateTotal()"
-                required
-                minlength="2"
-                maxlength="32"
-                [(ngModel)]="item.quantity"
-                #quantityModel="ngModel"
-                #quantityEl
-                />
-                <div 
-                *ngIf="createItemModal.submitted && !quantityModel.valid">
-                    <div *ngIf="quantityModel.errors.required"  class="error invalid-feedback d-block ng-star-inserted">
+
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field 
+                appearance="fill"
+                [class.mat-form-field-invalid]="createItemModal.submitted && quantityModel.hasError('required')"
+                class="w-100">
+                    <mat-label for="quantity">
+                        {{ "Quantity" | localize }}
+                    </mat-label>
+                    <input 
+                    matInput 
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    (keyup)="UpdateTotal()"
+                    required
+                    minlength="2"
+                    maxlength="32"
+                    [(ngModel)]="item.quantity"
+                    #quantityModel="ngModel"
+                    #quantityEl
+                    >
+                    <mat-error *ngIf="createItemModal.submitted && quantityModel.hasError('required')">
                         Quantity is required
-                    </div>
-                </div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field 
+                appearance="fill"
+                class="w-100">
+                    <mat-label for="totalPriceItem">
+                        {{ "Total Price" | localize }}
+                    </mat-label>
+                    <input 
+                    matInput 
+                    type="number"
+                    name="totalPrice"
+                    id="totalPriceItem"
+                    disabled
+                    maxlength="32"
+                    [(ngModel)]="item.totalPrice"
+                    #totalPriceModel="ngModel"
+                    #totalPriceEl
+                    >
+                </mat-form-field>
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="totalPriceItem">
-                {{ "Total Price" | localize }}
-            </label>
-            <div class="col-md-9">
-                <input
-                type="number"
-                class="form-control"
-                name="totalPrice"
-                id="totalPriceItem"
-                disabled
-                maxlength="32"
-                [(ngModel)]="item.totalPrice"
-                #totalPriceModel="ngModel"
-                #totalPriceEl
-                />
-            </div>
-        </div>
+        <hr>
+        <button mat-raised-button color="primary" type="submit" class="float-right">save</button>
+        <button mat-raised-button class="btn-secondary" type="button" (click)="bsModalRef.hide()">cancel</button>
+        <div class="clear-fix"></div>
     </div>
-    <abp-modal-footer
-    [cancelDisabled]="saving"
-    (onCancelClick)="bsModalRef.hide()"
-    ></abp-modal-footer>
+   
+
 </form>

@@ -19,6 +19,7 @@ export class CreateOrder2Component extends AppComponentBase
   order = new CreateOrder2InputDTO ();
   items2 : CreateItem2InputDTO[] = [];
   users: UserDto[] = [];
+  displayedColumns: string[] = ['name', 'price', 'quantity', 'Total Price','actions'];
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector,
     public _orderService: Order2ServiceProxy,
@@ -92,7 +93,7 @@ export class CreateOrder2Component extends AppComponentBase
           this.dataItemsService.deleteItem(index);
             abp.notify.success(this.l('SuccessfullyDeleted'));
             this.items2 =  this.dataItemsService.lines;
-            this.UpdateTotalPrice()
+            this.UpdateTotalPrice();
         }
       }
     );
