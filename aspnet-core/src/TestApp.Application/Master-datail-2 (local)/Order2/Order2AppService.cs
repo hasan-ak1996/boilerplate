@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using TestApp.Master_datail_2.Order2.DTO;
@@ -58,8 +59,7 @@ namespace TestApp.Master_datail_2.Order2
                     || o.OrderDate.Contains(input.keyword)
                     || o.EmpolyeeName.Contains(input.keyword))
                 .PageBy(input).ToListAsync();
-
-            return new PagedResultDto<GetOreder2OutputDTO>
+                return new PagedResultDto<GetOreder2OutputDTO>
             {
                 TotalCount = ordersCount,
                 Items = _objectMapper.Map<List<TestApp.Models.Order>, List<GetOreder2OutputDTO>>(orders)

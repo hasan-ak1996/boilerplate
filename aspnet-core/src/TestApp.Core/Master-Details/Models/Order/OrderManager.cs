@@ -52,7 +52,8 @@ namespace TestApp.Master_Details.Models
 
         public async Task<Order> GetOrderById(int id)
         {
-           return await _orderRepository.GetAll().Include(o=> o.Items).Where(i => i.Id == id).FirstOrDefaultAsync();
+          return  await _orderRepository.GetAllIncluding(o => o.Items).Where(i => i.Id == id).FirstOrDefaultAsync();
+   
         }
 
         public  async Task UpdateOrder(Order entity)
