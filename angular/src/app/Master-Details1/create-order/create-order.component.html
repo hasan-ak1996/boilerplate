@@ -137,6 +137,21 @@
                             </mat-error>
                           </mat-form-field>
                     </div>
+
+                    <div class="col-md-6">
+                        <mat-form-field
+                        appearance="fill"
+                        class="w-100"
+                        >
+                            <mat-label for="file">Attachment</mat-label>
+                            <ngx-mat-file-input 
+                            name="file" 
+                            id="file" 
+                            (change)="fileChange($event.target.files)" 
+                            ></ngx-mat-file-input>
+                            <mat-icon matSuffix>folder</mat-icon>
+                          </mat-form-field>
+                    </div>
                 </div>
             <div class="row">
                 <div class="col-md-6">
@@ -153,7 +168,8 @@
 
             <div class="form-group mt-3 mb-0">
                 <button mat-raised-button color="primary" typr="submit" ><i class="fa fa-database"></i> Submit Master</button>
-                <button mat-raised-button color="primary" (click)="goToViewOrders()" class="ml-2">View Orders</button>            
+                <button mat-raised-button color="primary" (click)="goToViewOrders()" class="ml-2">View Orders</button>    
+     
             </div>
         </form>
     </div>

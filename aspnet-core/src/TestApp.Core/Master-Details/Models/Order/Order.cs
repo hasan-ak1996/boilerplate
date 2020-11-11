@@ -14,6 +14,8 @@ namespace TestApp.Models
         public bool IsSubmit { get; set; }
         public string EmpolyeeName { get; set; }
         public decimal TotalPrice { get; set; }
+        public byte[] File { get; set; }
+        public string FileName { get; set; }
         public virtual List<Item> Items { get; set; }
 
     }

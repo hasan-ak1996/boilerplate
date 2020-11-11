@@ -23,8 +23,8 @@ namespace TestApp.Master_Detail.DTO
         public string EmpolyeeName { get; set; }
         [Required]
         public decimal TotalPrice { get; set; }
-
         public bool IsSubmit { get; set; }
+        public string FileName { get; set; }
         public virtual List<GetItemOutputDTO> Items { get; set; }
 
     }

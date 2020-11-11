@@ -6,6 +6,8 @@ import { CreateOrderItemComponent } from '../create-order-item/create-order-item
 import { EditItemComponent } from '../edit-item/edit-item.component';
 import { AppComponentBase } from '@shared/app-component-base';
 import { GetItemOutputDTO, GetOrederOutputDTO, ItemServiceProxy, OrderServiceProxy, UserDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
+import { OrderService } from '../services/order-service.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-order',
@@ -19,6 +21,8 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
   displayedColumns: string[] = ['name', 'price', 'quantity', 'Total Price','actions'];
   users: UserDto[] = [];
   id: number;
+  uploadedFile : File;
+  fileResult : any;
   @Output() onSave = new EventEmitter<any>();
 
   constructor(
@@ -29,7 +33,8 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
     public bsModalRef: BsModalRef,
     private _modalService: BsModalService,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private orderService : OrderService
   ) { 
     super(injector);
   }
@@ -39,12 +44,14 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
     this.id = params['id']; });
       
     this._OrderService.getOrderById(this.id).subscribe((result) => {
-      this.order = result; 
+      this.order = result;
+      console.log(this.order.fileName);
       this.items =result.items;
        });
        this._userService.getAll('',undefined,0,1000).subscribe((result) => {
         this.users = result.items;
       });
+      
       
   }
   UpdateTotalPrice(){
@@ -119,22 +126,44 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
       }
     );
   }
+ public downloadFile(element){
+  this.orderService.DownloadFile(this.order.fileName).subscribe((data) => {
+    this.fileResult = data;
+    switch (data.type) {
+      case HttpEventType.Response:
+        const downloadedFile = new Blob([this.fileResult.body], { type: this.fileResult.body.type });
+        element.download =this.order.fileName;
+        element.href = URL.createObjectURL(downloadedFile);
+    }
+  });
+  }
+  public fileChange(files: FileList) {
+    this.uploadedFile = files[0];
+  }
 
 
   save(): void {
     this.saving = true;
-    this._OrderService
-      .updateOrder(this.order)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        })
-      )
-      .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this._router.navigate(['app/view-orders']);
-        this.onSave.emit();
-      });
+    var formData = new FormData();
+    formData.append('file',this.uploadedFile);
+    formData.append('Order' , JSON.stringify(this.order));
+    this.orderService.UpdateOrder(formData).subscribe((res) => {
+      this.notify.info(this.l('SavedSuccessfully'));
+      this._router.navigate(['app/view-orders']);
+      this.onSave.emit();
+    })
+  //  this._OrderService
+   //   .updateOrder(this.order)
+   //   .pipe(
+    //    finalize(() => {
+    //      this.saving = false;
+    //    })
+    //  )
+    //  .subscribe(() => {
+    //    this.notify.info(this.l('SavedSuccessfully'));
+    //    this._router.navigate(['app/view-orders']);
+    //    this.onSave.emit();
+    //  });
 
   }
 

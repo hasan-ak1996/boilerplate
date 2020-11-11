@@ -3900,6 +3900,8 @@ export class Order implements IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
+    file: string | undefined;
+    fileName: string | undefined;
     items: Item[] | undefined;
 
     constructor(data?: IOrder) {
@@ -3927,6 +3929,8 @@ export class Order implements IOrder {
             this.isSubmit = _data["isSubmit"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
+            this.file = _data["file"];
+            this.fileName = _data["fileName"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -3958,6 +3962,8 @@ export class Order implements IOrder {
         data["isSubmit"] = this.isSubmit;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
+        data["file"] = this.file;
+        data["fileName"] = this.fileName;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -3989,6 +3995,8 @@ export interface IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
+    file: string | undefined;
+    fileName: string | undefined;
     items: Item[] | undefined;
 }
 
@@ -4000,6 +4008,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
     empolyeeName: string;
     totalPrice: number;
     isSubmit: boolean;
+    fileName: string | undefined;
     items: GetItemOutputDTO[] | undefined;
 
     constructor(data?: IGetOrederOutputDTO) {
@@ -4020,6 +4029,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
             this.isSubmit = _data["isSubmit"];
+            this.fileName = _data["fileName"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -4044,6 +4054,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
         data["isSubmit"] = this.isSubmit;
+        data["fileName"] = this.fileName;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -4068,6 +4079,7 @@ export interface IGetOrederOutputDTO {
     empolyeeName: string;
     totalPrice: number;
     isSubmit: boolean;
+    fileName: string | undefined;
     items: GetItemOutputDTO[] | undefined;
 }
 

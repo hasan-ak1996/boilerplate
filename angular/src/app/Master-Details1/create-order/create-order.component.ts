@@ -21,7 +21,12 @@ import { forEach as _forEach, map as _map, result } from 'lodash-es';
 import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
 import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { observable } from 'rxjs';
+import { OrderService } from '../services/order-service.service';
+
 @Component({
+  
   selector: 'create-order',
   templateUrl: './create-order.component.html',
   styleUrls: ['./create-order.component.css'],
@@ -31,10 +36,11 @@ export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
   saving = false;
   orderId : number;
-  EditItemComponent
+  uploadedFile : File;
   order = new CreateOrderInputDTO ();
   users: UserDto[] = [];
   items : GetItemOutputDTO[] =[];
+  orderResult : any;
   @Output() onSave = new EventEmitter<any>();
   
   constructor(
@@ -43,8 +49,10 @@ implements OnInit {
     private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     public _itemService: ItemServiceProxy,
+    public http : HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private orderService : OrderService
+    
   ) { 
     super(injector);
   }
@@ -131,24 +139,41 @@ implements OnInit {
         }); 
       });
   }
+  public fileChange(files: FileList) {
+    this.uploadedFile = files[0];
     
+  }
 
   save(): void {
     this.saving = true;
-    this._orderService
-      .createOrder(this.order)
-      .pipe(
-        finalize(() => {
-          this.saving = false;
-        })
-      )
-      .subscribe((result) => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this.onSave.emit();
-        this.orderId = result.id;
-        console.log(this.orderId );
-        this.router.navigate(['app/view-orders' , this.orderId ]);
-      });
+    var formData = new FormData();
+    formData.append('file',this.uploadedFile);
+    formData.append('Order' , JSON.stringify(this.order));
+    this.orderService.CreateOrder(formData).subscribe(res => {
+      this.orderResult = res;
+      this.notify.info(this.l('SavedSuccessfully'));
+      this.onSave.emit();
+      this.orderId =this.orderResult.result.id;
+      this.router.navigate(['app/view-orders' , this.orderId ]);
+    })
+    
+    //this.http.post("http://localhost:21021/OrdersFile/Create",formData).subscribe(result => {});
+
+      //this._orderService
+      //  .createOrder(this.order)
+      //  .pipe(
+      //    finalize(() => {
+      //      this.saving = false;
+      //    })
+      //  )
+      //  .subscribe((result) => {
+      //    this.notify.info(this.l('SavedSuccessfully'));
+      //    this.onSave.emit();
+          
+      //    this.orderId = result.id;
+      //    this.router.navigate(['app/view-orders' , this.orderId ]);
+      //  });
+
   }
   goToViewOrders(){
     this.router.navigate(['app/view-orders']);

@@ -64,8 +64,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { EditOrder2Items2Component } from './Master-Details2/edit-order2-items2/edit-order2-items2.component';
 import { CreateItems2Component } from './Master-Details2/edit-order2/create-items2/create-items2.component';
+import {OrderService} from './Master-Details1/services/order-service.service';
 
 
 @NgModule({
@@ -134,7 +136,8 @@ import { CreateItems2Component } from './Master-Details2/edit-order2/create-item
     MatNativeDateModule,
     MatCheckboxModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MaterialFileInputModule
     
     
   ],
@@ -147,6 +150,8 @@ import { CreateItems2Component } from './Master-Details2/edit-order2/create-item
     { provide : CreateOrderItemComponent , useClass : CreateOrderItemComponent},
     { provide: DataItemsService, useClass: DataItemsService },
     { provide : BsModalRef , useClass : BsModalRef},
+    { provide: OrderService, useClass: OrderService },
+    
     
     
   ],

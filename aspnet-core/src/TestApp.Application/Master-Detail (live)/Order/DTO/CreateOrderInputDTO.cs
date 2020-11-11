@@ -1,4 +1,5 @@
 ﻿using Abp.AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,6 +31,7 @@ namespace TestApp.Master_Detail.DTO
 
         [Required]
         public decimal TotalPrice { get; set; }
+     
 
     }
 }

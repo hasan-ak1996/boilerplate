@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6">
                     <mat-form-field  
                     appearance="fill"
@@ -136,9 +136,25 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
+
+                
+                <div class="col-md-6">
+                    <mat-form-field
+                    appearance="fill"
+                    class="w-100"
+                    >
+                        <mat-label for="file">Edit Attachment</mat-label>
+                        <ngx-mat-file-input 
+                        name="file" 
+                        id="file" 
+                        (change)="fileChange($event.target.files)" 
+                        ></ngx-mat-file-input>
+                        <mat-icon matSuffix>folder</mat-icon>
+                      </mat-form-field>
+                </div>
             </div>
 
-            <div class="row mb-0">
+            <div class="row mb-0 align-items-baseline">
                 <div class="col-md-6">
                     <mat-checkbox
                     name="isSubmit"
@@ -148,6 +164,14 @@
                     >
                         {{ "IsSubmit" | localize }}
                     </mat-checkbox>
+                        <a
+                        mat-raised-button color="primary"
+                        class="float-right"
+                        [class.invisible]="!order.fileName"
+                        (click)="downloadFile($event.target)"
+                        >
+                            Download File
+                        </a>
                 </div>
             </div>
             <a mat-raised-button color="primary" href="javascript:;" class=" float-right mb-2"  (click)="createItem()">
