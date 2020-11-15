@@ -5,7 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { CreateOrderItemComponent } from '../create-order-item/create-order-item.component';
 import { EditItemComponent } from '../edit-item/edit-item.component';
 import { AppComponentBase } from '@shared/app-component-base';
-import { GetItemOutputDTO, GetOrederOutputDTO, ItemServiceProxy, OrderServiceProxy, UserDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
+import { Attachment, GetItemOutputDTO, GetOrederOutputDTO, ItemServiceProxy, OrderServiceProxy, UserDto, UserServiceProxy } from '@shared/service-proxies/service-proxies';
 import { OrderService } from '../services/order-service.service';
 import { HttpEventType } from '@angular/common/http';
 
@@ -19,9 +19,14 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
   order = new GetOrederOutputDTO ();
   items : GetItemOutputDTO[] =[];
   displayedColumns: string[] = ['name', 'price', 'quantity', 'Total Price','actions'];
+  displayedColumnsFiles: string[] = ['File Name','actions'];
   users: UserDto[] = [];
   id: number;
+  orderFiles : Attachment[] = [];
+  filesToEdit = [];
+  fileName : string;
   uploadedFile : File;
+  fileId : number;
   fileResult : any;
   @Output() onSave = new EventEmitter<any>();
 
@@ -45,7 +50,8 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
       
     this._OrderService.getOrderById(this.id).subscribe((result) => {
       this.order = result;
-      console.log(this.order.fileName);
+      this.orderFiles = result.files;
+      console.log(this.orderFiles)
       this.items =result.items;
        });
        this._userService.getAll('',undefined,0,1000).subscribe((result) => {
@@ -126,26 +132,48 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
       }
     );
   }
- public downloadFile(element){
-  this.orderService.DownloadFile(this.order.fileName).subscribe((data) => {
+ public downloadFile(element,filename){
+  this.orderService.DownloadFile(filename).subscribe((data) => {
     this.fileResult = data;
-    switch (data.type) {
-      case HttpEventType.Response:
-        const downloadedFile = new Blob([this.fileResult.body], { type: this.fileResult.body.type });
-        element.download =this.order.fileName;
+    //switch (data.type) {
+      //case HttpEventType.Response:
+      //, { type: this.fileResult.body.type }
+        const downloadedFile = new Blob([this.fileResult.body]);
+        element.download =filename;
         element.href = URL.createObjectURL(downloadedFile);
-    }
+    //}
   });
   }
-  public fileChange(files: FileList) {
-    this.uploadedFile = files[0];
+
+  public fileChange(element,file) {
+    this.uploadedFile = file[0];
+    this.fileId = element.id;
+    var formData = new FormData();
+    formData.append('file' , this.uploadedFile);
+    formData.append('id' , this.fileId.toString());
+    this.orderService.UpdateFile(formData).subscribe((res) =>{
+      this._OrderService.getOrderById(this.id).subscribe((result) => {
+        this.notify.info(this.l('Updated Successfully'));
+        this.orderFiles = result.files;
+         });
+    })
+
+   
   }
+  public edit(){
+
+
+  }
+  
+
 
 
   save(): void {
     this.saving = true;
     var formData = new FormData();
-    formData.append('file',this.uploadedFile);
+    Array.from(this.filesToEdit).map((file) => {
+      return formData.append('files', file);
+    });
     formData.append('Order' , JSON.stringify(this.order));
     this.orderService.UpdateOrder(formData).subscribe((res) => {
       this.notify.info(this.l('SavedSuccessfully'));

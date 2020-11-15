@@ -5,6 +5,7 @@ using TestApp.Authorization.Users;
 using TestApp.MultiTenancy;
 using TestApp.Todo_list;
 using TestApp.Models;
+using TestApp.Master_Details.Models.Attachment;
 
 namespace TestApp.EntityFrameworkCore
 {
@@ -14,6 +15,7 @@ namespace TestApp.EntityFrameworkCore
         public DbSet<TodoList> Todolist { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<Item> Item { get; set; }
+        public DbSet<Attachment> Attachment { get; set; }
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options)
             : base(options)
         {

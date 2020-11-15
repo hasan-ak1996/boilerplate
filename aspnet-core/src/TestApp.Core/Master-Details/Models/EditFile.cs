@@ -5,9 +5,9 @@ using System.Text;
 
 namespace TestApp.Master_Details.Models
 {
-    public class FileUpload
+    public class EditFile
     {
-        public IFormFileCollection files { get; set; }
-        public string Order { get; set; }
+        public IFormFile file { get; set; }
+        public int id { get; set; }
     }
 }

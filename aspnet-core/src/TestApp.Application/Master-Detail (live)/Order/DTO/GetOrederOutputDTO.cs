@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TestApp.Master_Details;
+using TestApp.Master_Details.Models.Attachment;
 using TestApp.Models;
 
 namespace TestApp.Master_Detail.DTO
@@ -24,8 +25,9 @@ namespace TestApp.Master_Detail.DTO
         [Required]
         public decimal TotalPrice { get; set; }
         public bool IsSubmit { get; set; }
-        public string FileName { get; set; }
+        //public string FileName { get; set; }
         public virtual List<GetItemOutputDTO> Items { get; set; }
+        public virtual List<Attachment> Files { get; set; }
 
     }
 }

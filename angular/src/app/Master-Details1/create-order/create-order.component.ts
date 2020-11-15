@@ -36,7 +36,7 @@ export class CreateOrderComponent extends AppComponentBase
 implements OnInit {
   saving = false;
   orderId : number;
-  uploadedFile : File;
+  filesToUpload  : File[];
   order = new CreateOrderInputDTO ();
   users: UserDto[] = [];
   items : GetItemOutputDTO[] =[];
@@ -139,15 +139,16 @@ implements OnInit {
         }); 
       });
   }
-  public fileChange(files: FileList) {
-    this.uploadedFile = files[0];
-    
+  public fileChange(files) {
+    this.filesToUpload  = files;
   }
 
   save(): void {
     this.saving = true;
     var formData = new FormData();
-    formData.append('file',this.uploadedFile);
+    Array.from(this.filesToUpload).map((file) => {
+      return formData.append('files', file);
+    });
     formData.append('Order' , JSON.stringify(this.order));
     this.orderService.CreateOrder(formData).subscribe(res => {
       this.orderResult = res;

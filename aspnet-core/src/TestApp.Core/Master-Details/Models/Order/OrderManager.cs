@@ -52,7 +52,9 @@ namespace TestApp.Master_Details.Models
 
         public async Task<Order> GetOrderById(int id)
         {
-          return  await _orderRepository.GetAllIncluding(o => o.Items).Where(i => i.Id == id).FirstOrDefaultAsync();
+          return  await _orderRepository.GetAllIncluding(o => o.Items)
+                .Include(o => o.Files)
+                .Where(i => i.Id == id).FirstOrDefaultAsync();
    
         }
 

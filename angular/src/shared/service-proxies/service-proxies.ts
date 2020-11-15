@@ -3885,6 +3885,89 @@ export interface ICreateOrderInputDTO {
     totalPrice: number;
 }
 
+export class Attachment implements IAttachment {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    fileName: string | undefined;
+    file: string | undefined;
+    orderId: number;
+
+    constructor(data?: IAttachment) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.fileName = _data["fileName"];
+            this.file = _data["file"];
+            this.orderId = _data["orderId"];
+        }
+    }
+
+    static fromJS(data: any): Attachment {
+        data = typeof data === 'object' ? data : {};
+        let result = new Attachment();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["fileName"] = this.fileName;
+        data["file"] = this.file;
+        data["orderId"] = this.orderId;
+        return data; 
+    }
+
+    clone(): Attachment {
+        const json = this.toJSON();
+        let result = new Attachment();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAttachment {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    fileName: string | undefined;
+    file: string | undefined;
+    orderId: number;
+}
+
 export class Order implements IOrder {
     id: number;
     creationTime: moment.Moment;
@@ -3900,8 +3983,7 @@ export class Order implements IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
-    file: string | undefined;
-    fileName: string | undefined;
+    files: Attachment[] | undefined;
     items: Item[] | undefined;
 
     constructor(data?: IOrder) {
@@ -3929,8 +4011,11 @@ export class Order implements IOrder {
             this.isSubmit = _data["isSubmit"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
-            this.file = _data["file"];
-            this.fileName = _data["fileName"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files.push(Attachment.fromJS(item));
+            }
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -3962,8 +4047,11 @@ export class Order implements IOrder {
         data["isSubmit"] = this.isSubmit;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
-        data["file"] = this.file;
-        data["fileName"] = this.fileName;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -3995,8 +4083,7 @@ export interface IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
-    file: string | undefined;
-    fileName: string | undefined;
+    files: Attachment[] | undefined;
     items: Item[] | undefined;
 }
 
@@ -4008,8 +4095,8 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
     empolyeeName: string;
     totalPrice: number;
     isSubmit: boolean;
-    fileName: string | undefined;
     items: GetItemOutputDTO[] | undefined;
+    files: Attachment[] | undefined;
 
     constructor(data?: IGetOrederOutputDTO) {
         if (data) {
@@ -4029,11 +4116,15 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
             this.isSubmit = _data["isSubmit"];
-            this.fileName = _data["fileName"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
                     this.items.push(GetItemOutputDTO.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files.push(Attachment.fromJS(item));
             }
         }
     }
@@ -4054,11 +4145,15 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
         data["isSubmit"] = this.isSubmit;
-        data["fileName"] = this.fileName;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
                 data["items"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
         }
         return data; 
     }
@@ -4079,8 +4174,8 @@ export interface IGetOrederOutputDTO {
     empolyeeName: string;
     totalPrice: number;
     isSubmit: boolean;
-    fileName: string | undefined;
     items: GetItemOutputDTO[] | undefined;
+    files: Attachment[] | undefined;
 }
 
 export class GetOrederOutputDTOPagedResultDto implements IGetOrederOutputDTOPagedResultDto {

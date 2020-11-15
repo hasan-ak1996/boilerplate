@@ -13,14 +13,28 @@ export class OrderService {
     return this.http.post("http://localhost:21021/OrdersFile/Edit",data);
   }
   public DownloadFile(fileName: string){
-    return this.http.request(new HttpRequest(
-      'GET',
-      `http://localhost:21021/OrdersFile/Download?fileName=${fileName}`,
-      null,
-      {
-        reportProgress: true,
-        responseType: 'blob'
-      }
-    ));
+      return this.http.request(new HttpRequest(
+    'GET',
+    `http://localhost:21021/OrdersFile/Download?fileName=${fileName}`,
+    null,
+    {
+      responseType: 'blob'
     }
+  ));
+
+
+  }
+  public UpdateFile(data : FormData){
+    return this.http.post("http://localhost:21021/OrdersFile/EditFile",data);
+  }
+
+  //return this.http.request(new HttpRequest(
+    //'GET',
+   // `http://localhost:21021/OrdersFile/Download?fileName=${fileName}`,
+   // null,
+    //{
+     // reportProgress: true,
+     // responseType: 'blob'
+   // }
+  //));
 }

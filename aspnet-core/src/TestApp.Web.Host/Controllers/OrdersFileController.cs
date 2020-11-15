@@ -6,13 +6,16 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.AspNetCore.Mvc.Controllers;
+using Abp.Domain.Repositories;
 using Abp.IO.Extensions;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
 using TestApp.Master_Details.Models;
+using TestApp.Master_Details.Models.Attachment;
 using TestApp.Models;
 
 namespace TestApp.Web.Host.Controllers
@@ -23,12 +26,16 @@ namespace TestApp.Web.Host.Controllers
     public class OrdersFileController : AbpController
     {
         private IWebHostEnvironment _hostingEnvironment;
+        private readonly IMapper _objectMapper;
         private readonly OrderManager _orderManager;
+        private readonly IRepository<Attachment> _attachmentRepository;
 
-        public OrdersFileController(IWebHostEnvironment hostingEnvironment, OrderManager orderManager)
+        public OrdersFileController(IWebHostEnvironment hostingEnvironment, IMapper objectMapper, OrderManager orderManager , IRepository<Attachment> attachmentRepository)
         {
             _hostingEnvironment = hostingEnvironment;
+            _objectMapper = objectMapper;
             _orderManager = orderManager;
+            _attachmentRepository = attachmentRepository;
         }
         // GET: OrdersFileController
         public ActionResult Index()
@@ -49,27 +56,38 @@ namespace TestApp.Web.Host.Controllers
         public async Task<ActionResult> Create(FileUpload fileObj)
         {
             Order order = JsonConvert.DeserializeObject<Order>(fileObj.Order);
+            var files = fileObj.files;
+            List<Attachment> orderFiles = new List<Attachment>();
+
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
             if (!Directory.Exists(uploads))
             {
                 Directory.CreateDirectory(uploads);
             }
-            if (fileObj.file != null)
+
+            if (files.Count != 0)
             {
-                var filePath = Path.Combine(uploads, fileObj.file.FileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                foreach(var file in files)
                 {
-                    await fileObj.file.CopyToAsync(fileStream);
-                    using (var ms = new MemoryStream())
+                    var filePath = Path.Combine(uploads, file.FileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        fileObj.file.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        order.File = fileBytes;
-                        order.FileName = fileObj.file.FileName;
+                        await file.CopyToAsync(fileStream);
+                        using (var ms = new MemoryStream())
+                        {
+                            file.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            Attachment attachment = new Attachment
+                             {
+                                FileName = file.FileName,
+                                File = fileBytes,
+                             };
+                            orderFiles.Add(attachment);
+                        }
                     }
-                         
                    
                 }
+                order.Files = orderFiles;
             }
             order = await _orderManager.CreateOrder(order);
             return Ok(order);
@@ -106,36 +124,59 @@ namespace TestApp.Web.Host.Controllers
             return contentType;
         }
 
-
-        // GET: OrdersFileController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpPost]
+        public async Task<ActionResult>EditFile(EditFile editObj)
         {
-            return View();
+            var updatedItem = await _attachmentRepository.GetAsync(editObj.id);
+            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+            var file = editObj.file;
+            if (file != null)
+            {
+                var filePath = Path.Combine(uploads, file.FileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    using (var ms = new MemoryStream())
+                    {
+                                  file.CopyTo(ms);
+                                  var fileBytes = ms.ToArray();
+                                  updatedItem.File = fileBytes;
+                                  updatedItem.FileName = file.FileName;
+                    }
+
+                }
+
+            }
+            await _attachmentRepository.UpdateAsync(updatedItem);
+
+
+            return Ok("Ok");
         }
 
         // POST: OrdersFileController/Edit
         [HttpPost]
         public async Task<ActionResult> Edit(FileUpload fileObj)
         {
+
             Order order = JsonConvert.DeserializeObject<Order>(fileObj.Order);
-            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-            if (fileObj.file != null)
-            {
-                var filePath = Path.Combine(uploads, fileObj.file.FileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await fileObj.file.CopyToAsync(fileStream);
-                    using (var ms = new MemoryStream())
-                    {
-                        fileObj.file.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        order.File = fileBytes;
-                        order.FileName = fileObj.file.FileName;
-                        
-                    }
-                }
-            }
-            await _orderManager.UpdateOrder(order);
+
+            //if (fileObj.file != null)
+            //{
+            //  var filePath = Path.Combine(uploads, fileObj.file.FileName);
+            //  using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //  {
+            //      await fileObj.file.CopyToAsync(fileStream);
+            //      using (var ms = new MemoryStream())
+            //      {
+            //          fileObj.file.CopyTo(ms);
+            //          var fileBytes = ms.ToArray();
+            //          order.File = fileBytes;
+            //          order.FileName = fileObj.file.FileName;
+
+            //     }
+            // }
+            // }
+             await _orderManager.UpdateOrder(order);
 
 
             return Ok("ok");

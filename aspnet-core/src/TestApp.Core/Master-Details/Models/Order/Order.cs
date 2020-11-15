@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TestApp.Master_Details.Models.Attachment;
 
 namespace TestApp.Models
 {
@@ -14,8 +15,9 @@ namespace TestApp.Models
         public bool IsSubmit { get; set; }
         public string EmpolyeeName { get; set; }
         public decimal TotalPrice { get; set; }
-        public byte[] File { get; set; }
-        public string FileName { get; set; }
+       //public byte[] File { get; set; }
+       //public string FileName { get; set; }
+        public virtual List<Attachment> Files { get; set; }
         public virtual List<Item> Items { get; set; }
 
     }

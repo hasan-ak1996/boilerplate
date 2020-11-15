@@ -146,7 +146,8 @@
                             <mat-label for="file">Attachment</mat-label>
                             <ngx-mat-file-input 
                             name="file" 
-                            id="file" 
+                            id="file"
+                            multiple
                             (change)="fileChange($event.target.files)" 
                             ></ngx-mat-file-input>
                             <mat-icon matSuffix>folder</mat-icon>
