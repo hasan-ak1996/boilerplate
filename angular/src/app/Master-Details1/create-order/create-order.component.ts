@@ -17,6 +17,7 @@ import {
   UserServiceProxy,
   
 } from '@shared/service-proxies/service-proxies';
+import { FileValidator } from 'ngx-material-file-input';
 import { forEach as _forEach, map as _map, result } from 'lodash-es';
 import { CreateOrderItemComponent } from '@app/Master-Details1/create-order-item/create-order-item.component';
 import { EditItemComponent } from '@app/Master-Details1/edit-item/edit-item.component';
@@ -24,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { observable } from 'rxjs';
 import { OrderService } from '../services/order-service.service';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   
@@ -41,6 +43,14 @@ implements OnInit {
   users: UserDto[] = [];
   items : GetItemOutputDTO[] =[];
   orderResult : any;
+  file  ;
+  t : boolean ;
+  registerForm : FormGroup;
+  MinFilesCount : number =2 ;
+  MaxFilesCount :number = 4;
+  isValidFormSubmitted = null;
+  readonly maxSize = 104857600;
+  
   @Output() onSave = new EventEmitter<any>();
   
   constructor(
@@ -51,7 +61,8 @@ implements OnInit {
     public _itemService: ItemServiceProxy,
     public http : HttpClient,
     private router: Router,
-    private orderService : OrderService
+    private orderService : OrderService,
+    private formBuilder : FormBuilder
     
   ) { 
     super(injector);
@@ -59,16 +70,44 @@ implements OnInit {
 
   ngOnInit(): void {
     this._orderService.getOrderById(this.orderId).subscribe((result) => {
+      
+      
       this.items = result.items;
       this.order.totalPrice = 0;
     });
+        
+
+    this.registerForm = this.formBuilder.group({
+      'name' :new FormControl('',[
+        Validators.required
+      ]), 
+      'orderNo' :new FormControl('',[
+        Validators.required
+      ]),
+      'empolyeeName' :new FormControl('',[
+        Validators.required
+      ]),
+      'totalPrice' :new FormControl(''),
+      'orderDate' :new FormControl('',[
+        Validators.required
+      ]),
+      'file' :new FormControl('',[
+        Validators.required , Validators.minLength(2)
+      ]),
+      'datetime' :new FormControl('',[
+        Validators.required
+      ]),
+
+      
+    });
+    console.log(this.registerForm)
 
     this._userService.getAll('',undefined,0,1000).subscribe((result) => {
       this.users = result.items;
     });
     
   }
-
+   public date = new Date()
 
 
   createItem(): void {
@@ -140,40 +179,65 @@ implements OnInit {
       });
   }
   public fileChange(files) {
+    console.log(this.file.files);
     this.filesToUpload  = files;
+    console.log(this.filesToUpload )
+    let FilesCounts = this.filesToUpload.length;
+    this.t =this.test(FilesCounts);
+    console.log(this.t);
+    console.log(FilesCounts)
+
   }
+  public test(filecount : number) : boolean {
+    if (filecount = this.MinFilesCount){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  
 
   save(): void {
+    this.isValidFormSubmitted = false;
+     if (this.registerForm.invalid) {
+        return;
+     }
+     this.isValidFormSubmitted = true;
     this.saving = true;
     var formData = new FormData();
-    Array.from(this.filesToUpload).map((file) => {
-      return formData.append('files', file);
-    });
-    formData.append('Order' , JSON.stringify(this.order));
+    this.filesToUpload = this.file._files;
+    if(this.filesToUpload == null){
+        formData.append('files', null);
+    }else{
+      Array.from(this.filesToUpload).map((file) => {
+        return formData.append('files', file);
+      });
+    }
+    
+    //formData.append('Order' , JSON.stringify(this.order));
     this.orderService.CreateOrder(formData).subscribe(res => {
       this.orderResult = res;
-      this.notify.info(this.l('SavedSuccessfully'));
+      this.order.attachmentMasterId = this.orderResult.result.id;
+        this._orderService
+          .createOrder(this.order)
+          .pipe(
+            finalize(() => {
+              this.saving = false;
+            })
+        )
+          .subscribe((result) => {
+            this.notify.info(this.l('SavedSuccessfully'));
+            this.onSave.emit();
+            
+            this.orderId = result.id;
+            this.router.navigate(['app/view-orders' , this.orderId ]);
+          });
       this.onSave.emit();
-      this.orderId =this.orderResult.result.id;
-      this.router.navigate(['app/view-orders' , this.orderId ]);
-    })
-    
+     // this.orderId =this.orderResult.result.id;
+     // this.router.navigate(['app/view-orders' , this.orderId ]);
+    });
     //this.http.post("http://localhost:21021/OrdersFile/Create",formData).subscribe(result => {});
 
-      //this._orderService
-      //  .createOrder(this.order)
-      //  .pipe(
-      //    finalize(() => {
-      //      this.saving = false;
-      //    })
-      //  )
-      //  .subscribe((result) => {
-      //    this.notify.info(this.l('SavedSuccessfully'));
-      //    this.onSave.emit();
-          
-      //    this.orderId = result.id;
-      //    this.router.navigate(['app/view-orders' , this.orderId ]);
-      //  });
 
   }
   goToViewOrders(){

@@ -70,7 +70,7 @@
                         [class.mat-form-field-invalid]="createOrder2Form.submitted && empolyeeNameModel.hasError('required')"
                         class="w-100">
                             <mat-label for="empolyeeName">
-                                {{ "Empolyee Name" | localize }}
+                                {{ "Employee Name" | localize }}
                             </mat-label>
 
                             <mat-select 
@@ -156,10 +156,10 @@
 
             <table class="table table-hover text-nowrap">
                 <thead class="bg-light">
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
+                    <th> {{ "Name" | localize }}</th>
+                    <th>{{ "Price" | localize }}</th>
+                    <th>{{ "Quantity" | localize }}</th>
+                    <th>{{ "Total Price" | localize }}</th>
                     <th style="width: 300px;">
                         <a mat-raised-button color="primary" href="javascript:;"  (click)="createItem()">
                              <i class="fa fa-plus-square"></i>
@@ -170,7 +170,7 @@
                 <tbody>
                     <tr *ngIf="!items2.length">
                         <td class="text-center font-italic" colspan="7">
-                            No item selected for this order
+                            {{ "No item selected for this order" | localize }}
                         </td>
                     </tr>
                     <tr *ngFor="let item of items2 ; let i=index">
@@ -192,8 +192,8 @@
                 </tbody>
             </table>
             <div class="form-group">
-                <button mat-raised-button color="primary" typr="submit"><i class="fa fa-database"></i> Submit</button>
-                <button mat-raised-button color="primary" (click)="goToViewOrders()" class="ml-2">View Orders</button>
+                <button mat-raised-button color="primary" typr="submit"><i class="fa fa-database"></i>{{ "Submit" | localize }} </button>
+                <button mat-raised-button color="primary" (click)="goToViewOrders()" class="ml-2">{{ "View Orders" | localize }}</button>
             </div>
         </form>
     </div>

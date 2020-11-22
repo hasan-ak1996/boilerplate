@@ -141,6 +141,74 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
+export class AttachmentMasterServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getFolderById(id: number | undefined): Observable<AttachmentMasterDTO> {
+        let url_ = this.baseUrl + "/api/services/app/AttachmentMaster/GetFolderById?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFolderById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFolderById(<any>response_);
+                } catch (e) {
+                    return <Observable<AttachmentMasterDTO>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AttachmentMasterDTO>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetFolderById(response: HttpResponseBase): Observable<AttachmentMasterDTO> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AttachmentMasterDTO.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AttachmentMasterDTO>(<any>null);
+    }
+}
+
+@Injectable()
 export class ConfigurationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -3365,6 +3433,156 @@ export interface IRegisterOutput {
     canLogin: boolean;
 }
 
+export class AttachmentDetail implements IAttachmentDetail {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    fileName: string | undefined;
+    file: string | undefined;
+    extension: string | undefined;
+    temporaryStatus: number;
+    fileSize: number;
+    attachmentMasterId: number;
+
+    constructor(data?: IAttachmentDetail) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.fileName = _data["fileName"];
+            this.file = _data["file"];
+            this.extension = _data["extension"];
+            this.temporaryStatus = _data["temporaryStatus"];
+            this.fileSize = _data["fileSize"];
+            this.attachmentMasterId = _data["attachmentMasterId"];
+        }
+    }
+
+    static fromJS(data: any): AttachmentDetail {
+        data = typeof data === 'object' ? data : {};
+        let result = new AttachmentDetail();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["fileName"] = this.fileName;
+        data["file"] = this.file;
+        data["extension"] = this.extension;
+        data["temporaryStatus"] = this.temporaryStatus;
+        data["fileSize"] = this.fileSize;
+        data["attachmentMasterId"] = this.attachmentMasterId;
+        return data; 
+    }
+
+    clone(): AttachmentDetail {
+        const json = this.toJSON();
+        let result = new AttachmentDetail();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAttachmentDetail {
+    id: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    fileName: string | undefined;
+    file: string | undefined;
+    extension: string | undefined;
+    temporaryStatus: number;
+    fileSize: number;
+    attachmentMasterId: number;
+}
+
+export class AttachmentMasterDTO implements IAttachmentMasterDTO {
+    id: number;
+    files: AttachmentDetail[] | undefined;
+
+    constructor(data?: IAttachmentMasterDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files.push(AttachmentDetail.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AttachmentMasterDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new AttachmentMasterDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): AttachmentMasterDTO {
+        const json = this.toJSON();
+        let result = new AttachmentMasterDTO();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAttachmentMasterDTO {
+    id: number;
+    files: AttachmentDetail[] | undefined;
+}
+
 export class ChangeUiThemeInput implements IChangeUiThemeInput {
     theme: string;
 
@@ -3826,6 +4044,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
+    attachmentMasterId: number;
 
     constructor(data?: ICreateOrderInputDTO) {
         if (data) {
@@ -3845,6 +4064,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
             this.orderDate = _data["orderDate"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
+            this.attachmentMasterId = _data["attachmentMasterId"];
         }
     }
 
@@ -3864,6 +4084,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
         data["orderDate"] = this.orderDate;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
+        data["attachmentMasterId"] = this.attachmentMasterId;
         return data; 
     }
 
@@ -3883,89 +4104,7 @@ export interface ICreateOrderInputDTO {
     orderDate: string;
     empolyeeName: string;
     totalPrice: number;
-}
-
-export class Attachment implements IAttachment {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    fileName: string | undefined;
-    file: string | undefined;
-    orderId: number;
-
-    constructor(data?: IAttachment) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
-            this.fileName = _data["fileName"];
-            this.file = _data["file"];
-            this.orderId = _data["orderId"];
-        }
-    }
-
-    static fromJS(data: any): Attachment {
-        data = typeof data === 'object' ? data : {};
-        let result = new Attachment();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
-        data["fileName"] = this.fileName;
-        data["file"] = this.file;
-        data["orderId"] = this.orderId;
-        return data; 
-    }
-
-    clone(): Attachment {
-        const json = this.toJSON();
-        let result = new Attachment();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IAttachment {
-    id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
-    fileName: string | undefined;
-    file: string | undefined;
-    orderId: number;
+    attachmentMasterId: number;
 }
 
 export class Order implements IOrder {
@@ -3983,7 +4122,7 @@ export class Order implements IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
-    files: Attachment[] | undefined;
+    attachmentMasterId: number;
     items: Item[] | undefined;
 
     constructor(data?: IOrder) {
@@ -4011,11 +4150,7 @@ export class Order implements IOrder {
             this.isSubmit = _data["isSubmit"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files.push(Attachment.fromJS(item));
-            }
+            this.attachmentMasterId = _data["attachmentMasterId"];
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
@@ -4047,11 +4182,7 @@ export class Order implements IOrder {
         data["isSubmit"] = this.isSubmit;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
+        data["attachmentMasterId"] = this.attachmentMasterId;
         if (Array.isArray(this.items)) {
             data["items"] = [];
             for (let item of this.items)
@@ -4083,7 +4214,7 @@ export interface IOrder {
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
-    files: Attachment[] | undefined;
+    attachmentMasterId: number;
     items: Item[] | undefined;
 }
 
@@ -4096,7 +4227,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
     totalPrice: number;
     isSubmit: boolean;
     items: GetItemOutputDTO[] | undefined;
-    files: Attachment[] | undefined;
+    attachmentMasterId: number;
 
     constructor(data?: IGetOrederOutputDTO) {
         if (data) {
@@ -4121,11 +4252,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
                 for (let item of _data["items"])
                     this.items.push(GetItemOutputDTO.fromJS(item));
             }
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files.push(Attachment.fromJS(item));
-            }
+            this.attachmentMasterId = _data["attachmentMasterId"];
         }
     }
 
@@ -4150,11 +4277,7 @@ export class GetOrederOutputDTO implements IGetOrederOutputDTO {
             for (let item of this.items)
                 data["items"].push(item.toJSON());
         }
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
+        data["attachmentMasterId"] = this.attachmentMasterId;
         return data; 
     }
 
@@ -4175,7 +4298,7 @@ export interface IGetOrederOutputDTO {
     totalPrice: number;
     isSubmit: boolean;
     items: GetItemOutputDTO[] | undefined;
-    files: Attachment[] | undefined;
+    attachmentMasterId: number;
 }
 
 export class GetOrederOutputDTOPagedResultDto implements IGetOrederOutputDTOPagedResultDto {

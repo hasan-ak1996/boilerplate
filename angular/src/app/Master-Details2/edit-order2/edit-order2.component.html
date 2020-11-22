@@ -5,11 +5,11 @@
     #editOrder2Form="ngForm"
     (ngSubmit)="editOrder2Form.valid && save()"
     >
-        <h3 >EditOrder</h3>
+        <h3 >{{ "Edit Order" | localize }}</h3>
         <div class="modal-body">
             <div class="form-group row required">
                 <label class="col-md-2 col-form-label" for="orderName">
-                {{ "order Name" | localize }}
+                {{ "Order Name" | localize }}
                 </label>
                 <div class="col-md-9">
                     <input
@@ -34,7 +34,7 @@
             </div>
             <div class="form-group row required">
                 <label class="col-md-2 col-form-label" for="orderNo">
-                    {{ "orderNo" | localize }}
+                    {{ "Order.No" | localize }}
                 </label>
                 <div class="col-md-9">
                     <input
@@ -147,10 +147,10 @@
 
             <table class="table table-hover text-nowrap">
                 <thead class="bg-light">
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
+                    <th> {{ "Name" | localize }}</th>
+                    <th> {{ "Price" | localize }}</th>
+                    <th> {{ "Quantity" | localize }}</th>
+                    <th> {{ "Total Price" | localize }}</th>
                     
                     <th style="width: 200px;">
                         <a href="javascript:;" class="btn bg-blue" (click)="createItem()">
@@ -162,7 +162,7 @@
                 <tbody>
                     <tr *ngIf="!items.length">
                         <td class="text-center font-italic" colspan="7">
-                            No item selected for this order
+                            {{ "No item selected for this order" | localize }}
                         </td>
                     </tr>
                     <tr *ngFor = "let item of items; let i=index">
@@ -184,7 +184,7 @@
                 </tbody>
             </table>
             <div class="form-group">
-                <button class="btn btn-primary ml-auto" type="submit">Save</button>
+                <button class="btn btn-primary ml-auto" type="submit"> {{ "Save" | localize }}</button>
             </div>
         </div>
 

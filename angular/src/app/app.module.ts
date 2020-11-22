@@ -40,7 +40,7 @@ import { SidebarComponent } from './layout/sidebar.component';
 import { SidebarLogoComponent } from './layout/sidebar-logo.component';
 import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component';
 import { SidebarMenuComponent } from './layout/sidebar-menu.component';
-import { Item2ServiceProxy, Order2ServiceProxy, OrderServiceProxy } from '@shared/service-proxies/service-proxies';
+import { AttachmentMasterServiceProxy, Item2ServiceProxy, Order2ServiceProxy, OrderServiceProxy } from '@shared/service-proxies/service-proxies';
 import { ItemServiceProxy } from '@shared/service-proxies/service-proxies';
 import { CreateOrderItemComponent } from './Master-Details1/create-order-item/create-order-item.component';
 import { EditItemComponent } from './Master-Details1/edit-item/edit-item.component';
@@ -68,6 +68,9 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { EditOrder2Items2Component } from './Master-Details2/edit-order2-items2/edit-order2-items2.component';
 import { CreateItems2Component } from './Master-Details2/edit-order2/create-items2/create-items2.component';
 import {OrderService} from './Master-Details1/services/order-service.service';
+import { CustomAttachmentComponent } from './Master-Details1/custom-attachment/custom-attachment.component';
+import { DisplayAttachmentDetailComponent } from './display-attachment-detail/display-attachment-detail.component';
+import { DisplayAttachmentMasterComponent } from './display-attachment-master/display-attachment-master.component';
 
 
 @NgModule({
@@ -111,6 +114,9 @@ import {OrderService} from './Master-Details1/services/order-service.service';
     EditItem2Component,
     EditOrder2Items2Component,
     CreateItems2Component,
+    CustomAttachmentComponent,
+    DisplayAttachmentDetailComponent,
+    DisplayAttachmentMasterComponent,
     
   ],
   imports: [
@@ -137,21 +143,25 @@ import {OrderService} from './Master-Details1/services/order-service.service';
     MatCheckboxModule,
     MatIconModule,
     MatTableModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+
+    
     
     
   ],
   providers: [
+    
     MatDatepickerModule, 
     MatNativeDateModule,
     { provide : ItemServiceProxy , useClass : ItemServiceProxy},
     { provide : Item2ServiceProxy , useClass : Item2ServiceProxy},
     { provide : Order2ServiceProxy , useClass : Order2ServiceProxy},
+    { provide : AttachmentMasterServiceProxy , useClass : AttachmentMasterServiceProxy},
+    
     { provide : CreateOrderItemComponent , useClass : CreateOrderItemComponent},
     { provide: DataItemsService, useClass: DataItemsService },
     { provide : BsModalRef , useClass : BsModalRef},
     { provide: OrderService, useClass: OrderService },
-    
     
     
   ],

@@ -109,8 +109,8 @@
             </div>
         </div>
         <hr>
-        <button mat-raised-button color="primary" type="submit" class="float-right">save</button>
-        <button mat-raised-button  class="btn-secondary" type="button" (click)="bsModalRef.hide()">cancel</button>
+        <button mat-raised-button color="primary" type="submit" class="float-right"> {{ "Save" | localize }}</button>
+        <button mat-raised-button  class="btn-secondary" type="button" (click)="bsModalRef.hide()">{{ "Cancel" | localize }}</button>
         <div class="clear-fix"></div>
     </div>
 </form>

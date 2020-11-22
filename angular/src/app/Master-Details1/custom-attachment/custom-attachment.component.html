@@ -1,0 +1,13 @@
+<mat-form-field
+    appearance="fill"
+    class="w-100"
+    >
+    <mat-label for="file"> {{ "Attachment" | localize }}</mat-label>
+    <ngx-mat-file-input 
+    id="file"
+    multiple
+    required 
+    [(ngModel)]="value"
+    ></ngx-mat-file-input>
+    <mat-icon matSuffix>folder</mat-icon>
+</mat-form-field>

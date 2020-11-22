@@ -133,19 +133,19 @@
                 <table class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
-                            <th>Name</th>
-                            <th>Order.No</th>
-                            <th>Order Date</th>
-                            <th>Employee Name</th>
-                            <th>Total Price</th>
-                            <th>is submit</th>
+                            <th>{{ "Name" | localize }}</th>
+                            <th>{{ "Order.No" | localize }}</th>
+                            <th>{{ "Order Date" | localize }}</th>
+                            <th>{{ "Employee Name" | localize }}</th>
+                            <th>{{ "Total Price" | localize }}</th>
+                            <th>{{ "is submit" | localize }}</th>
                             <th style="width: 100px;">{{ "Actions" | localize }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngIf="!orders.length">
                             <td class="text-center font-italic" colspan="7">
-                                No Orders Created
+                              {{ "No Orders Created" | localize }}
                             </td>
                         </tr>
                         <tr *ngFor = "let order of orders
