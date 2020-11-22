@@ -969,16 +969,22 @@ export class OrderServiceProxy {
     /**
      * @param keyword (optional) 
      * @param isSubmit (optional) 
+     * @param formDate (optional) 
+     * @param toDate (optional) 
      * @param maxResultCount (optional) 
      * @param skipCount (optional) 
      * @return Success
      */
-    getAllOrders(keyword: string | null | undefined, isSubmit: boolean | null | undefined, maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOrederOutputDTOPagedResultDto> {
+    getAllOrders(keyword: string | null | undefined, isSubmit: boolean | null | undefined, formDate: moment.Moment | null | undefined, toDate: moment.Moment | null | undefined, maxResultCount: number | undefined, skipCount: number | undefined): Observable<GetOrederOutputDTOPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/Order/GetAllOrders?";
         if (keyword !== undefined && keyword !== null)
             url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         if (isSubmit !== undefined && isSubmit !== null)
             url_ += "IsSubmit=" + encodeURIComponent("" + isSubmit) + "&";
+        if (formDate !== undefined && formDate !== null)
+            url_ += "FormDate=" + encodeURIComponent(formDate ? "" + formDate.toJSON() : "") + "&";
+        if (toDate !== undefined && toDate !== null)
+            url_ += "ToDate=" + encodeURIComponent(toDate ? "" + toDate.toJSON() : "") + "&";
         if (maxResultCount === null)
             throw new Error("The parameter 'maxResultCount' cannot be null.");
         else if (maxResultCount !== undefined)
@@ -4041,7 +4047,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
     orderNo: string;
     creationTime: moment.Moment;
     isSubmit: boolean;
-    orderDate: string;
+    orderDate: moment.Moment;
     empolyeeName: string;
     totalPrice: number;
     attachmentMasterId: number;
@@ -4061,7 +4067,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
             this.orderNo = _data["orderNo"];
             this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
             this.isSubmit = _data["isSubmit"];
-            this.orderDate = _data["orderDate"];
+            this.orderDate = _data["orderDate"] ? moment(_data["orderDate"].toString()) : <any>undefined;
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
             this.attachmentMasterId = _data["attachmentMasterId"];
@@ -4081,7 +4087,7 @@ export class CreateOrderInputDTO implements ICreateOrderInputDTO {
         data["orderNo"] = this.orderNo;
         data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         data["isSubmit"] = this.isSubmit;
-        data["orderDate"] = this.orderDate;
+        data["orderDate"] = this.orderDate ? this.orderDate.toISOString() : <any>undefined;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
         data["attachmentMasterId"] = this.attachmentMasterId;
@@ -4101,7 +4107,7 @@ export interface ICreateOrderInputDTO {
     orderNo: string;
     creationTime: moment.Moment;
     isSubmit: boolean;
-    orderDate: string;
+    orderDate: moment.Moment;
     empolyeeName: string;
     totalPrice: number;
     attachmentMasterId: number;
@@ -4118,7 +4124,7 @@ export class Order implements IOrder {
     deletionTime: moment.Moment | undefined;
     name: string | undefined;
     orderNo: string | undefined;
-    orderDate: string | undefined;
+    orderDate: moment.Moment;
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;
@@ -4146,7 +4152,7 @@ export class Order implements IOrder {
             this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.orderNo = _data["orderNo"];
-            this.orderDate = _data["orderDate"];
+            this.orderDate = _data["orderDate"] ? moment(_data["orderDate"].toString()) : <any>undefined;
             this.isSubmit = _data["isSubmit"];
             this.empolyeeName = _data["empolyeeName"];
             this.totalPrice = _data["totalPrice"];
@@ -4178,7 +4184,7 @@ export class Order implements IOrder {
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["orderNo"] = this.orderNo;
-        data["orderDate"] = this.orderDate;
+        data["orderDate"] = this.orderDate ? this.orderDate.toISOString() : <any>undefined;
         data["isSubmit"] = this.isSubmit;
         data["empolyeeName"] = this.empolyeeName;
         data["totalPrice"] = this.totalPrice;
@@ -4210,7 +4216,7 @@ export interface IOrder {
     deletionTime: moment.Moment | undefined;
     name: string | undefined;
     orderNo: string | undefined;
-    orderDate: string | undefined;
+    orderDate: moment.Moment;
     isSubmit: boolean;
     empolyeeName: string | undefined;
     totalPrice: number;

@@ -26,6 +26,9 @@ import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { observable } from 'rxjs';
 import { OrderService } from '../services/order-service.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { parse } from 'path';
+import { Moment } from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 @Component({
   
@@ -45,11 +48,13 @@ implements OnInit {
   orderResult : any;
   file  ;
   t : boolean ;
+  time :Moment ;
   registerForm : FormGroup;
   MinFilesCount : number =2 ;
   MaxFilesCount :number = 4;
   isValidFormSubmitted = null;
   readonly maxSize = 104857600;
+  
   
   @Output() onSave = new EventEmitter<any>();
   
@@ -88,16 +93,13 @@ implements OnInit {
         Validators.required
       ]),
       'totalPrice' :new FormControl(''),
-      'orderDate' :new FormControl('',[
-        Validators.required
-      ]),
       'file' :new FormControl('',[
         Validators.required , Validators.minLength(2)
       ]),
       'datetime' :new FormControl('',[
         Validators.required
       ]),
-
+      'isSubmit' :new FormControl(''),
       
     });
     console.log(this.registerForm)
@@ -107,7 +109,8 @@ implements OnInit {
     });
     
   }
-   public date = new Date()
+
+  
 
 
   createItem(): void {
@@ -218,6 +221,28 @@ implements OnInit {
     this.orderService.CreateOrder(formData).subscribe(res => {
       this.orderResult = res;
       this.order.attachmentMasterId = this.orderResult.result.id;
+      this.order.name = this.registerForm.get('name').value;
+      this.order.orderNo = this.registerForm.get('orderNo').value;
+      this.order.empolyeeName = this.registerForm.get('empolyeeName').value;
+  
+     
+     //var date = new Date(this.registerForm.get('datetime').value + " UTC");
+     //console.log(date);
+     //date.setMinutes(date.getMinutes() - 0);
+     //console.log(date)
+     //this.time = this.registerForm.get('datetime').value;
+      this.order.orderDate = this.registerForm.get('datetime').value;
+      console.log(this.order.orderDate )
+     //console.log(this.time)
+
+
+     // this.order.creationTime = new Date(date.toLocaleString());
+      if(this.registerForm.get('isSubmit').value == false){
+        this.order.isSubmit = false
+      }else{
+        this.order.isSubmit = this.registerForm.get('isSubmit').value;
+      }
+      
         this._orderService
           .createOrder(this.order)
           .pipe(

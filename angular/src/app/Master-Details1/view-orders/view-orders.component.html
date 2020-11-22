@@ -109,6 +109,64 @@
                         </div>
                       </div>
                     </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <mat-form-field  
+                        appearance="fill"
+                      
+                        class="w-100"
+                        >
+                            <mat-label for="formDate">
+                                {{ "From Date" | localize }}
+                            
+                            </mat-label>
+                            <input 
+                            matInput 
+                            name="formDate" 
+                            id="formDate" 
+                            [(ngModel)]="formDate" 
+                            #orderDateModel="ngModel" 
+                            #orderDateEl
+                            [ngxMatDatetimePicker]="picker"
+                            >
+                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                             <ngx-mat-datetime-picker #picker 
+                             [enableMeridian]="true"
+                             [showSpinners]="true" 
+                                >
+                             </ngx-mat-datetime-picker>
+    
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field  
+                      appearance="fill"
+                    
+                      class="w-100"
+                      >
+                          <mat-label for="toDate">
+                              {{ "To Date" | localize }}
+                          
+                          </mat-label>
+                          <input 
+                          matInput 
+                          name="toDate" 
+                          id="toDate" 
+                          [(ngModel)]="toDate" 
+                          #orderDateModel="ngModel" 
+                          #orderDateEl
+                          [ngxMatDatetimePicker]="picker2"
+                          >
+                           <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                           <ngx-mat-datetime-picker #picker2 
+                           [enableMeridian]="true"
+                           [showSpinners]="true" 
+                              >
+                           </ngx-mat-datetime-picker>
+  
+                      </mat-form-field>
+                  </div>
+                    </div>
                   </form>
                 </div>
                 <div class="card-footer">

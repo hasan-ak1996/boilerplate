@@ -117,23 +117,29 @@
                     >
                         <mat-label for="orderDate">
                             {{ "Order Date" | localize }}
+                        
                         </mat-label>
                         <input 
                         matInput 
-                        [matDatepicker]="picker1"
                         name="orderDate" 
                         id="orderDate" 
                         required 
-                        maxlength="32"
                         [(ngModel)]="order.orderDate" 
                         #orderDateModel="ngModel" 
                         #orderDateEl
+                        [ngxMatDatetimePicker]="picker"
                         >
-                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1></mat-datepicker>
-                        <mat-error *ngIf="editOrderModal.submitted && orderDateModel.hasError('required')">
+                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                         <ngx-mat-datetime-picker #picker 
+                         [enableMeridian]="true"
+                         [showSpinners]="true" 
+                            >
+                         </ngx-mat-datetime-picker>
+
+                         <mat-error *ngIf="editOrderModal.submitted && orderDateModel.hasError('required')">
                             Order Date is required
                         </mat-error>
+
                     </mat-form-field>
                 </div>
 

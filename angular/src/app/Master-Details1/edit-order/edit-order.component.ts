@@ -72,7 +72,9 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
       this._AttachmentMasterService.getFolderById(result.attachmentMasterId).subscribe((result) => {
         this.attachment = result;
         this.orderFiles = result.files;
-        console.log(this.orderFiles)
+        var date = new Date( this.order.orderDate);
+        
+        this.order.orderDate = date.toISOString()
 
       })
        });
@@ -212,6 +214,8 @@ export class EditOrderComponent extends AppComponentBase  implements OnInit {
   //    this._router.navigate(['app/view-orders']);
   //    this.onSave.emit();
   //  })
+    var date = new Date( this.order.orderDate);
+    this.order.orderDate = date.toLocaleString()
     this._OrderService
       .updateOrder(this.order)
       .pipe(

@@ -6,12 +6,16 @@ import {
   GetOrederOutputDTO,
   GetOrederOutputDTOPagedResultDto,
 } from '@shared/service-proxies/service-proxies';
+import * as moment from 'moment-timezone';
+import { Moment } from 'moment-timezone';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { finalize } from 'rxjs/operators';
 
 class PagedOrderssRequestDto extends PagedRequestDto {
   keyword: string;
-  isSubmit: boolean | null;
+  isSubmit: boolean | undefined;
+  formDate : Moment | undefined;
+  toDate : Moment | undefined;
 }
 
 @Component({
@@ -24,6 +28,8 @@ export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutp
   orders : GetOrederOutputDTO[] =[];
   keyword = '';
   isSubmit: boolean | null;
+  formDate : Moment | undefined ;
+  toDate  : Moment | undefined;
   advancedFiltersVisible = false;
   @Output() onSave = new EventEmitter<any>();
   constructor(injector: Injector ,
@@ -42,12 +48,19 @@ export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutp
     {
     request.keyword = this.keyword;
     request.isSubmit = this.isSubmit;
+    request.formDate = this.formDate;
+    request.toDate = this.toDate;
+    
+    
       this._orderService
       .getAllOrders(
         request.keyword,
         request.isSubmit,
+        request.formDate,
+        request.toDate,
         request.maxResultCount,
         request.skipCount,
+        
       )
       .pipe(
         finalize(() => {
@@ -62,6 +75,8 @@ export class ViewOrdersComponent extends PagedListingComponentBase<GetOrederOutp
   clearFilters(): void {
     this.keyword = '';
     this.isSubmit = undefined;
+    this.formDate = undefined;
+    this.toDate = undefined;
     this.getDataPage(1);
   }
 

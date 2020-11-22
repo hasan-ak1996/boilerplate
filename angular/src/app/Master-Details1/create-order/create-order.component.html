@@ -29,7 +29,6 @@
                             id="name" 
                             required 
                             maxlength="32"
-                            [(ngModel)]="order.name" 
                             >
                             <mat-error *ngIf=" isValidFormSubmitted != null && !isValidFormSubmitted && registerForm.get('name').hasError('required')">
                                 Order Name is required
@@ -55,7 +54,6 @@
                             id="orderNo" 
                             required 
                             maxlength="32"
-                            [(ngModel)]="order.orderNo"  
                             #orderNoEl >
                             <mat-error *ngIf="isValidFormSubmitted != null && !isValidFormSubmitted && registerForm.get('orderNo').hasError('required')">
                                 Order.No is required
@@ -74,7 +72,6 @@
                             </mat-label>
 
                             <mat-select 
-                            [(ngModel)]="order.empolyeeName"
                             formControlName="empolyeeName"
                             name="empolyeeName"
                             id="empolyeeName"
@@ -104,7 +101,6 @@
                             id="totalPrice" 
                             disabled
                             maxlength="32" 
-                            [(ngModel)]="order.totalPrice" 
                             #totalPriceEl 
                             >
                         </mat-form-field>
@@ -114,27 +110,31 @@
                     <div class="col-md-6">
                         <mat-form-field  
                         appearance="fill"
-                        [class.mat-form-field-invalid]= "registerForm.get('orderDate').errors && isValidFormSubmitted != null && !isValidFormSubmitted"
+                        [class.mat-form-field-invalid]= "registerForm.get('datetime').errors && isValidFormSubmitted != null && !isValidFormSubmitted"
                         class="w-100"
                         >
-                            <mat-label for="orderDate">
-                                {{ "Order Date" | localize }}
-                            </mat-label>
-                            <input 
-                            matInput 
-                            [matDatepicker]="picker1"
-                            name="orderDate" 
-                            id="orderDate" 
-                            required 
-                            maxlength="32"
-                            formControlName="orderDate"
-                            [(ngModel)]="order.orderDate" 
+                        <mat-label for="orderDate">
+                            {{ "Order Date" | localize }}
+                        </mat-label>
+   
+
+                        <input 
+                        matInput 
+                        name="orderDate" 
+                        id="orderDate" 
+                        required 
+                        formControlName="datetime"
+                        [ngxMatDatetimePicker]="picker"
+                        >
+                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                         <ngx-mat-datetime-picker #picker 
+                         [enableMeridian]="true"
+                         [showSpinners]="true" 
                             >
-                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                            <mat-datepicker #picker1></mat-datepicker>
-                            <mat-error  *ngIf="isValidFormSubmitted != null && !isValidFormSubmitted && registerForm.get('orderDate').hasError('required')">
-                                Order Date is required
-                            </mat-error>
+                         </ngx-mat-datetime-picker>
+                         <mat-error *ngIf="isValidFormSubmitted != null && !isValidFormSubmitted && registerForm.get('datetime').hasError('required')">
+                            Order Date is required
+                        </mat-error>
                           </mat-form-field>
 
                     </div>
@@ -152,8 +152,8 @@
                     <mat-checkbox
                     name="isSubmit"
                     id="isSubmit"
-                    [(ngModel)]="order.isSubmit"
                     color="primary"
+                    formControlName="isSubmit"
                     >
                         {{ "IsSubmit" | localize }}
                     </mat-checkbox>
